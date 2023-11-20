@@ -7,7 +7,7 @@ import com.app.exceptions.UnableToTakeConnectionException;
 import com.app.util.ConnectionManager;
 import lombok.Cleanup;
 
-import static com.app.builder.OrderBuilder.buildOrder;
+import static com.app.util.EntityBuilder.buildOrder;
 
 import java.sql.SQLException;
 import java.util.ArrayList;

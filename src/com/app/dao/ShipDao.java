@@ -1,12 +1,13 @@
 package com.app.dao;
 
-import com.app.entity.Customer;
-import com.app.entity.Order;
+
+import com.app.entity.Cargo;
+import com.app.entity.Ship;
 import com.app.exceptions.UnableToTakeConnectionException;
 import com.app.util.ConnectionManager;
 import lombok.Cleanup;
 
-import static com.app.util.EntityBuilder.buildCustomer;
+import static com.app.util.EntityBuilder.buildShip;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -14,28 +15,32 @@ import java.util.List;
 import java.util.Optional;
 
 
-public class CustomerDao implements Dao<Integer, Customer> {
-    private static final CustomerDao INSTANCE = new CustomerDao();
+public class ShipDao implements Dao<Integer, Ship> {
 
-    public static CustomerDao getInstance() {
+    private static final ShipDao INSTANCE = new ShipDao();
+
+    public static ShipDao getInstance() {
         return INSTANCE;
     }
 
-    private CustomerDao() {
+    private ShipDao() {
     }
 
     private final static String FIND_ALL = """
-        SELECT * FROM customer;
+        SELECT * FROM ship
+            JOIN freighter f on f.freighter_id = ship.freighter_id
+            JOIN team t on t.team_id = ship.team_id
+            JOIN ship_model sm on sm.ship_model = ship.ship_model;
     """;
 
     @Override
-    public List<Customer> findAll() {
+    public List<Ship> findAll() {
         try (var connection = ConnectionManager.get()) {
             @Cleanup var preparedStatement = connection.prepareStatement(FIND_ALL);
             @Cleanup var resultSet = preparedStatement.executeQuery();
-            List<Customer> result = new ArrayList<>();
+            List<Ship> result = new ArrayList<>();
             while (resultSet.next()) {
-                result.add(buildCustomer(resultSet));
+                result.add(buildShip(resultSet));
             }
             return result;
         } catch (SQLException e) {
@@ -44,7 +49,7 @@ public class CustomerDao implements Dao<Integer, Customer> {
     }
 
     @Override
-    public Optional<Customer> findById(Integer id) {
+    public Optional<Ship> findById(Integer id) {
         return Optional.empty();
     }
 
@@ -54,12 +59,12 @@ public class CustomerDao implements Dao<Integer, Customer> {
     }
 
     @Override
-    public Customer update(Customer entity) {
+    public Ship update(Ship entity) {
         return null;
     }
 
     @Override
-    public Customer save(Customer entity) {
+    public Ship save(Ship entity) {
         return null;
     }
 }

@@ -1,12 +1,13 @@
 package com.app.dao;
 
-import com.app.entity.Customer;
-import com.app.entity.Order;
+
+import com.app.entity.Team;
+import com.app.entity.TeamMember;
 import com.app.exceptions.UnableToTakeConnectionException;
 import com.app.util.ConnectionManager;
 import lombok.Cleanup;
 
-import static com.app.util.EntityBuilder.buildCustomer;
+import static com.app.util.EntityBuilder.buildTeam;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -14,28 +15,30 @@ import java.util.List;
 import java.util.Optional;
 
 
-public class CustomerDao implements Dao<Integer, Customer> {
-    private static final CustomerDao INSTANCE = new CustomerDao();
+public class TeamDao  implements Dao<Integer, Team>{
 
-    public static CustomerDao getInstance() {
+    private static final TeamDao INSTANCE = new TeamDao();
+
+    public static TeamDao getInstance() {
         return INSTANCE;
     }
 
-    private CustomerDao() {
+    private TeamDao() {
     }
 
     private final static String FIND_ALL = """
-        SELECT * FROM customer;
+        SELECT * FROM team;
     """;
 
+
     @Override
-    public List<Customer> findAll() {
+    public List<Team> findAll() {
         try (var connection = ConnectionManager.get()) {
             @Cleanup var preparedStatement = connection.prepareStatement(FIND_ALL);
             @Cleanup var resultSet = preparedStatement.executeQuery();
-            List<Customer> result = new ArrayList<>();
+            List<Team> result = new ArrayList<>();
             while (resultSet.next()) {
-                result.add(buildCustomer(resultSet));
+                result.add(buildTeam(resultSet));
             }
             return result;
         } catch (SQLException e) {
@@ -44,7 +47,7 @@ public class CustomerDao implements Dao<Integer, Customer> {
     }
 
     @Override
-    public Optional<Customer> findById(Integer id) {
+    public Optional<Team> findById(Integer id) {
         return Optional.empty();
     }
 
@@ -54,12 +57,12 @@ public class CustomerDao implements Dao<Integer, Customer> {
     }
 
     @Override
-    public Customer update(Customer entity) {
+    public Team update(Team entity) {
         return null;
     }
 
     @Override
-    public Customer save(Customer entity) {
+    public Team save(Team entity) {
         return null;
     }
 }

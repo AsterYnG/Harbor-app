@@ -1,12 +1,12 @@
 package com.app.dao;
 
-import com.app.entity.Customer;
 import com.app.entity.Order;
+import com.app.entity.TeamMember;
 import com.app.exceptions.UnableToTakeConnectionException;
 import com.app.util.ConnectionManager;
 import lombok.Cleanup;
 
-import static com.app.util.EntityBuilder.buildCustomer;
+import static com.app.util.EntityBuilder.buildTeamMember;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -14,28 +14,29 @@ import java.util.List;
 import java.util.Optional;
 
 
-public class CustomerDao implements Dao<Integer, Customer> {
-    private static final CustomerDao INSTANCE = new CustomerDao();
+public class TeamMemberDao implements Dao<Integer, TeamMember> {
+    private static final TeamMemberDao INSTANCE = new TeamMemberDao();
 
-    public static CustomerDao getInstance() {
+    public static TeamMemberDao getInstance() {
         return INSTANCE;
     }
 
-    private CustomerDao() {
+    private TeamMemberDao() {
     }
 
     private final static String FIND_ALL = """
-        SELECT * FROM customer;
+        SELECT * FROM team_member
+            JOIN public.team t on t.team_id = team_member.team_id;
     """;
 
     @Override
-    public List<Customer> findAll() {
+    public List<TeamMember> findAll() {
         try (var connection = ConnectionManager.get()) {
             @Cleanup var preparedStatement = connection.prepareStatement(FIND_ALL);
             @Cleanup var resultSet = preparedStatement.executeQuery();
-            List<Customer> result = new ArrayList<>();
+            List<TeamMember> result = new ArrayList<>();
             while (resultSet.next()) {
-                result.add(buildCustomer(resultSet));
+                result.add(buildTeamMember(resultSet));
             }
             return result;
         } catch (SQLException e) {
@@ -44,7 +45,7 @@ public class CustomerDao implements Dao<Integer, Customer> {
     }
 
     @Override
-    public Optional<Customer> findById(Integer id) {
+    public Optional<TeamMember> findById(Integer id) {
         return Optional.empty();
     }
 
@@ -54,12 +55,12 @@ public class CustomerDao implements Dao<Integer, Customer> {
     }
 
     @Override
-    public Customer update(Customer entity) {
+    public TeamMember update(TeamMember entity) {
         return null;
     }
 
     @Override
-    public Customer save(Customer entity) {
+    public TeamMember save(TeamMember entity) {
         return null;
     }
 }

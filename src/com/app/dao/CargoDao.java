@@ -5,7 +5,7 @@ import com.app.exceptions.UnableToTakeConnectionException;
 import com.app.util.ConnectionManager;
 import lombok.Cleanup;
 
-import static com.app.builder.CargoBuilder.buildCargo;
+import static com.app.util.EntityBuilder.buildCargo;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

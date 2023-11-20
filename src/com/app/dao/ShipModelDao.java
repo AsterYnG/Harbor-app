@@ -1,12 +1,11 @@
 package com.app.dao;
 
-import com.app.entity.Customer;
-import com.app.entity.Order;
+import com.app.entity.ShipModel;
 import com.app.exceptions.UnableToTakeConnectionException;
 import com.app.util.ConnectionManager;
 import lombok.Cleanup;
 
-import static com.app.util.EntityBuilder.buildCustomer;
+import static com.app.util.EntityBuilder.buildShipModel;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -14,28 +13,30 @@ import java.util.List;
 import java.util.Optional;
 
 
-public class CustomerDao implements Dao<Integer, Customer> {
-    private static final CustomerDao INSTANCE = new CustomerDao();
+public class ShipModelDao  implements Dao<String, ShipModel>{
 
-    public static CustomerDao getInstance() {
+    private static final ShipModelDao INSTANCE = new ShipModelDao();
+
+    public static ShipModelDao getInstance() {
         return INSTANCE;
     }
 
-    private CustomerDao() {
+    private ShipModelDao() {
     }
 
     private final static String FIND_ALL = """
-        SELECT * FROM customer;
+        SELECT * FROM ship_model;
     """;
 
+
     @Override
-    public List<Customer> findAll() {
+    public List<ShipModel> findAll() {
         try (var connection = ConnectionManager.get()) {
             @Cleanup var preparedStatement = connection.prepareStatement(FIND_ALL);
             @Cleanup var resultSet = preparedStatement.executeQuery();
-            List<Customer> result = new ArrayList<>();
+            List<ShipModel> result = new ArrayList<>();
             while (resultSet.next()) {
-                result.add(buildCustomer(resultSet));
+                result.add(buildShipModel(resultSet));
             }
             return result;
         } catch (SQLException e) {
@@ -44,22 +45,22 @@ public class CustomerDao implements Dao<Integer, Customer> {
     }
 
     @Override
-    public Optional<Customer> findById(Integer id) {
+    public Optional<ShipModel> findById(String id) {
         return Optional.empty();
     }
 
     @Override
-    public boolean delete(Integer id) {
+    public boolean delete(String id) {
         return false;
     }
 
     @Override
-    public Customer update(Customer entity) {
+    public ShipModel update(ShipModel entity) {
         return null;
     }
 
     @Override
-    public Customer save(Customer entity) {
+    public ShipModel save(ShipModel entity) {
         return null;
     }
 }

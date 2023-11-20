@@ -1,13 +1,12 @@
 package com.app.dao;
 
 import com.app.entity.Freighter;
-import com.app.exceptions.NoSuchColumnInResultSetException;
 import com.app.exceptions.UnableToTakeConnectionException;
 import com.app.util.ConnectionManager;
 import lombok.Cleanup;
-import lombok.Value;
 
-import java.sql.ResultSet;
+import static com.app.util.EntityBuilder.buildFreighter;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,21 +62,5 @@ public class FreighterDao implements Dao<Integer, Freighter> {
     public Freighter save(Freighter entity) {
         return null;
     }
-
-    private Freighter buildFreighter(ResultSet resultSet) {
-        try {
-            return Freighter.builder()
-                    .freighterId(resultSet.getInt("freighter_id"))
-                    .tax(resultSet.getInt("tax"))
-                    .freighterName(resultSet.getString("freighter_name"))
-                    .fragileCost(resultSet.getInt("fragile_cost"))
-                    .sizeCost(resultSet.getInt("size_cost"))
-                    .weightCost(resultSet.getInt("weight_cost"))
-                    .build();
-        } catch (SQLException e) {
-            throw new NoSuchColumnInResultSetException(e);
-        }
-    }
-
 
 }
