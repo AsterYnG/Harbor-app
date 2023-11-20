@@ -13,10 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Value
+
 public class FreighterDao implements Dao<Integer, Freighter> {
 
-    static FreighterDao INSTANCE = new FreighterDao();
+    private static final FreighterDao INSTANCE = new FreighterDao();
 
     public static FreighterDao getInstance() {
         return INSTANCE;
@@ -25,7 +25,7 @@ public class FreighterDao implements Dao<Integer, Freighter> {
     private FreighterDao() {
     }
 
-    static String FIND_ALL = """
+    private static final String FIND_ALL = """
             SELECT * FROM freighter;
             """;
 
@@ -42,8 +42,6 @@ public class FreighterDao implements Dao<Integer, Freighter> {
         } catch (SQLException e) {
             throw new UnableToTakeConnectionException(e);
         }
-
-
     }
 
     @Override

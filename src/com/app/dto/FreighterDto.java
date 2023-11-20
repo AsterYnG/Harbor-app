@@ -13,5 +13,4 @@ public class FreighterDto {
      Integer freighterId;
      Integer weightCost;
      String freighterName;
-
 }
