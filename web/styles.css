@@ -1,0 +1,120 @@
+/* Styling for the registration page with animations */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+    background-image: url('BMW.jpg'); /* Replace 'background-image.jpg' with your image file path */
+    background-size: cover;
+    background-position: center;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.registration-form {
+    background-color: rgba(255, 255, 255, 0.9); /* Background with some transparency */
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    transition: transform 0.3s ease-in-out;
+}
+
+.registration-form:hover {
+    transform: translateY(-5px);
+}
+
+.registration-form h1 {
+    margin-bottom: 30px;
+    font-size: 24px;
+    color: #333;
+}
+
+.input-group {
+    margin-bottom: 20px;
+    text-align: left;
+    transition: transform 0.3s ease-in-out;
+}
+
+.input-group:hover {
+    transform: translateX(5px);
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+    font-weight: bold;
+}
+
+.input-group input[type="text"],
+.input-group input[type="email"],
+.input-group input[type="password"] {
+    width: calc(100% - 20px);
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    transition: border-color 0.3s ease-in-out;
+}
+
+.input-group input[type="text"]:focus,
+.input-group input[type="email"]:focus,
+.input-group input[type="password"]:focus {
+    border-color: #3498db;
+}
+
+.checkbox-group {
+    text-align: left;
+    margin-bottom: 20px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.checkbox-group:hover {
+    transform: translateX(5px);
+}
+
+.checkbox-group input[type="checkbox"] {
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+.checkbox-group label {
+    color: #333;
+}
+
+button[type="submit"] {
+    background-color: #3498db;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease-in-out;
+}
+
+button[type="submit"]:hover {
+    background-color: #2980b9;
+}
+
+.additional-info a {
+    color: #3498db;
+    text-decoration: none;
+    transition: color 0.3s ease-in-out;
+}
+
+.additional-info a:hover {
+    text-decoration: underline;
+    color: #2574a9;
+}
+/* Styling for the registration page with background image and animations */
+
+
+/* ... (rest of the CSS remains the same as in the previous example) */

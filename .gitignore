@@ -2,7 +2,7 @@
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
-resources/application.properties
+
 
 
 ### Eclipse ###
@@ -29,3 +29,7 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+### Application config file ###
+resources/application.properties
+
