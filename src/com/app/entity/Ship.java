@@ -5,10 +5,10 @@ import lombok.Data;
 
 @Data
 @Builder
-public class Ship {
+public final class Ship {
     private Integer shipId;
     private Boolean inUse;
-    private Team teamId;
+    private Team team;
     private ShipModel shipModel;
-    private Freighter freighterId;
+    private Freighter freighter;
 }

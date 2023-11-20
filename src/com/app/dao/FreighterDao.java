@@ -42,8 +42,6 @@ public class FreighterDao implements Dao<Integer, Freighter> {
         } catch (SQLException e) {
             throw new UnableToTakeConnectionException(e);
         }
-
-
     }
 
     @Override

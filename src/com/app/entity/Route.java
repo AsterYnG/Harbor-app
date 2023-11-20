@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class Route {
+public final class Route {
     private Integer routeId;
     private String destinationCountry;
     private String destinationCity;

@@ -5,8 +5,8 @@ import lombok.Data;
 
 @Data
 @Builder
-public class FreighterRoutes {
-    private Freighter freighterId;
-    private Route routeId;
+public final class FreighterRoutes {
+    private Freighter freighter;
+    private Route route;
     private Integer count;
 }

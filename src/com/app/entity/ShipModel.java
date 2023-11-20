@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class ShipModel {
+public final class ShipModel {
     private String shipModel;
     private Integer shipCapacity;
     private Integer shipSize;

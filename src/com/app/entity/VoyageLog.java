@@ -7,8 +7,8 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
-public final class Order {
-    private LocalDateTime date;
-    private Integer orderId;
-    private String status;
+public class VoyageLog {
+    private Integer logId;
+    private Ship ship;
+    private LocalDateTime shipmentDate;
 }

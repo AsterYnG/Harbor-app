@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class Team {
+public final class Team {
     private Integer experience;
     private String description;
     private Integer teamId;
