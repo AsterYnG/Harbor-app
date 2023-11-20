@@ -6,12 +6,132 @@ import lombok.experimental.UtilityClass;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 
 @UtilityClass
 public class EntityBuilder {
+
+    public Dock buildDock(ResultSet resultSet){
+        try {
+            return Dock.builder()
+                    .dockId(resultSet.getObject("dock_id",Integer.class))
+                    .shipCapacity(resultSet.getObject("ship_capacity",Integer.class))
+                    .freighterName(buildFreighter(resultSet))
+                    .build();
+        } catch (SQLException e) {
+            throw new NoSuchColumnInResultSetException(e);
+        }
+    }
+
+    public StoreHouse buildStoreHouse(ResultSet resultSet){
+        try {
+            return StoreHouse.builder()
+                    .storeId(resultSet.getObject("store_id",Integer.class))
+                    .capacity(resultSet.getObject("capacity",Integer.class))
+                    .dockId(buildDock(resultSet))
+                    .build();
+        } catch (SQLException e) {
+            throw new NoSuchColumnInResultSetException(e);
+        }
+    }
+
+    public Education buildEducation(ResultSet resultSet){
+        try {
+            return Education.builder()
+                    .educationSerialNumber(resultSet.getObject("education_serial_number",Integer.class))
+                    .grade(resultSet.getObject("grade",String.class))
+                    .establishment(resultSet.getObject("establishment",String.class))
+                    .build();
+        } catch (SQLException e) {
+            throw new NoSuchColumnInResultSetException(e);
+        }
+    }
+
+    public Employment buildEmployment(ResultSet resultSet){
+        try {
+            return Employment.builder()
+                    .employmentSerialNumber(resultSet.getObject("employment_serial_number",Integer.class))
+                    .previousJob(resultSet.getObject("previous_job",String.class))
+                    .experience(resultSet.getObject("experience",Integer.class))
+                    .build();
+        } catch (SQLException e) {
+            throw new NoSuchColumnInResultSetException(e);
+        }
+    }
+
+    public MedicalCard buildMedicalCard(ResultSet resultSet){
+        try {
+            return MedicalCard.builder()
+                    .medSerialNumber(resultSet.getObject("med_serial_number",Integer.class))
+                    .hivStatus(resultSet.getObject("hiv_status",Boolean.class))
+                    .illness(resultSet.getObject("illness",String.class))
+                    .build();
+        } catch (SQLException e) {
+            throw new NoSuchColumnInResultSetException(e);
+        }
+    }
+
+    public Registration buildRegistration(ResultSet resultSet){
+        try {
+            return Registration.builder()
+                    .regId(resultSet.getObject("reg_id",Integer.class))
+                    .house(resultSet.getObject("house",Integer.class))
+                    .flat(resultSet.getObject("flat",Integer.class))
+                    .region(resultSet.getObject("region",String.class))
+                    .city(resultSet.getObject("city",String.class))
+                    .street(resultSet.getObject("street",String.class))
+                    .build();
+        } catch (SQLException e) {
+            throw new NoSuchColumnInResultSetException(e);
+        }
+    }
+
+    public Passport buildPassport(ResultSet resultSet){
+        try {
+            return Passport.builder()
+                    .passportSerialNumber(resultSet.getObject("passport_serial_number",Integer.class))
+                    .fullName(resultSet.getObject("full_name",String.class))
+                    .birthDate(resultSet.getObject("birth_date",Timestamp.class))
+                    .sex(resultSet.getObject("sex",String.class))
+                    .citizenship(resultSet.getObject("citizenship",String.class))
+                    .regId(buildRegistration(resultSet))
+                    .build();
+        } catch (SQLException e) {
+            throw new NoSuchColumnInResultSetException(e);
+        }
+    }
+
+    public Position buildPosition(ResultSet resultSet){
+        try {
+            return Position.builder()
+                    .position(resultSet.getObject("position",String.class))
+                    .salary(resultSet.getObject("salary",Integer.class))
+                    .description(resultSet.getObject("description",String.class))
+                    .build();
+        } catch (SQLException e) {
+            throw new NoSuchColumnInResultSetException(e);
+        }
+    }
+
+    public Worker buildWorker(ResultSet resultSet){
+        try {
+            return Worker.builder()
+                    .workerId(resultSet.getObject("workerId",Integer.class))
+                    .hiringDate(resultSet.getObject("hiring_date",Timestamp.class))
+                    .position(buildPosition(resultSet))
+                    .medSerialNumber(buildMedicalCard(resultSet))
+                    .passportSerialNumber(buildPassport(resultSet))
+                    .educationSerialNumber(buildEducation(resultSet))
+                    .employmentSerialNumber(buildEmployment(resultSet))
+                    .dockId(buildDock(resultSet))
+                    .build();
+        } catch (SQLException e) {
+            throw new NoSuchColumnInResultSetException(e);
+        }
+    }
 
     public Cargo buildCargo(ResultSet resultSet){
         try {
