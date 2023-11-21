@@ -1,0 +1,142 @@
+/* Общие стили для страницы */
+/* Общие стили для страницы */
+/* Общие стили для страницы */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Стили для блока логина */
+.login-box {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    text-align: center;
+    width: 400px;
+    color: #333;
+    animation: fadeIn 0.6s ease-in-out;
+}
+
+.login-box h1 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    background-color: #4caf50;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+.additional-info a {
+    color: #4caf50;
+    text-decoration: none;
+}
+
+.additional-info a:hover {
+    text-decoration: underline;
+}
+
+
+/* Анимация для появления блока логина */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+.popup {
+    position: fixed;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    background-color: #4CAF50; /* Зеленый цвет */
+    color: #fff;
+    border-radius: 5px;
+    animation: fadeInOut1 0.5s ease-in-out; /* Анимация появления */
+}
+
+.popup-content {
+    position: relative;
+}
+
+
+.checkmark {
+    margin-left: 5px;
+}
+
+
+
+.error-popup {
+    display: block;
+    position: fixed;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    background-color: #ffcccb; /* Цвет ошибки */
+    border: 1px solid #f08080; /* Цвет рамки ошибки */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 1001;
+    animation: fadeInOut1 0.5s ease-in-out;
+}
+
+.error-popup p {
+    margin: 0;
+    color: #333;
+}
+@keyframes fadeInOut1 {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.7);
+    }
+    50% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.05);
+    }
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+
+

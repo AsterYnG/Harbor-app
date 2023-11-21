@@ -7,6 +7,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.Cleanup;
 
 import static com.app.util.EntityBuilder.buildCustomer;
@@ -26,6 +27,7 @@ public class RegistrationServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setAttribute("notUnique",false);
+        req.setAttribute("registred",false);
         req.getRequestDispatcher("/WEB-INF/jsp/registration.jsp")
                 .forward(req,resp);
     }
@@ -33,8 +35,7 @@ public class RegistrationServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
        var parameterMap = req.getParameterMap();
-       @Cleanup PrintWriter out = resp.getWriter();
-
+        HttpSession session = req.getSession();
         if(!regService.checkUniqueLogin(parameterMap.get("login")[0])) {
             var customer = Customer.builder()
                     .fullName(parameterMap.get("fullname")[0])
@@ -43,6 +44,8 @@ public class RegistrationServlet extends HttpServlet {
                     .email(parameterMap.get("email")[0])
                     .build();
         regService.save(customer);
+        session.setAttribute("success",true);
+        resp.sendRedirect("/login");
         }
         else {
             req.setAttribute("notUnique",true);

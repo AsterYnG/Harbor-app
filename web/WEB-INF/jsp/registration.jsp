@@ -6,7 +6,8 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -25,37 +26,30 @@
         <h1>Create an Account</h1>
         <form id="registration-form" action="/registration" method="post">
             <div class="form-group">
-                <input type="text" id="fullname" name="fullname" placeholder="Full Name" value="${param.fullname}" required>
+                <input type="text" id="fullname" name="fullname" placeholder="Full Name" value="${param.fullname}"
+                       required>
             </div>
 
             <div class="form-group">
-                <input type="text" id="login" name="login" placeholder="Login" required>
+                <input type="text" id="login" name="login" placeholder="Login" value="${param.login}" required>
             </div>
             <c:if test="${requestScope.notUnique}">
                 <div class="error-message" id="login-error">Логин занят, используйте другой</div>
             </c:if>
             <div class="form-group">
-                <input type="email" id="email" name="email" placeholder="Email Address" required>
+                <input type="text" id="email" name="email" placeholder="Email Address" value="${param.email}" pattern="^\S+@\S+\.\S+$" required>
             </div>
 
             <div class="form-group">
-                <input type="password" id="password" name="password" placeholder="Password" required>
+                <input type="password" id="password" name="password" placeholder="Password" value="${param.password}"
+                       required>
             </div>
 
-<%--            <div class="form-group">--%>
-<%--                <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm Password" required>--%>
-<%--            </div>--%>
-
-
-<%--            <div class="checkbox-group">--%>
-<%--                <input type="checkbox" id="terms" name="terms" required>--%>
-<%--                <label for="terms">I agree to the <a href="#">Terms and Conditions</a></label>--%>
-<%--            </div>--%>
 
             <button type="submit" id="register-btn">Sign Up</button>
         </form>
         <div class="additional-info">
-            <p>Already have an account? <a href="#" id="toggle-login">Login</a></p>
+            <p>Already have an account? <a href="/login" id="toggle-login">Login</a></p>
         </div>
     </div>
 </div>
