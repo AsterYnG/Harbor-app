@@ -1,41 +1,41 @@
 package com.app.dao;
 
-import com.app.entity.Route;
+
+import com.app.entity.VoyageLog;
 import com.app.exceptions.UnableToTakeConnectionException;
 import com.app.util.ConnectionManager;
 import lombok.Cleanup;
 
-import static com.app.util.EntityBuilder.buildRoute;
+import static com.app.util.EntityBuilder.buildVoyageLog;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class RouteDao implements Dao<Integer, Route>{
+public class VoyageLogDao implements Dao<Integer, VoyageLog> {
 
+    private static final VoyageLogDao INSTANCE = new VoyageLogDao();
 
-    private static final RouteDao INSTANCE = new RouteDao();
-
-    public static RouteDao getInstance() {
+    public static VoyageLogDao getInstance() {
         return INSTANCE;
     }
 
-    private RouteDao() {
+    private VoyageLogDao() {
     }
 
     private final static String FIND_ALL = """
-        SELECT * FROM available_routes;
+        SELECT * FROM voyage_log
+            JOIN public.ship s on s.ship_id = voyage_log.ship_id;
     """;
-
     @Override
-    public List<Route> findAll() {
+    public List<VoyageLog> findAll() {
         try (var connection = ConnectionManager.get()) {
             @Cleanup var preparedStatement = connection.prepareStatement(FIND_ALL);
             @Cleanup var resultSet = preparedStatement.executeQuery();
-            List<Route> result = new ArrayList<>();
+            List<VoyageLog> result = new ArrayList<>();
             while (resultSet.next()) {
-                result.add(buildRoute(resultSet));
+                result.add(buildVoyageLog(resultSet));
             }
             return result;
         } catch (SQLException e) {
@@ -44,7 +44,7 @@ public class RouteDao implements Dao<Integer, Route>{
     }
 
     @Override
-    public Optional<Route> findById(Integer id) {
+    public Optional<VoyageLog> findById(Integer id) {
         return Optional.empty();
     }
 
@@ -54,12 +54,12 @@ public class RouteDao implements Dao<Integer, Route>{
     }
 
     @Override
-    public Route update(Route entity) {
+    public VoyageLog update(VoyageLog entity) {
         return null;
     }
 
     @Override
-    public void save(Route entity) {
+    public void save(VoyageLog entity) {
 
     }
 }

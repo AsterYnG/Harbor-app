@@ -77,7 +77,7 @@ public class RegistrationDao implements Dao<Integer, Registration> {
     }
 
     @Override
-    public Registration save(Registration entity) {
-        return null;
+    public void save(Registration entity) {
+
     }
 }

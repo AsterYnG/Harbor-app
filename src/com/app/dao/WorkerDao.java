@@ -30,7 +30,7 @@ public class WorkerDao implements Dao<Integer, Worker> {
     private final static String FIND_BY_ID = """
         SELECT * 
         FROM worker
-        WHERE workerId = ?
+        WHERE worker_id = ?;
     """;
 
     private final static String DELETE = """
@@ -77,7 +77,7 @@ public class WorkerDao implements Dao<Integer, Worker> {
     }
 
     @Override
-    public Worker save(Worker entity) {
-        return null;
+    public void save(Worker entity) {
+
     }
 }

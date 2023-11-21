@@ -30,7 +30,7 @@ public class DockDao implements Dao<Integer, Dock> {
     private final static String FIND_BY_ID = """
         SELECT * 
         FROM dock
-        WHERE dockId = ?
+        WHERE dock_id = ?ж
     """;
 
     private final static String DELETE = """
@@ -59,6 +59,7 @@ public class DockDao implements Dao<Integer, Dock> {
             @Cleanup var preparedStatement = connection.prepareStatement(FIND_BY_ID);
             preparedStatement.setInt(1, id);
             @Cleanup var resultSet = preparedStatement.executeQuery();
+            resultSet.next();
             Dock result = buildDock(resultSet);
             return Optional.ofNullable(result);
         } catch (SQLException e) {
@@ -77,7 +78,6 @@ public class DockDao implements Dao<Integer, Dock> {
     }
 
     @Override
-    public Dock save(Dock entity) {
-        return null;
+    public void save(Dock entity) {
     }
 }

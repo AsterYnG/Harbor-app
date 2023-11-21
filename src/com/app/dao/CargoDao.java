@@ -7,7 +7,6 @@ import lombok.Cleanup;
 
 import static com.app.util.EntityBuilder.buildCargo;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,10 +62,9 @@ public final class CargoDao implements Dao<Integer, Cargo> {
     }
 
     @Override
-    public Cargo save(Cargo entity) {
-        return null;
-    }
+    public void save(Cargo entity) {
 
+    }
 
 
 }

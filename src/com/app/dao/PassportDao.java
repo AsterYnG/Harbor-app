@@ -30,7 +30,7 @@ public class PassportDao implements Dao<Integer, Passport> {
     private final static String FIND_BY_ID = """
         SELECT * 
         FROM passport
-        WHERE passportSerialNumber = ?
+        WHERE passport_serial_number = ?;
     """;
 
     private final static String DELETE = """
@@ -77,7 +77,7 @@ public class PassportDao implements Dao<Integer, Passport> {
     }
 
     @Override
-    public Passport save(Passport entity) {
-        return null;
+    public void save(Passport entity) {
+
     }
 }

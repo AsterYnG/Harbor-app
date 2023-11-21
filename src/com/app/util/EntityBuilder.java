@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @UtilityClass
 public class EntityBuilder {
 
-    public Dock buildDock(ResultSet resultSet){
+    public static Dock buildDock(ResultSet resultSet){
         try {
             return Dock.builder()
                     .dockId(resultSet.getObject("dock_id",Integer.class))
@@ -26,7 +26,7 @@ public class EntityBuilder {
         }
     }
 
-    public StoreHouse buildStoreHouse(ResultSet resultSet){
+    public static StoreHouse buildStoreHouse(ResultSet resultSet){
         try {
             return StoreHouse.builder()
                     .storeId(resultSet.getObject("store_id",Integer.class))
@@ -38,7 +38,7 @@ public class EntityBuilder {
         }
     }
 
-    public Education buildEducation(ResultSet resultSet){
+    public static Education buildEducation(ResultSet resultSet){
         try {
             return Education.builder()
                     .educationSerialNumber(resultSet.getObject("education_serial_number",Integer.class))
@@ -50,7 +50,7 @@ public class EntityBuilder {
         }
     }
 
-    public Employment buildEmployment(ResultSet resultSet){
+    public static Employment buildEmployment(ResultSet resultSet){
         try {
             return Employment.builder()
                     .employmentSerialNumber(resultSet.getObject("employment_serial_number",Integer.class))
@@ -62,7 +62,7 @@ public class EntityBuilder {
         }
     }
 
-    public MedicalCard buildMedicalCard(ResultSet resultSet){
+    public static MedicalCard buildMedicalCard(ResultSet resultSet){
         try {
             return MedicalCard.builder()
                     .medSerialNumber(resultSet.getObject("med_serial_number",Integer.class))
@@ -74,7 +74,7 @@ public class EntityBuilder {
         }
     }
 
-    public Registration buildRegistration(ResultSet resultSet){
+    public static Registration buildRegistration(ResultSet resultSet){
         try {
             return Registration.builder()
                     .regId(resultSet.getObject("reg_id",Integer.class))
@@ -89,7 +89,7 @@ public class EntityBuilder {
         }
     }
 
-    public Passport buildPassport(ResultSet resultSet){
+    public static Passport buildPassport(ResultSet resultSet){
         try {
             return Passport.builder()
                     .passportSerialNumber(resultSet.getObject("passport_serial_number",Integer.class))
@@ -104,7 +104,7 @@ public class EntityBuilder {
         }
     }
 
-    public Position buildPosition(ResultSet resultSet){
+    public static Position buildPosition(ResultSet resultSet){
         try {
             return Position.builder()
                     .position(resultSet.getObject("position",String.class))
@@ -116,7 +116,7 @@ public class EntityBuilder {
         }
     }
 
-    public Worker buildWorker(ResultSet resultSet){
+    public static Worker buildWorker(ResultSet resultSet){
         try {
             return Worker.builder()
                     .workerId(resultSet.getObject("workerId",Integer.class))
@@ -133,7 +133,7 @@ public class EntityBuilder {
         }
     }
 
-    public Cargo buildCargo(ResultSet resultSet){
+    public static Cargo buildCargo(ResultSet resultSet){
         try {
             return Cargo.builder()
                     .cargoId(resultSet.getObject("cargo_id",Integer.class))
@@ -150,7 +150,7 @@ public class EntityBuilder {
         }
     }
 
-    public Customer buildCustomer(ResultSet resultSet){
+    public static Customer buildCustomer(ResultSet resultSet){
         try {
             return Customer.builder()
                     .customerId(resultSet.getObject("customer_id",Integer.class))
@@ -164,7 +164,7 @@ public class EntityBuilder {
         }
     }
 
-    public Freighter buildFreighter(ResultSet resultSet){
+    public static Freighter buildFreighter(ResultSet resultSet){
         try {
             return Freighter.builder()
                     .freighterId(resultSet.getObject("freighter_id",Integer.class))
@@ -178,7 +178,7 @@ public class EntityBuilder {
         }
     }
 
-    public FreighterRoutes buildFreighterRoutes(ResultSet resultSet){
+    public static FreighterRoutes buildFreighterRoutes(ResultSet resultSet){
         try {
             return FreighterRoutes.builder()
                     .route(buildRoute(resultSet))
@@ -190,7 +190,7 @@ public class EntityBuilder {
         }
     }
 
-    public Order buildOrder(ResultSet resultSet){
+    public static Order buildOrder(ResultSet resultSet){
         try {
             return Order.builder()
                     .orderId(resultSet.getObject("order_id",Integer.class))
@@ -202,7 +202,7 @@ public class EntityBuilder {
         }
     }
 
-    public Route buildRoute(ResultSet resultSet){
+    public static Route buildRoute(ResultSet resultSet){
         try {
             return Route.builder()
                     .routeId(resultSet.getObject("route_id",Integer.class))
@@ -215,7 +215,7 @@ public class EntityBuilder {
         }
     }
 
-    public Ship buildShip(ResultSet resultSet){
+    public static Ship buildShip(ResultSet resultSet){
         try {
             return Ship.builder()
                     .shipId(resultSet.getObject("ship_id",Integer.class))
@@ -229,7 +229,7 @@ public class EntityBuilder {
         }
     }
 
-    public ShipModel buildShipModel(ResultSet resultSet){
+    public static ShipModel buildShipModel(ResultSet resultSet){
         try {
             return ShipModel.builder()
                     .shipModel(resultSet.getObject("ship_model",String.class))
@@ -241,7 +241,7 @@ public class EntityBuilder {
         }
     }
 
-    public Team buildTeam(ResultSet resultSet){
+    public static Team buildTeam(ResultSet resultSet){
         try {
             return Team.builder()
                     .teamId(resultSet.getObject("team_id",Integer.class))
@@ -252,7 +252,7 @@ public class EntityBuilder {
             throw new NoSuchColumnInResultSetException(e);
         }
     }
-    public TeamMember buildTeamMember(ResultSet resultSet){
+    public static TeamMember buildTeamMember(ResultSet resultSet){
         try {
             return TeamMember.builder()
                     .memberId(resultSet.getObject("member_id",Integer.class))
@@ -267,7 +267,7 @@ public class EntityBuilder {
         }
     }
 
-    public VoyageLog buildVoyageLog(ResultSet resultSet){
+    public static VoyageLog buildVoyageLog(ResultSet resultSet){
         try {
             return VoyageLog.builder()
                     .logId(resultSet.getObject("log_id",Integer.class))

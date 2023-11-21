@@ -2,7 +2,6 @@ package com.app.dao;
 
 
 import com.app.entity.Team;
-import com.app.entity.TeamMember;
 import com.app.exceptions.UnableToTakeConnectionException;
 import com.app.util.ConnectionManager;
 import lombok.Cleanup;
@@ -62,7 +61,7 @@ public class TeamDao  implements Dao<Integer, Team>{
     }
 
     @Override
-    public Team save(Team entity) {
-        return null;
+    public void save(Team entity) {
+
     }
 }

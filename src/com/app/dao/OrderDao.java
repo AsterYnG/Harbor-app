@@ -1,7 +1,6 @@
 package com.app.dao;
 
 
-import com.app.entity.Freighter;
 import com.app.entity.Order;
 import com.app.exceptions.UnableToTakeConnectionException;
 import com.app.util.ConnectionManager;
@@ -60,7 +59,7 @@ public class OrderDao  implements Dao<Integer, Order>{
     }
 
     @Override
-    public Order save(Order entity) {
-        return null;
+    public void save(Order entity) {
+
     }
 }

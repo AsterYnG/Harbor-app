@@ -60,7 +60,7 @@ public class ShipModelDao  implements Dao<String, ShipModel>{
     }
 
     @Override
-    public ShipModel save(ShipModel entity) {
-        return null;
+    public void save(ShipModel entity) {
+
     }
 }

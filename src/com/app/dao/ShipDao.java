@@ -1,7 +1,6 @@
 package com.app.dao;
 
 
-import com.app.entity.Cargo;
 import com.app.entity.Ship;
 import com.app.exceptions.UnableToTakeConnectionException;
 import com.app.util.ConnectionManager;
@@ -64,7 +63,7 @@ public class ShipDao implements Dao<Integer, Ship> {
     }
 
     @Override
-    public Ship save(Ship entity) {
-        return null;
+    public void save(Ship entity) {
+
     }
 }

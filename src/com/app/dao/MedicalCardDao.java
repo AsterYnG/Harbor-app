@@ -77,7 +77,7 @@ public class MedicalCardDao implements Dao<Integer, MedicalCard> {
     }
 
     @Override
-    public MedicalCard save(MedicalCard entity) {
-        return null;
+    public void save(MedicalCard entity) {
+
     }
 }

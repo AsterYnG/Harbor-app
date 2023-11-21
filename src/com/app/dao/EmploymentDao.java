@@ -30,7 +30,7 @@ public class EmploymentDao implements Dao<Integer, Employment> {
     private final static String FIND_BY_ID = """
         SELECT * 
         FROM employment 
-        WHERE employmentSerialNumber = ?
+        WHERE employment_serial_number = ?;
     """;
 
     private final static String DELETE = """
@@ -77,7 +77,7 @@ public class EmploymentDao implements Dao<Integer, Employment> {
     }
 
     @Override
-    public Employment save(Employment entity) {
-        return null;
+    public void save(Employment entity) {
+
     }
 }

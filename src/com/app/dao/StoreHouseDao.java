@@ -30,7 +30,7 @@ public class StoreHouseDao implements Dao<Integer, StoreHouse> {
     private final static String FIND_BY_ID = """
         SELECT * 
         FROM store_house
-        WHERE storeId = ?
+        WHERE store_id = ?;
     """;
 
     private final static String DELETE = """
@@ -77,7 +77,7 @@ public class StoreHouseDao implements Dao<Integer, StoreHouse> {
     }
 
     @Override
-    public StoreHouse save(StoreHouse entity) {
-        return null;
+    public void save(StoreHouse entity) {
+
     }
 }

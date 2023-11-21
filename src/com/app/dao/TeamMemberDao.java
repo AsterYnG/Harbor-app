@@ -1,6 +1,5 @@
 package com.app.dao;
 
-import com.app.entity.Order;
 import com.app.entity.TeamMember;
 import com.app.exceptions.UnableToTakeConnectionException;
 import com.app.util.ConnectionManager;
@@ -60,7 +59,7 @@ public class TeamMemberDao implements Dao<Integer, TeamMember> {
     }
 
     @Override
-    public TeamMember save(TeamMember entity) {
-        return null;
+    public void save(TeamMember entity) {
+
     }
 }
