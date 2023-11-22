@@ -32,7 +32,7 @@ button:hover {
 
 /* Модальные окна */
 .modal {
-    display: none;
+    display: block;
     position: fixed;
     z-index: 1;
     left: 0;
@@ -201,4 +201,43 @@ table th {
 .logout-btn:hover {
     background-color: #777;
     transform: scale(1.1);
+}
+input[type="date"] {
+    width: calc(100% - 12px);
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+/* ... (предыдущие стили) */
+
+/* Стили для select */
+select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+/* Уменьшаем стандартную стрелку в select (это может быть разное в разных браузерах) */
+select::-ms-expand {
+    display: none;
+}
+
+/* Стили при наведении */
+select:hover {
+    border-color: #777;
+}
+
+/* Стили при фокусе */
+select:focus {
+    border-color: #555;
+    outline: none;
+}
+
+/* Стили для опций в select */
+option {
+    padding: 8px;
 }

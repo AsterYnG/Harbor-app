@@ -3,6 +3,7 @@ package com.app.util;
 import com.app.entity.*;
 import com.app.exceptions.NoSuchColumnInResultSetException;
 import lombok.experimental.UtilityClass;
+import org.postgresql.jdbc.PgResultSet;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

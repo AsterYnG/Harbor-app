@@ -37,7 +37,9 @@ public class ButtonServlet extends HttpServlet {
 
         switch (clickedButton) {
             case "buttonAddEmployee": {
-
+                session.setAttribute("active","addEmployee");
+                resp.sendRedirect("/admin");
+                break;
             }
             case "buttonShowAllEmployees": {
                 var workers = buttonService.showAllEmployees();
@@ -52,6 +54,8 @@ public class ButtonServlet extends HttpServlet {
                 break;
             }
             case "buttonAddFreighter": {
+                session.setAttribute("active","addFreighter");
+                resp.sendRedirect("/admin");
                 break;
             }
             case "buttonShowAllFreighters": {
@@ -67,8 +71,16 @@ public class ButtonServlet extends HttpServlet {
                 break;
             }
             case "buttonShowAllClients": {
+                var customers = buttonService.showAllCustomers();
+                session.setAttribute("customers", customers);
+                Set<String> columnNames = new HashSet<>();
+                for (Field declaredField : customers.get(0).getClass().getDeclaredFields()) {
+                    columnNames.add(declaredField.getName());
+                }
+                session.setAttribute("columnNames", columnNames);
+                session.setAttribute("active","showCustomers");
+                resp.sendRedirect("/admin");
                 break;
-
             }
             case "buttonShowVoyageLog": {
                 break;

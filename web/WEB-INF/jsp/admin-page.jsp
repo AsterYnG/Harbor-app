@@ -49,17 +49,10 @@
 </main>
 
 <!-- Модальные окна для форм -->
-<div id="employeeFormModal" class="modal">
-    <!-- Форма для внесения работника -->
-    <!-- Здесь нужно описать HTML-структуру формы -->
-</div>
 
-<div id="carrierFormModal" class="modal">
-    <!-- Форма для внесения перевозчика -->
-    <!-- Здесь нужно описать HTML-структуру формы -->
-</div>
 
 <jsp:include page="popup-table.jsp" />
+<jsp:include page="worker-documents-modal.jsp"/>
 </body>
 </html>
 
