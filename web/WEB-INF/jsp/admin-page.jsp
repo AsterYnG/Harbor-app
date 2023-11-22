@@ -17,6 +17,9 @@
         <p>ФИО админа: ${sessionScope.loggedIn.fullName}</p>
         <p>Логин: ${sessionScope.loggedIn.password}</p>
     </div>
+    <form action="/logout" method="post">
+    <button class="logout-btn">Выход</button>
+    </form>
 </header>
 
 <!-- Основная часть страницы -->
