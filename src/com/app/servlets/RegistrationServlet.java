@@ -36,7 +36,9 @@ public class RegistrationServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
        var parameterMap = req.getParameterMap();
         HttpSession session = req.getSession();
-        if(!regService.checkUniqueLogin(parameterMap.get("login")[0])) {
+       var isNotValidLogin = regService.checkUniqueLogin(parameterMap.get("login")[0]);
+       var isNotValidEmail = regService.checkUniqueEmail(parameterMap.get("email")[0]);
+        if(!(isNotValidLogin || isNotValidEmail)) {
             var customer = Customer.builder()
                     .fullName(parameterMap.get("fullname")[0])
                     .login(parameterMap.get("login")[0])
@@ -44,11 +46,22 @@ public class RegistrationServlet extends HttpServlet {
                     .email(parameterMap.get("email")[0])
                     .build();
         regService.save(customer);
-        session.setAttribute("success",true);
-        resp.sendRedirect("/login");
+            session.setAttribute("success",true);
+            resp.sendRedirect("/login");
         }
         else {
-            req.setAttribute("notUnique",true);
+            if(isNotValidLogin){
+            req.setAttribute("notUniqueLogin",true);
+            }
+            else {
+                req.setAttribute("notUniqueLogin",false);
+            }
+            if (isNotValidEmail){
+                req.setAttribute("notUniqueEmail",true);
+            }
+            else {
+                req.setAttribute("notUniqueEmail",false);
+            }
             req.getRequestDispatcher("/WEB-INF/jsp/registration.jsp")
                     .forward(req,resp);
         }

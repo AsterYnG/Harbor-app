@@ -40,9 +40,10 @@ public class LoginServlet extends HttpServlet {
                 .password(req.getParameter("password"))
                 .build();
         if (loginService.checkUserData(customer)) {
-
-            session.setAttribute("loggedIn", customer);
+            Customer savedCutomer = loginService.getSavedCustomerByLogin(req.getParameter("login"));
+            session.setAttribute("loggedIn", savedCutomer);
             resp.sendRedirect("/client");
+
         } else {
             req.setAttribute("invalidData", true);
             req.getRequestDispatcher("/WEB-INF/jsp/login.jsp")

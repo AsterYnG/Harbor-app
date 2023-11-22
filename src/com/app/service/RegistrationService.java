@@ -23,4 +23,10 @@ public class RegistrationService {
     public boolean checkUniqueLogin(String login){
         return customerDao.findByLogin(login).isPresent();
     }
+
+    public boolean checkUniqueEmail(String email){
+        return customerDao.findByEmail(email).isPresent();
+    }
+
+
 }

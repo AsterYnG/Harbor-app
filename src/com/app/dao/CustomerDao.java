@@ -38,6 +38,27 @@ public class CustomerDao implements Dao<Integer, Customer> {
             LIMIT 1;
     """;
 
+    private final static String FIND_BY_EMAIL = """
+        SELECT * FROM customer
+        WHERE email = ?
+            LIMIT 1;
+    """;
+
+
+    public Optional<Customer> findByEmail(String email){
+        try (var connection = ConnectionManager.get()) {
+            @Cleanup var preparedStatement = connection.prepareStatement(FIND_BY_EMAIL);
+            preparedStatement.setString(1,email);
+            @Cleanup var resultSet = preparedStatement.executeQuery();
+            Customer result = null;
+            if (resultSet.next()){
+                result = buildCustomer(resultSet);
+            }
+            return Optional.ofNullable(result);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public Optional<Customer> findByLogin(String login){
         try (var connection = ConnectionManager.get()) {

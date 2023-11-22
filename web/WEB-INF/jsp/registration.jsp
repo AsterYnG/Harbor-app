@@ -30,12 +30,18 @@
                        required>
             </div>
 
+            <c:if test="${requestScope.notUniqueLogin}">
+                <div class="error-message-login" id="login-error">Логин занят, используйте другой</div>
+            </c:if>
+
             <div class="form-group">
                 <input type="text" id="login" name="login" placeholder="Login" value="${param.login}" required>
             </div>
-            <c:if test="${requestScope.notUnique}">
-                <div class="error-message" id="login-error">Логин занят, используйте другой</div>
+
+            <c:if test="${requestScope.notUniqueEmail}">
+                <div class="error-message-email" id="email-error">Почта занята, используйте другую</div>
             </c:if>
+
             <div class="form-group">
                 <input type="text" id="email" name="email" placeholder="Email Address" value="${param.email}" pattern="^\S+@\S+\.\S+$" required>
             </div>
@@ -52,6 +58,8 @@
             <p>Already have an account? <a href="/login" id="toggle-login">Login</a></p>
         </div>
     </div>
+
+
 </div>
 </body>
 </html>

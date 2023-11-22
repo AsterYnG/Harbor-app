@@ -19,18 +19,13 @@ import java.util.Optional;
 public class ClientServlet extends HttpServlet {
     private final ClientService clientService = ClientService.getInstance();
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException {
-
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         HttpSession session = request.getSession();
-//        Customer customer = Customer.builder()
-//                .customerId((Customer)session.getAttribute("loggedIn"))
-//                .build();
-        // получаем ID клиента
+        var loggedCustomer = (Customer) session.getAttribute("loggedIn");
 
-//        List<Optional<Order>> orderHistory = clientService.getOrderHistory(customer);
-//        List<String> currentOrders = clientService.getCurrentOrders(customer.getCustomerId());
-        // получаем данные из сервиса
+
+        List<Optional<Order>> orderHistory = clientService.getOrderHistory(loggedCustomer);
+//         получаем данные из сервиса
 
         request.getRequestDispatcher("/WEB-INF/jsp/clientPage.jsp")
                 .forward(request,response);

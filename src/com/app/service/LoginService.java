@@ -21,4 +21,7 @@ public class LoginService {
         Optional<Customer> DataBaseCustomer = customerDao.findByLogin(customer.getLogin());
         return DataBaseCustomer.filter(value -> customer.getPassword().equals(value.getPassword())).isPresent();
     }
+    public Customer getSavedCustomerByLogin(String login){
+        return customerDao.findByLogin(login).isPresent() ? customerDao.findByLogin(login).get() : null;
+    }
 }
