@@ -30,12 +30,12 @@ public class PositionDao implements Dao<Integer, Position> {
     private final static String FIND_BY_NAME = """
         SELECT * 
         FROM position
-        WHERE position = ?
+        WHERE position = ?;
     """;
 
     private final static String DELETE = """
         DELETE FROM position 
-        WHERE position IN ?
+        WHERE position = ?;
     """;
 
     @Override

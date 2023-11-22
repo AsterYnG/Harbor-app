@@ -35,7 +35,7 @@ public class StoreHouseDao implements Dao<Integer, StoreHouse> {
 
     private final static String DELETE = """
         DELETE FROM store_house
-        WHERE storeId IN ?
+        WHERE store_id = ?;
     """;
 
     @Override

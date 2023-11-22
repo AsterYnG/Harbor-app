@@ -35,7 +35,7 @@ public class WorkerDao implements Dao<Integer, Worker> {
 
     private final static String DELETE = """
         DELETE FROM worker
-        WHERE workerId IN ?
+        WHERE worker_id = ?;
     """;
 
     @Override

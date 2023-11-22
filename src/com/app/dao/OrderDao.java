@@ -1,11 +1,13 @@
 package com.app.dao;
 
 
+import com.app.entity.Customer;
 import com.app.entity.Order;
 import com.app.exceptions.UnableToTakeConnectionException;
 import com.app.util.ConnectionManager;
 import lombok.Cleanup;
 
+import static com.app.util.EntityBuilder.buildCustomer;
 import static com.app.util.EntityBuilder.buildOrder;
 
 import java.sql.SQLException;
@@ -28,6 +30,13 @@ public class OrderDao  implements Dao<Integer, Order>{
         SELECT * FROM "Order";
     """;
 
+    private final static String CUSTOMER_ORDER = """
+            SELECT * FROM "Order"
+            JOIN public.cargo c on "Order".order_id = c.order_id
+            JOIN public.customer c2 on c2.customer_id = c.customer_id
+            WHERE c.customer_id = ?;
+            """;
+
     @Override
     public List<Order> findAll() {
         try (var connection = ConnectionManager.get()) {
@@ -43,6 +52,20 @@ public class OrderDao  implements Dao<Integer, Order>{
         }
     }
 
+    public List<Optional<Order>> customerOrders(Integer id) {
+        try (var connection = ConnectionManager.get()) {
+            @Cleanup var preparedStatement = connection.prepareStatement(CUSTOMER_ORDER);
+            preparedStatement.setInt(1, id);
+            @Cleanup var resultSet = preparedStatement.executeQuery();
+            List<Optional<Order>> result = new ArrayList<>();
+            while (resultSet.next()) {
+                result.add(Optional.of(buildOrder(resultSet)));
+            }
+            return result;
+        } catch (SQLException e) {
+            throw new UnableToTakeConnectionException(e);
+        }
+    }
     @Override
     public Optional<Order> findById(Integer id) {
         return Optional.empty();

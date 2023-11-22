@@ -30,12 +30,12 @@ public class MedicalCardDao implements Dao<Integer, MedicalCard> {
     private final static String FIND_BY_ID = """
         SELECT * 
         FROM medical_card
-        WHERE medSerialNumber = ?
+        WHERE med_serial_number = ?;
     """;
 
     private final static String DELETE = """
-        DELETE FROM medical_card 
-        WHERE medSerialNumber IN ?
+        DELETE FROM medical_card
+        WHERE med_serial_number = ?;
     """;
 
     @Override

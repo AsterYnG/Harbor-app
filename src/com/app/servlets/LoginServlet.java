@@ -42,7 +42,7 @@ public class LoginServlet extends HttpServlet {
         if (loginService.checkUserData(customer)) {
 
             session.setAttribute("loggedIn", customer);
-            // Перенаправление на главную стр в зависимости от роли
+            resp.sendRedirect("/client");
         } else {
             req.setAttribute("invalidData", true);
             req.getRequestDispatcher("/WEB-INF/jsp/login.jsp")

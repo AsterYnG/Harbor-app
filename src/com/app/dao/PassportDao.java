@@ -35,7 +35,7 @@ public class PassportDao implements Dao<Integer, Passport> {
 
     private final static String DELETE = """
         DELETE FROM passport 
-        WHERE passportSerialNumber IN ?
+        WHERE passport_serial_number = ?;
     """;
 
     @Override

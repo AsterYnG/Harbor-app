@@ -35,7 +35,7 @@ public class EducationDao implements Dao<Integer, Education> {
 
     private final static String DELETE = """
         DELETE FROM education 
-        WHERE educationSerialNumber IN ?
+        WHERE education_serial_number = ?;
     """;
 
     @Override

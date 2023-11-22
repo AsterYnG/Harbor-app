@@ -30,12 +30,12 @@ public class RegistrationDao implements Dao<Integer, Registration> {
     private final static String FIND_BY_ID = """
         SELECT * 
         FROM registration
-        WHERE regId = ?
+        WHERE reg_id = ?;
     """;
 
     private final static String DELETE = """
         DELETE FROM registration 
-        WHERE regId IN ?
+        WHERE reg_id = ?;
     """;
 
     @Override

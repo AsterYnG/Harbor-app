@@ -35,7 +35,7 @@ public class EmploymentDao implements Dao<Integer, Employment> {
 
     private final static String DELETE = """
         DELETE FROM employment 
-        WHERE employmentSerialNumber IN ?
+        WHERE employment_serial_number = ?;
     """;
 
     @Override

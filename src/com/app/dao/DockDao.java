@@ -30,12 +30,12 @@ public class DockDao implements Dao<Integer, Dock> {
     private final static String FIND_BY_ID = """
         SELECT * 
         FROM dock
-        WHERE dock_id = ?ж
+        WHERE dock_id = ?;
     """;
 
     private final static String DELETE = """
         DELETE FROM dock
-        WHERE dockId IN ?
+        WHERE dock_id = ?;
     """;
 
     @Override
