@@ -24,11 +24,31 @@ public class WorkerDao implements Dao<Integer, Worker> {
     }
 
     private final static String FIND_ALL = """
-        SELECT * FROM worker;
+        SELECT *
+        FROM worker
+            LEFT JOIN dock d on d.dock_id = worker.dock_id
+            JOIN position p on p.position = worker.position
+            LEFT JOIN medical_card mc on mc.med_serial_number = worker.med_serial_number
+            LEFT JOIN passport p2 on p2.passport_serial_number = worker.passport_serial_number
+            LEFT JOIN education e on e.education_serial_number = worker.education_serial_number
+            LEFT JOIN employment e2 on e2.employment_serial_number = worker.employment_serial_number
+            LEFT JOIN registration r on r.reg_id = p2.reg_id
+            LEFT JOIN freighter f on f.freighter_id = d.freighter_id
+            LEFT JOIN store_house sh on d.dock_id = sh.dock_id
+            LEFT JOIN cargo c on d.freighter_id = c.freighter_id
+            LEFT JOIN "Order" O on O.order_id = c.order_id
+            LEFT JOIN customer c2 on c2.customer_id = c.customer_id
+            LEFT JOIN ship s on f.freighter_id = s.freighter_id
+            LEFT JOIN team t on t.team_id = s.team_id
+            LEFT JOIN team_member tm on c2.full_name = tm.full_name
+            LEFT JOIN ship_model sm on sm.ship_model = s.ship_model
+            LEFT JOIN freighter_routes fr on d.freighter_id = fr.freighter_id
+            LEFT JOIN voyage_log vl on s.ship_id = vl.ship_id
+            LEFT JOIN available_routes ar on ar.route_id = fr.route_id;
     """;
 
     private final static String FIND_BY_ID = """
-        SELECT * 
+        SELECT *
         FROM worker
         WHERE worker_id = ?;
     """;

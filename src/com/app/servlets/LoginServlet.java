@@ -34,6 +34,12 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
 
+        if (session.getAttribute("success") != null) {  //это для того чтобы не выскакивало постоянно окно с успешной регистрацией
+            if (session.getAttribute("success").equals(true)) {
+                if (counter != 0) session.setAttribute("success", false);
+                else counter++;
+            }
+        }
 
         Customer customer = Customer.builder()
                 .login(req.getParameter("login"))
@@ -42,7 +48,14 @@ public class LoginServlet extends HttpServlet {
         if (loginService.checkUserData(customer)) {
             Customer savedCutomer = loginService.getSavedCustomerByLogin(req.getParameter("login"));
             session.setAttribute("loggedIn", savedCutomer);
-            resp.sendRedirect("/client");
+            if(savedCutomer.getLogin().equals("admin")){
+                session.setAttribute("role","admin");
+                resp.sendRedirect("/admin");
+            }
+            else {
+                session.setAttribute("role","user");
+                resp.sendRedirect("/client");
+            }
 
         } else {
             req.setAttribute("invalidData", true);

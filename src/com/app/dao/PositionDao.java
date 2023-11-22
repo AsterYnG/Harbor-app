@@ -28,7 +28,7 @@ public class PositionDao implements Dao<Integer, Position> {
     """;
 
     private final static String FIND_BY_NAME = """
-        SELECT * 
+        SELECT *
         FROM position
         WHERE position = ?;
     """;

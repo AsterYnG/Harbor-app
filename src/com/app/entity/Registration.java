@@ -8,7 +8,7 @@ import java.util.Objects;
 @Builder
 public final class Registration {
     private Integer regId;
-    private Integer house;
+    private String house;
     private Integer flat;
     private String region;
     private String city;

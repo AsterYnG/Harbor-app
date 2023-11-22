@@ -3,13 +3,14 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.Objects;
 
 @Data
 @Builder
 public final class Worker {
     private Integer workerId;
-    private Timestamp hiringDate;
+    private LocalDate hiringDate;
     private Position position;
     private MedicalCard medSerialNumber;
     private Passport passportSerialNumber;

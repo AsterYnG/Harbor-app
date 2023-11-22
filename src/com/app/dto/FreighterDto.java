@@ -9,7 +9,9 @@ import lombok.Value;
 @Value
 @Builder
 public class FreighterDto {
-     Integer freighterId;
+     Integer tax;
      Integer weightCost;
+     Integer sizeCost;
+     Integer fragileCost;
      String freighterName;
 }

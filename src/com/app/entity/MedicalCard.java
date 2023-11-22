@@ -7,7 +7,7 @@ import java.util.Objects;
 @Data
 @Builder
 public final class MedicalCard {
-    private Integer medSerialNumber;
+    private String medSerialNumber;
     private Boolean hivStatus;
     private String illness;
 }

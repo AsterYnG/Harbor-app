@@ -41,7 +41,7 @@ public class EntityBuilder {
     public static Education buildEducation(ResultSet resultSet){
         try {
             return Education.builder()
-                    .educationSerialNumber(resultSet.getObject("education_serial_number",Integer.class))
+                    .educationSerialNumber(resultSet.getObject("education_serial_number",String.class))
                     .grade(resultSet.getObject("grade",String.class))
                     .establishment(resultSet.getObject("establishment",String.class))
                     .build();
@@ -53,7 +53,7 @@ public class EntityBuilder {
     public static Employment buildEmployment(ResultSet resultSet){
         try {
             return Employment.builder()
-                    .employmentSerialNumber(resultSet.getObject("employment_serial_number",Integer.class))
+                    .employmentSerialNumber(resultSet.getObject("employment_serial_number",String.class))
                     .previousJob(resultSet.getObject("previous_job",String.class))
                     .experience(resultSet.getObject("experience",Integer.class))
                     .build();
@@ -65,7 +65,7 @@ public class EntityBuilder {
     public static MedicalCard buildMedicalCard(ResultSet resultSet){
         try {
             return MedicalCard.builder()
-                    .medSerialNumber(resultSet.getObject("med_serial_number",Integer.class))
+                    .medSerialNumber(resultSet.getObject("med_serial_number",String.class))
                     .hivStatus(resultSet.getObject("hiv_status",Boolean.class))
                     .illness(resultSet.getObject("illness",String.class))
                     .build();
@@ -78,7 +78,7 @@ public class EntityBuilder {
         try {
             return Registration.builder()
                     .regId(resultSet.getObject("reg_id",Integer.class))
-                    .house(resultSet.getObject("house",Integer.class))
+                    .house(resultSet.getObject("house",String.class))
                     .flat(resultSet.getObject("flat",Integer.class))
                     .region(resultSet.getObject("region",String.class))
                     .city(resultSet.getObject("city",String.class))
@@ -92,9 +92,9 @@ public class EntityBuilder {
     public static Passport buildPassport(ResultSet resultSet){
         try {
             return Passport.builder()
-                    .passportSerialNumber(resultSet.getObject("passport_serial_number",Integer.class))
+                    .passportSerialNumber(resultSet.getObject("passport_serial_number",String.class))
                     .fullName(resultSet.getObject("full_name",String.class))
-                    .birthDate(resultSet.getObject("birth_date",Timestamp.class))
+                    .birthDate(resultSet.getObject("birth_date",LocalDate.class))
                     .sex(resultSet.getObject("sex",String.class))
                     .citizenship(resultSet.getObject("citizenship",String.class))
                     .regId(buildRegistration(resultSet))
@@ -119,8 +119,8 @@ public class EntityBuilder {
     public static Worker buildWorker(ResultSet resultSet){
         try {
             return Worker.builder()
-                    .workerId(resultSet.getObject("workerId",Integer.class))
-                    .hiringDate(resultSet.getObject("hiring_date",Timestamp.class))
+                    .workerId(resultSet.getObject("worker_id",Integer.class))
+                    .hiringDate(resultSet.getObject("hiring_date",LocalDate.class))
                     .position(buildPosition(resultSet))
                     .medSerialNumber(buildMedicalCard(resultSet))
                     .passportSerialNumber(buildPassport(resultSet))
@@ -172,6 +172,7 @@ public class EntityBuilder {
                     .weightCost(resultSet.getObject("weight_cost",Integer.class))
                     .sizeCost(resultSet.getObject("size_cost",Integer.class))
                     .freighterName(resultSet.getObject("freighter_name",String.class))
+                    .fragileCost(resultSet.getObject("fragile_cost",Integer.class))
                     .build();
         } catch (SQLException e) {
             throw new NoSuchColumnInResultSetException(e);

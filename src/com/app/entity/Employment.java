@@ -7,7 +7,7 @@ import java.util.Objects;
 @Data
 @Builder
 public final class Employment {
-    private Integer employmentSerialNumber;
+    private String employmentSerialNumber;
     private String previousJob;
     private Integer experience;
 }
