@@ -38,6 +38,20 @@ public class DockDao implements Dao<Integer, Dock> {
         WHERE dock_id = ?;
     """;
 
+    private final static String FIND_LEAST_DOCK  = """
+        SELECT * FROM dock_with_least_workers();
+    """;
+
+    public Dock findLeastWorkersDock(){
+        try (var connection = ConnectionManager.get()) {
+            @Cleanup var preparedStatement = connection.prepareStatement(FIND_LEAST_DOCK);
+            @Cleanup var resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            return buildDock(resultSet);
+        } catch (SQLException e) {
+            throw new UnableToTakeConnectionException(e);
+        }
+    }
     @Override
     public List<Dock> findAll() {
         try (var connection = ConnectionManager.get()) {

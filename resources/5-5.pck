@@ -321,4 +321,30 @@ WHERE tm.position IN ('Cook', 'Worker', 'Captain')
 GROUP BY team.team_id
 HAVING count(distinct position) = 3;
 
+CREATE OR REPLACE FUNCTION dock_with_least_workers()
+    RETURNS TABLE (
+                      dock_id int,
+                      ship_capacity int,
+                      freighter_id int,
+                      tax int,
+                      weight_cost int,
+                      size_cost int,
+                      fragile_cost int,
+                      freighter_name varchar
+                  )
+    LANGUAGE plpgsql AS $$
+BEGIN
+    RETURN QUERY
+        SELECT dock.dock_id,dock.ship_capacity,f.freighter_id,f.tax, f.weight_cost , f.size_cost, f.fragile_cost,f.freighter_name from dock
+                                                                                                                                           JOIN public.freighter f on f.freighter_id = dock.freighter_id
+                                                                                                                                           JOIN public.worker w on dock.dock_id = w.dock_id
+        WHERE dock.dock_id = (SELECT dock.dock_id from dock
+                                                           JOIN public.freighter f on f.freighter_id = dock.freighter_id
+                                                           JOIN public.worker w on dock.dock_id = w.dock_id
+                              GROUP BY dock.dock_id
+                              ORDER BY count(w.worker_id)
+                              LIMIT 1);
+end;
+$$;
 
+SELECT * FROM dock_with_least_workers();

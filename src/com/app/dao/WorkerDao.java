@@ -58,6 +58,10 @@ public class WorkerDao implements Dao<Integer, Worker> {
         WHERE worker_id = ?;
     """;
 
+    private final static String SAVE_WORKER = """
+        INSERT INTO worker
+    """;
+
     @Override
     public List<Worker> findAll() {
         try (var connection = ConnectionManager.get()) {

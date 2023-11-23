@@ -19,6 +19,8 @@ public class ButtonServlet extends HttpServlet {
 
     private final ButtonService buttonService = ButtonService.getInstance();
 
+
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
@@ -38,6 +40,7 @@ public class ButtonServlet extends HttpServlet {
         switch (clickedButton) {
             case "buttonAddEmployee": {
                 session.setAttribute("active","addEmployee");
+                session.setAttribute("positions",buttonService.getAllPositions());
                 resp.sendRedirect("/admin");
                 break;
             }

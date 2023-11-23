@@ -112,7 +112,11 @@
             </div>
             <div class="form-group">
                 <label for="employeePosition">Должность:</label>
-                <input type="text" id="employeePosition" name="employeePosition" required>
+                <select id="employeePosition" name="employeePosition">
+                    <c:forEach var="position" items="${sessionScope.positions}">
+                        <option value="${position.position}">${position.position}</option>
+                    </c:forEach>
+                </select>
             </div>
             <!-- Другие поля для ввода данных работника -->
 

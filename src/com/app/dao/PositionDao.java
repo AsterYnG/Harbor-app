@@ -34,7 +34,7 @@ public class PositionDao implements Dao<Integer, Position> {
     """;
 
     private final static String DELETE = """
-        DELETE FROM position 
+        DELETE FROM position
         WHERE position = ?;
     """;
 
@@ -63,6 +63,7 @@ public class PositionDao implements Dao<Integer, Position> {
             @Cleanup var preparedStatement = connection.prepareStatement(FIND_BY_NAME);
             preparedStatement.setString(1, pos);
             @Cleanup var resultSet = preparedStatement.executeQuery();
+            resultSet.next();
             Position result = buildPosition(resultSet);
             return Optional.ofNullable(result);
         } catch (SQLException e) {
