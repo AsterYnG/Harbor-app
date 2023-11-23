@@ -7,7 +7,7 @@ import lombok.Cleanup;
 
 import static com.app.util.EntityBuilder.buildWorker;
 
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -58,8 +58,9 @@ public class WorkerDao implements Dao<Integer, Worker> {
         WHERE worker_id = ?;
     """;
 
-    private final static String SAVE_WORKER = """
-        INSERT INTO worker
+    private final static String SAVE = """
+        INSERT INTO worker(hiring_date, position, med_serial_number, passport_serial_number, education_serial_number, employment_serial_number, dock_id)
+        VALUES (?,?,?,?,?,?,?);
     """;
 
     @Override
@@ -101,7 +102,25 @@ public class WorkerDao implements Dao<Integer, Worker> {
     }
 
     @Override
-    public void save(Worker entity) {
-
+    public Worker save(Worker entity) {
+        try (var connection = ConnectionManager.get()) {
+            @Cleanup var preparedStatement = connection.prepareStatement(SAVE);
+            preparedStatement.setObject(1, entity.getHiringDate());
+            preparedStatement.setString(2, entity.getPosition().getPosition());
+            preparedStatement.setString(3, entity.getMedSerialNumber().getMedSerialNumber());
+            preparedStatement.setString(4, entity.getPassportSerialNumber().getPassportSerialNumber());
+            preparedStatement.setString(5, entity.getEducationSerialNumber().getEducationSerialNumber());
+            preparedStatement.setString(6, entity.getEmploymentSerialNumber().getEmploymentSerialNumber());
+            if(entity.getDockId() != null){
+                preparedStatement.setInt(7, entity.getDockId().getDockId());
+            }
+            else {
+                preparedStatement.setInt(7, );
+            }
+            preparedStatement.executeUpdate();
+            return entity;
+        } catch (SQLException e) {
+            throw new UnableToTakeConnectionException(e);
+        }
     }
 }

@@ -59,7 +59,7 @@ public class RouteDao implements Dao<Integer, Route>{
     }
 
     @Override
-    public void save(Route entity) {
-
+    public Route save(Route entity) {
+        return entity;
     }
 }

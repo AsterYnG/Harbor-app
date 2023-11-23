@@ -59,8 +59,8 @@ public class FreighterDao implements Dao<Integer, Freighter> {
     }
 
     @Override
-    public void save(Freighter entity) {
-
+    public Freighter save(Freighter entity) {
+        return entity;
     }
 
 }

@@ -7,6 +7,8 @@ import lombok.Cleanup;
 
 import static com.app.util.EntityBuilder.buildRegistration;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,14 +30,14 @@ public class RegistrationDao implements Dao<Integer, Registration> {
     """;
 
     private final static String FIND_BY_ID = """
-        SELECT * 
+        SELECT *
         FROM registration
         WHERE reg_id = ?;
     """;
 
-    private final static String DELETE = """
-        DELETE FROM registration 
-        WHERE reg_id = ?;
+    private final static String SAVE = """
+        INSERT INTO registration(region, city, street, house, flat)
+        VALUES (?,?,?,?,?);
     """;
 
     @Override
@@ -77,7 +79,21 @@ public class RegistrationDao implements Dao<Integer, Registration> {
     }
 
     @Override
-    public void save(Registration entity) {
-
+    public Registration save(Registration entity) {
+        try (var connection = ConnectionManager.get()) {
+            @Cleanup var preparedStatement = connection.prepareStatement(SAVE, PreparedStatement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1, entity.getRegion());
+            preparedStatement.setString(2, entity.getCity());
+            preparedStatement.setString(3, entity.getStreet());
+            preparedStatement.setString(4, entity.getHouse());
+            preparedStatement.setInt(5, entity.getFlat());
+            preparedStatement.executeUpdate();
+            ResultSet resultSet = preparedStatement.getGeneratedKeys();
+            resultSet.next();
+            entity.setRegId(resultSet.getObject("reg_id",Integer.class));
+            return entity;
+        } catch (SQLException e) {
+            throw new UnableToTakeConnectionException(e);
+        }
     }
 }

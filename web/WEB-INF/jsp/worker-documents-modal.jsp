@@ -7,7 +7,7 @@
             <h2>Добавить Паспорт</h2>
             <div class="form-group">
                 <label for="serialNumber">Серия и номер паспорта:</label>
-                <input type="text" id="serialNumber" name="serialNumber" pattern="^\d{11}$" maxlength="11" required>
+                <input type="text" id="serialNumber" name="serialNumber" pattern="^\d{10}$" maxlength="10" required>
             </div>
             <div class="form-group">
                 <label for="birthDate">Дата рождения:</label>

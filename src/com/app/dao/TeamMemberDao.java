@@ -59,7 +59,7 @@ public class TeamMemberDao implements Dao<Integer, TeamMember> {
     }
 
     @Override
-    public void save(TeamMember entity) {
-
+    public TeamMember save(TeamMember entity) {
+    return entity;
     }
 }

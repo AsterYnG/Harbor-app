@@ -77,7 +77,7 @@ public class StoreHouseDao implements Dao<Integer, StoreHouse> {
     }
 
     @Override
-    public void save(StoreHouse entity) {
-
+    public StoreHouse save(StoreHouse entity) {
+        return entity;
     }
 }

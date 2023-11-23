@@ -7,6 +7,7 @@ import lombok.Cleanup;
 
 import static com.app.util.EntityBuilder.buildEmployment;
 
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,9 +34,9 @@ public class EmploymentDao implements Dao<Integer, Employment> {
         WHERE employment_serial_number = ?;
     """;
 
-    private final static String DELETE = """
-        DELETE FROM employment 
-        WHERE employment_serial_number = ?;
+    private final static String SAVE = """
+        INSERT INTO employment(previous_job, experience, employment_serial_number)
+        VALUES (?,?,?);
     """;
 
     @Override
@@ -77,7 +78,17 @@ public class EmploymentDao implements Dao<Integer, Employment> {
     }
 
     @Override
-    public void save(Employment entity) {
+    public Employment save(Employment entity) {
+        try (var connection = ConnectionManager.get()) {
+            @Cleanup var preparedStatement = connection.prepareStatement(SAVE, PreparedStatement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1, entity.getPreviousJob());
+            preparedStatement.setInt(2, entity.getExperience());
+            preparedStatement.setString(3, entity.getEmploymentSerialNumber());
+            preparedStatement.executeUpdate();
 
+            return entity;
+        } catch (SQLException e) {
+            throw new UnableToTakeConnectionException(e);
+        }
     }
 }

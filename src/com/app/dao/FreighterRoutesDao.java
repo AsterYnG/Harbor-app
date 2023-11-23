@@ -62,7 +62,7 @@ public class FreighterRoutesDao implements Dao<Map<String,Integer>, FreighterRou
     }
 
     @Override
-    public void save(FreighterRoutes entity) {
-
+    public FreighterRoutes save(FreighterRoutes entity) {
+        return entity;
     }
 }

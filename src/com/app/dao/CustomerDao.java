@@ -1,13 +1,12 @@
 package com.app.dao;
 
 import com.app.entity.Customer;
-import com.app.exceptions.UnableToTakeConnectionException;
 import com.app.util.ConnectionManager;
-import com.app.util.EntityBuilder;
 import lombok.Cleanup;
 
 import static com.app.util.EntityBuilder.buildCustomer;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -105,7 +104,7 @@ public class CustomerDao implements Dao<Integer, Customer> {
     }
 
     @Override
-    public void save(Customer entity) {
+    public Customer save(Customer entity) {
         try (var connection = ConnectionManager.get()) {
             @Cleanup var preparedStatement = connection.prepareStatement(SAVE, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, entity.getFullName());
@@ -113,6 +112,10 @@ public class CustomerDao implements Dao<Integer, Customer> {
             preparedStatement.setString(3, entity.getPassword());
             preparedStatement.setString(4, entity.getLogin());
             preparedStatement.executeUpdate();
+            ResultSet resultSet = preparedStatement.getGeneratedKeys();
+            resultSet.next();
+            entity.setCustomerId(resultSet.getObject("customer_id",Integer.class));
+            return entity;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

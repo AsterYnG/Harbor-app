@@ -62,8 +62,8 @@ public final class CargoDao implements Dao<Integer, Cargo> {
     }
 
     @Override
-    public void save(Cargo entity) {
-
+    public Cargo save(Cargo entity) {
+    return entity;
     }
 
 

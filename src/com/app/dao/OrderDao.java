@@ -1,13 +1,11 @@
 package com.app.dao;
 
 
-import com.app.entity.Customer;
 import com.app.entity.Order;
 import com.app.exceptions.UnableToTakeConnectionException;
 import com.app.util.ConnectionManager;
 import lombok.Cleanup;
 
-import static com.app.util.EntityBuilder.buildCustomer;
 import static com.app.util.EntityBuilder.buildOrder;
 
 import java.sql.SQLException;
@@ -15,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class OrderDao  implements Dao<Integer, Order>{
+public class OrderDao implements Dao<Integer, Order> {
 
     private static final OrderDao INSTANCE = new OrderDao();
 
@@ -27,8 +25,8 @@ public class OrderDao  implements Dao<Integer, Order>{
     }
 
     private final static String FIND_ALL = """
-        SELECT * FROM "Order";
-    """;
+                SELECT * FROM "Order";
+            """;
 
     private final static String CUSTOMER_ORDER = """
             SELECT * FROM "Order"
@@ -66,6 +64,7 @@ public class OrderDao  implements Dao<Integer, Order>{
             throw new UnableToTakeConnectionException(e);
         }
     }
+
     @Override
     public Optional<Order> findById(Integer id) {
         return Optional.empty();
@@ -82,7 +81,7 @@ public class OrderDao  implements Dao<Integer, Order>{
     }
 
     @Override
-    public void save(Order entity) {
-
+    public Order save(Order entity) {
+        return entity;
     }
 }

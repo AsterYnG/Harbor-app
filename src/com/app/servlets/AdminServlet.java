@@ -26,6 +26,7 @@ public class AdminServlet extends HttpServlet {
         employeeAddStatus.add("addEmployee");
         employeeAddStatus.add("addEmployeePassport");
         employeeAddStatus.add("addEmployeeMedicalCard");
+        employeeAddStatus.add("addEmployeeEmploymentCard");
         employeeAddStatus.add("addEmployeeEducationCard");
     }
 

@@ -7,6 +7,7 @@ import lombok.Cleanup;
 
 import static com.app.util.EntityBuilder.buildMedicalCard;
 
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,9 +34,9 @@ public class MedicalCardDao implements Dao<Integer, MedicalCard> {
         WHERE med_serial_number = ?;
     """;
 
-    private final static String DELETE = """
-        DELETE FROM medical_card
-        WHERE med_serial_number = ?;
+    private final static String SAVE = """
+        INSERT INTO medical_card(hiv_status, illness, med_serial_number)
+        VALUES (?,?,?);
     """;
 
     @Override
@@ -77,7 +78,17 @@ public class MedicalCardDao implements Dao<Integer, MedicalCard> {
     }
 
     @Override
-    public void save(MedicalCard entity) {
+    public MedicalCard save(MedicalCard entity) {
+        try (var connection = ConnectionManager.get()) {
+            @Cleanup var preparedStatement = connection.prepareStatement(SAVE, PreparedStatement.RETURN_GENERATED_KEYS);
+            preparedStatement.setBoolean(1, entity.getHivStatus());
+            preparedStatement.setString(2, entity.getIllness());
+            preparedStatement.setString(3, entity.getMedSerialNumber());
+            preparedStatement.executeUpdate();
 
+            return entity;
+        } catch (SQLException e) {
+            throw new UnableToTakeConnectionException(e);
+        }
     }
 }

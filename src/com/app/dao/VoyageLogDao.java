@@ -59,7 +59,7 @@ public class VoyageLogDao implements Dao<Integer, VoyageLog> {
     }
 
     @Override
-    public void save(VoyageLog entity) {
-
+    public VoyageLog save(VoyageLog entity) {
+        return entity;
     }
 }

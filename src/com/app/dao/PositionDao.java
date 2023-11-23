@@ -82,7 +82,7 @@ public class PositionDao implements Dao<Integer, Position> {
     }
 
     @Override
-    public void save(Position entity) {
-
+    public Position save(Position entity) {
+        return entity;
     }
 }

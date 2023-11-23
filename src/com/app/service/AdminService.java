@@ -1,8 +1,6 @@
 package com.app.service;
 
-import com.app.dao.CustomerDao;
-import com.app.dao.DockDao;
-import com.app.dao.PositionDao;
+import com.app.dao.*;
 import com.app.dto.*;
 import com.app.entity.*;
 import com.app.util.Mapper;
@@ -32,6 +30,13 @@ public class AdminService {
 
     private final PositionDao positionDao = PositionDao.getInstance();
     private final DockDao dockDao = DockDao.getInstance();
+    private final EmploymentDao employmentDao = EmploymentDao.getInstance();
+    private final MedicalCardDao medicalCardDao = MedicalCardDao.getInstance();
+    private final RegistrationDao registrationDao = RegistrationDao.getInstance();
+    private final PassportDao passportDao = PassportDao.getInstance();
+    private final EducationDao educationDao = EducationDao.getInstance();
+    private final WorkerDao workerDao = WorkerDao.getInstance();
+
 
     public void saveWorker(CreateEducationDto educationDto, CreateEmploymentDto employmentDto, CreatePassportDto passportDto, CreateRegistrationDto registrationDto , CreateMedicalCardDto medicalCardDto, Position position){
         Dock dock;
@@ -65,6 +70,14 @@ public class AdminService {
                 .passportSerialNumber(passport)
                 .position(position)
                 .build();
+
+        worker.getPassportSerialNumber().setRegId(registrationDao.save(worker.getPassportSerialNumber().getRegId()));
+        worker.setPassportSerialNumber(passportDao.save(worker.getPassportSerialNumber()));
+        worker.setEmploymentSerialNumber(employmentDao.save(worker.getEmploymentSerialNumber()));
+        worker.setMedSerialNumber(medicalCardDao.save(worker.getMedSerialNumber()));
+        worker.setEducationSerialNumber(educationDao.save(worker.getEducationSerialNumber()));
+
+        workerDao.save(worker);
 
 
     }

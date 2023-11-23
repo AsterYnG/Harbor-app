@@ -92,6 +92,7 @@ public class DockDao implements Dao<Integer, Dock> {
     }
 
     @Override
-    public void save(Dock entity) {
+    public Dock save(Dock entity) {
+        return entity;
     }
 }

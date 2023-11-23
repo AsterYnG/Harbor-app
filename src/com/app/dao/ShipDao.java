@@ -63,7 +63,7 @@ public class ShipDao implements Dao<Integer, Ship> {
     }
 
     @Override
-    public void save(Ship entity) {
-
+    public Ship save(Ship entity) {
+        return entity;
     }
 }
