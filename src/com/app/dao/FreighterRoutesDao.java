@@ -27,8 +27,12 @@ public class FreighterRoutesDao implements Dao<Map<String,Integer>, FreighterRou
 
     private final static String FIND_ALL = """
         SELECT * FROM available_routes
-            JOIN public.freighter_routes fr on available_routes.route_id = fr.route_id
-            JOIN public.available_routes ar on ar.route_id = fr.route_id;
+        JOIN public.freighter_routes fr on available_routes.route_id = fr.route_id
+        JOIN public.freighter f on f.freighter_id = fr.freighter_id;
+    """;
+
+    private final static String FIND_CITIES = """
+        SELECT destination_city FROM available_routes;
     """;
 
     @Override
@@ -45,7 +49,19 @@ public class FreighterRoutesDao implements Dao<Map<String,Integer>, FreighterRou
             throw new UnableToTakeConnectionException(e);
         }
     }
-
+    public List<String> findAvailableCities() {
+        try (var connection = ConnectionManager.get()) {
+            @Cleanup var preparedStatement = connection.prepareStatement(FIND_CITIES);
+            @Cleanup var resultSet = preparedStatement.executeQuery();
+            List<String> result = new ArrayList<>();
+            while (resultSet.next()) {
+                result.add(String.valueOf(resultSet));
+            }
+            return result;
+        } catch (SQLException e) {
+            throw new UnableToTakeConnectionException(e);
+        }
+    }
     @Override
     public Optional<FreighterRoutes> findById(Map<String, Integer> id) {
         return Optional.empty();

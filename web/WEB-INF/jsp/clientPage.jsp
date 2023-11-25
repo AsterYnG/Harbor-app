@@ -11,12 +11,12 @@
     </style>
 </head>
 <body>
-
 <jsp:include page="profileSection.jsp"/>
 
 <jsp:include page="changePasswordModal.jsp"/>
 
 <jsp:include page="orderSection.jsp" />
 
+<jsp:include page="create-order-modal.jsp"/>
 </body>
 </html>

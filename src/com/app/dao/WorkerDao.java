@@ -111,12 +111,13 @@ public class WorkerDao implements Dao<Integer, Worker> {
             preparedStatement.setString(4, entity.getPassportSerialNumber().getPassportSerialNumber());
             preparedStatement.setString(5, entity.getEducationSerialNumber().getEducationSerialNumber());
             preparedStatement.setString(6, entity.getEmploymentSerialNumber().getEmploymentSerialNumber());
-            if(entity.getDockId() != null){
-                preparedStatement.setInt(7, entity.getDockId().getDockId());
-            }
-            else {
-                preparedStatement.setInt(7, );
-            }
+//            if(entity.getDockId() != null){
+//                preparedStatement.setInt(7, entity.getDockId().getDockId());
+//            }
+//            else {
+//                preparedStatement.setInt(7, );
+//            }
+            preparedStatement.setInt(7, entity.getDockId().getDockId());
             preparedStatement.executeUpdate();
             return entity;
         } catch (SQLException e) {

@@ -85,4 +85,13 @@ public class Mapper {
                 .build();
     }
 
+    public static Cargo mapFromDtoToCargo(CreateCargoDto cargoDto){
+        return Cargo.builder()
+                .cargoSize(cargoDto.getCargoSize())
+                .cargoWeight(cargoDto.getCargoWeight())
+                .isFragile(cargoDto.getIsFragile())
+                .destination(cargoDto.getDestination())
+                .build();
+    }
+
 }

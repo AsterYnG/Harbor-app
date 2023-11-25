@@ -115,7 +115,6 @@ public class AdminServlet extends HttpServlet {
                     var employmentCard = (CreateEmploymentDto) session.getAttribute("employmentCard");
                     var position = (Position)session.getAttribute("position");
                     adminService.saveWorker(education,employmentCard,passport,registration,medicalCard,position);
-
                     req.getRequestDispatcher("/WEB-INF/jsp/admin-page.jsp")
                             .forward(req,resp);
                     break;

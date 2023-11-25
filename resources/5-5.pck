@@ -294,7 +294,10 @@ SELECT full_name FROM customer;
 select * FROM worker
 JOIN public.passport p on p.passport_serial_number = worker.passport_serial_number;
 
-
+SELECT * FROM "Order"
+                           JOIN public.cargo c on "Order".order_id = c.order_id
+                           JOIN public.customer c2 on c2.customer_id = c.customer_id
+WHERE c.customer_id = 1 AND "Order".status IN ('Delivered', 'Canceled');
 SELECT full_name, position FROM team_member
 UNION
 SELECT full_name, worker.position FROM worker

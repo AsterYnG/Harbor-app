@@ -32,7 +32,14 @@ public class OrderDao implements Dao<Integer, Order> {
             SELECT * FROM "Order"
             JOIN public.cargo c on "Order".order_id = c.order_id
             JOIN public.customer c2 on c2.customer_id = c.customer_id
-            WHERE c.customer_id = ?;
+            WHERE c.customer_id = ? AND "Order".status IN ('Delivered', 'Canceled');
+            """;
+
+    private final static String CURRENT_CUSTOMER_ORDER = """
+            SELECT * FROM "Order"
+            JOIN public.cargo c on "Order".order_id = c.order_id
+            JOIN public.customer c2 on c2.customer_id = c.customer_id
+            WHERE c.customer_id = ? AND "Order".status NOT IN ('Delivered', 'Canceled');
             """;
 
     @Override
@@ -83,5 +90,20 @@ public class OrderDao implements Dao<Integer, Order> {
     @Override
     public Order save(Order entity) {
         return entity;
+    }
+
+    public List<Optional<Order>> currentCustomerOrders(Integer id) {
+        try (var connection = ConnectionManager.get()) {
+            @Cleanup var preparedStatement = connection.prepareStatement(CURRENT_CUSTOMER_ORDER);
+            preparedStatement.setInt(1, id);
+            @Cleanup var resultSet = preparedStatement.executeQuery();
+            List<Optional<Order>> result = new ArrayList<>();
+            while (resultSet.next()) {
+                result.add(Optional.of(buildOrder(resultSet)));
+            }
+            return result;
+        } catch (SQLException e) {
+            throw new UnableToTakeConnectionException(e);
+        }
     }
 }
