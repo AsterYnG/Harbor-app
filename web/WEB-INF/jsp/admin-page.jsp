@@ -41,10 +41,10 @@
         <button onclick="showAllClients()" name="buttonShowAllClients" value="true">Все клиенты</button>
 
         <!-- Кнопка вывода всех плаваний кораблей -->
-        <button onclick="showAllShipVoyages()" name="buttonShowVoyageLog" value="true">Плавания кораблей</button>
+<%--        <button onclick="showAllShipVoyages()" name="buttonShowVoyageLog" value="true">Плавания кораблей</button>--%>
 
-        <!-- Кнопка вывода всех команд для кораблей -->
-        <button onclick="showAllShipCrews()" name="buttonShowAllTeams" value="true">Команды для кораблей</button>
+<%--        <!-- Кнопка вывода всех команд для кораблей -->--%>
+<%--        <button onclick="showAllShipCrews()" name="buttonShowAllTeams" value="true">Команды для кораблей</button>--%>
     </form>
 </main>
 

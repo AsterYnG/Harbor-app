@@ -92,7 +92,7 @@ button:hover {
 
 /* Анимация появления модального окна */
 .modal {
-    /* ... (предыдущие стили) */
+    z-index: 60;
     animation: fadeIn 0.3s ease;
 }
 
@@ -152,7 +152,7 @@ table th,
 table td {
     border: 1px solid #ddd;
     padding: 8px;
-    text-align: left;
+    text-align: center;
 }
 
 table th {
@@ -195,7 +195,7 @@ table th {
     cursor: pointer;
     border-radius: 8px; /* Более закругленные углы */
     transition: background-color 0.3s ease;
-    z-index: 999;
+    z-index: 50;
 }
 
 .logout-btn:hover {
@@ -240,4 +240,32 @@ select:focus {
 /* Стили для опций в select */
 option {
     padding: 8px;
+}
+.error-message {
+    display: block;
+    color: red;
+    font-size: 14px;
+    margin-top: -15px; /* Регулируйте отступ, чтобы всплывающее окно было над полем ввода */
+}
+.error-message-date{
+display: block;
+color: red;
+font-size: 14px;
+margin-top: 3px;
+margin-left: 180px;
+}
+
+.close-button {
+    width: 30px;
+    height: 30px;
+    background-color: red;
+    border: none;
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
