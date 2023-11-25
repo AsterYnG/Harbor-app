@@ -1,10 +1,12 @@
 package com.app.dao;
 
+import com.app.entity.Customer;
 import com.app.entity.Passport;
 import com.app.exceptions.UnableToTakeConnectionException;
 import com.app.util.ConnectionManager;
 import lombok.Cleanup;
 
+import static com.app.util.EntityBuilder.buildCustomer;
 import static com.app.util.EntityBuilder.buildPassport;
 
 import java.sql.PreparedStatement;
@@ -15,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 
-public class PassportDao implements Dao<Integer, Passport> {
+public class PassportDao implements Dao<String, Passport> {
     private static final PassportDao INSTANCE = new PassportDao();
 
     public static PassportDao getInstance() {
@@ -32,6 +34,7 @@ public class PassportDao implements Dao<Integer, Passport> {
     private final static String FIND_BY_ID = """
         SELECT *
         FROM passport
+        JOIN public.registration r on r.reg_id = passport.reg_id
         WHERE passport_serial_number = ?;
     """;
 
@@ -56,12 +59,15 @@ public class PassportDao implements Dao<Integer, Passport> {
     }
 
     @Override
-    public Optional<Passport> findById(Integer id) {
+    public Optional<Passport> findById(String id) {
         try (var connection = ConnectionManager.get()) {
             @Cleanup var preparedStatement = connection.prepareStatement(FIND_BY_ID);
-            preparedStatement.setInt(1, id);
+            preparedStatement.setString(1, id);
             @Cleanup var resultSet = preparedStatement.executeQuery();
-            Passport result = buildPassport(resultSet);
+            Passport result = null;
+            if (resultSet.next()){
+                result = buildPassport(resultSet);
+            }
             return Optional.ofNullable(result);
         } catch (SQLException e) {
             throw new UnableToTakeConnectionException(e);
@@ -69,7 +75,7 @@ public class PassportDao implements Dao<Integer, Passport> {
     }
 
     @Override
-    public boolean delete(Integer id) {
+    public boolean delete(String id) {
         return false;
     }
 

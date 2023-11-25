@@ -1,10 +1,12 @@
 package com.app.dao;
 
+import com.app.entity.Employment;
 import com.app.entity.MedicalCard;
 import com.app.exceptions.UnableToTakeConnectionException;
 import com.app.util.ConnectionManager;
 import lombok.Cleanup;
 
+import static com.app.util.EntityBuilder.buildEmployment;
 import static com.app.util.EntityBuilder.buildMedicalCard;
 
 import java.sql.PreparedStatement;
@@ -14,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 
-public class MedicalCardDao implements Dao<Integer, MedicalCard> {
+public class MedicalCardDao implements Dao<String, MedicalCard> {
     private static final MedicalCardDao INSTANCE = new MedicalCardDao();
 
     public static MedicalCardDao getInstance() {
@@ -55,12 +57,15 @@ public class MedicalCardDao implements Dao<Integer, MedicalCard> {
     }
 
     @Override
-    public Optional<MedicalCard> findById(Integer id) {
+    public Optional<MedicalCard> findById(String id) {
         try (var connection = ConnectionManager.get()) {
             @Cleanup var preparedStatement = connection.prepareStatement(FIND_BY_ID);
-            preparedStatement.setInt(1, id);
+            preparedStatement.setString(1, id);
             @Cleanup var resultSet = preparedStatement.executeQuery();
-            MedicalCard result = buildMedicalCard(resultSet);
+            MedicalCard result = null;
+            if (resultSet.next()){
+                result = buildMedicalCard(resultSet);
+            }
             return Optional.ofNullable(result);
         } catch (SQLException e) {
             throw new UnableToTakeConnectionException(e);
@@ -68,7 +73,7 @@ public class MedicalCardDao implements Dao<Integer, MedicalCard> {
     }
 
     @Override
-    public boolean delete(Integer id) {
+    public boolean delete(String id) {
         return false;
     }
 

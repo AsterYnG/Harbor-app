@@ -27,6 +27,10 @@ public class FreighterDao implements Dao<Integer, Freighter> {
     private static final String FIND_ALL = """
             SELECT * FROM freighter;
             """;
+    private static final String SAVE = """
+            INSERT INTO freighter(tax, weight_cost, size_cost, fragile_cost, freighter_name)
+            VALUES (?,?,?,?,?);
+            """;
 
     @Override
     public List<Freighter> findAll() {
@@ -60,7 +64,19 @@ public class FreighterDao implements Dao<Integer, Freighter> {
 
     @Override
     public Freighter save(Freighter entity) {
-        return entity;
+        try (var connection = ConnectionManager.get()) {
+            @Cleanup var preparedStatement = connection.prepareStatement(SAVE);
+            preparedStatement.setInt(1,entity.getTax());
+            preparedStatement.setInt(2,entity.getWeightCost());
+            preparedStatement.setInt(3,entity.getSizeCost());
+            preparedStatement.setInt(4,entity.getFragileCost());
+            preparedStatement.setString(5,entity.getFreighterName());
+            preparedStatement.executeUpdate();
+
+            return entity;
+        } catch (SQLException e) {
+            throw new UnableToTakeConnectionException(e);
+        }
     }
 
 }

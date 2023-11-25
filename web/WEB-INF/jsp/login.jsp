@@ -20,21 +20,21 @@
 <body>
 <div class="container">
     <div class="login-box">
-        <h1>Login</h1>
+        <h1>Аутентификация</h1>
         <form id="login-form" action="/login" method="post">
             <div class="input-group">
-                <input type="text" id="login" name="login" placeholder="Login" value="${requestScope.login}" required>
+                <input type="text" id="login" name="login" placeholder="Логин" value="${requestScope.login}" maxlength="15" pattern="^\S+$" required>
             </div>
 
             <div class="input-group">
-                <input type="password" id="password" name="password" placeholder="Password" value="${requestScope.password}" required>
+                <input type="password" id="password" name="password" placeholder="Пароль" value="${requestScope.password}" maxlength="15" pattern="^\S+$" required>
             </div>
 
-            <button type="submit" id="login-btn">Login</button>
+            <button type="submit" id="login-btn">Войти</button>
         </form>
 
         <div class="additional-info">
-            <p>Don't have an account? <a href="/registration">Sign Up</a></p>
+            <p>Нет аккаунта? <a href="/registration">Регистрация</a></p>
         </div>
     </div>
 </div>

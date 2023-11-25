@@ -62,6 +62,10 @@ public class WorkerDao implements Dao<Integer, Worker> {
         INSERT INTO worker(hiring_date, position, med_serial_number, passport_serial_number, education_serial_number, employment_serial_number, dock_id)
         VALUES (?,?,?,?,?,?,?);
     """;
+    private final static String SAVE2 = """
+        INSERT INTO worker(hiring_date, position, med_serial_number, passport_serial_number, education_serial_number, employment_serial_number)
+        VALUES (?,?,?,?,?,?);
+    """;
 
     @Override
     public List<Worker> findAll() {
@@ -104,6 +108,8 @@ public class WorkerDao implements Dao<Integer, Worker> {
     @Override
     public Worker save(Worker entity) {
         try (var connection = ConnectionManager.get()) {
+
+            if(entity.getDockId() != null){
             @Cleanup var preparedStatement = connection.prepareStatement(SAVE);
             preparedStatement.setObject(1, entity.getHiringDate());
             preparedStatement.setString(2, entity.getPosition().getPosition());
@@ -111,14 +117,24 @@ public class WorkerDao implements Dao<Integer, Worker> {
             preparedStatement.setString(4, entity.getPassportSerialNumber().getPassportSerialNumber());
             preparedStatement.setString(5, entity.getEducationSerialNumber().getEducationSerialNumber());
             preparedStatement.setString(6, entity.getEmploymentSerialNumber().getEmploymentSerialNumber());
-            if(entity.getDockId() != null){
-                preparedStatement.setInt(7, entity.getDockId().getDockId());
-            }
-            else {
-                preparedStatement.setInt(7, );
-            }
+            preparedStatement.setInt(7, entity.getDockId().getDockId());
+
             preparedStatement.executeUpdate();
             return entity;
+            }
+            else {
+                @Cleanup var preparedStatement = connection.prepareStatement(SAVE2);
+                preparedStatement.setObject(1, entity.getHiringDate());
+                preparedStatement.setString(2, entity.getPosition().getPosition());
+                preparedStatement.setString(3, entity.getMedSerialNumber().getMedSerialNumber());
+                preparedStatement.setString(4, entity.getPassportSerialNumber().getPassportSerialNumber());
+                preparedStatement.setString(5, entity.getEducationSerialNumber().getEducationSerialNumber());
+                preparedStatement.setString(6, entity.getEmploymentSerialNumber().getEmploymentSerialNumber());
+
+                preparedStatement.executeUpdate();
+                return entity;
+            }
+
         } catch (SQLException e) {
             throw new UnableToTakeConnectionException(e);
         }

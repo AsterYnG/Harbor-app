@@ -1,10 +1,12 @@
 package com.app.dao;
 
+import com.app.entity.Education;
 import com.app.entity.Employment;
 import com.app.exceptions.UnableToTakeConnectionException;
 import com.app.util.ConnectionManager;
 import lombok.Cleanup;
 
+import static com.app.util.EntityBuilder.buildEducation;
 import static com.app.util.EntityBuilder.buildEmployment;
 
 import java.sql.PreparedStatement;
@@ -14,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 
-public class EmploymentDao implements Dao<Integer, Employment> {
+public class EmploymentDao implements Dao<String, Employment> {
     private static final EmploymentDao INSTANCE = new EmploymentDao();
 
     public static EmploymentDao getInstance() {
@@ -55,12 +57,15 @@ public class EmploymentDao implements Dao<Integer, Employment> {
     }
 
     @Override
-    public Optional<Employment> findById(Integer id) {
+    public Optional<Employment> findById(String id) {
         try (var connection = ConnectionManager.get()) {
             @Cleanup var preparedStatement = connection.prepareStatement(FIND_BY_ID);
-            preparedStatement.setInt(1, id);
+            preparedStatement.setString(1, id);
             @Cleanup var resultSet = preparedStatement.executeQuery();
-            Employment result = buildEmployment(resultSet);
+            Employment result = null;
+            if (resultSet.next()){
+                result = buildEmployment(resultSet);
+            }
             return Optional.ofNullable(result);
         } catch (SQLException e) {
             throw new UnableToTakeConnectionException(e);
@@ -68,7 +73,7 @@ public class EmploymentDao implements Dao<Integer, Employment> {
     }
 
     @Override
-    public boolean delete(Integer id) {
+    public boolean delete(String id) {
         return false;
     }
 

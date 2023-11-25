@@ -104,11 +104,11 @@
 </c:if>
 <c:if test="${sessionScope.active == 'addEmployee'}">
     <div id="employeeFormModal" class="modal">
-        <form id="employeeForm" class="modal-form" action="/admin" method="post">
+        <form id="employeeForm" class="modal-form" action="${pageContext.request.contextPath}/admin" method="post">
             <h2>Добавить работника</h2>
             <div class="form-group">
                 <label for="employeeFullName">ФИО:</label>
-                <input type="text" id="employeeFullName" name="employeeFullName" required>
+                <input type="text" id="employeeFullName" name="employeeFullName" maxlength="49"  required>
             </div>
             <div class="form-group">
                 <label for="employeePosition">Должность:</label>
@@ -129,15 +129,27 @@
 
 <c:if test="${sessionScope.active == 'addFreighter'}">
     <div id="freighterFormModal" class="modal">
-        <form id="freighterForm" class="modal-form" action="/admin" method="post">
+        <form id="freighterForm" class="modal-form" action="${pageContext.request.contextPath}/admin" method="post">
             <h2>Добавить Перевозчика</h2>
             <div class="form-group">
                 <label for="freighterName">Название перевозчика:</label>
                 <input type="text" id="freighterName" name="freighterName" required>
             </div>
             <div class="form-group">
-                <label for="freighterCost">Стоимость за 1 кг груза:</label>
-                <input type="text" id="freighterCost" name="freighterCost" required>
+                <label for="weightCost">Стоимость за 1 кг груза:</label>
+                <input type="text" id="weightCost" name="weightCost" required>
+            </div>
+            <div class="form-group">
+                <label for="sizeCost">Стоимость за 1 кубометр груза:</label>
+                <input type="text" id="sizeCost" name="sizeCost" required>
+            </div>
+            <div class="form-group">
+                <label for="tax">Тариф за пользование услугами порта в % :</label>
+                <input type="text" id="tax" name="tax" required>
+            </div>
+            <div class="form-group">
+                <label for="fragileCost">Стоимость за хрупкость груза:</label>
+                <input type="text" id="fragileCost" name="fragileCost" required>
             </div>
             <!-- Другие поля для ввода данных работника -->
 
@@ -158,6 +170,8 @@
          document.getElementById('freighterFormModal').style.display = 'none';
      }
 
+
+
      window.onclick = function(event) {
          if (event.target === document.getElementById('employeeFormModal')) {
              closeModal();
@@ -165,5 +179,6 @@
          if (event.target === document.getElementById('freighterFormModal')) {
              closeModal1();
          }
+
      };
 </script>
