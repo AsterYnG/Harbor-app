@@ -31,7 +31,7 @@ GROUP BY capacity;
 
 --Сортировка
 select * FROM team
-ORDER BY expirience DESC;
+ORDER BY experience DESC;
 
 --Деление
 SELECT team.team_id FROM team

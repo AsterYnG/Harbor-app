@@ -26,7 +26,12 @@ public class VoyageLogDao implements Dao<Integer, VoyageLog> {
 
     private final static String FIND_ALL = """
         SELECT * FROM voyage_log
-            JOIN public.ship s on s.ship_id = voyage_log.ship_id;
+            JOIN public.ship s on s.ship_id = voyage_log.ship_id
+            JOIN public.team t on t.team_id = s.team_id
+            JOIN public.team_member tm on t.team_id = tm.team_id
+            JOIN public.ship_model sm on sm.ship_model = s.ship_model
+            JOIN public.freighter f on f.freighter_id = s.freighter_id;
+            
     """;
     @Override
     public List<VoyageLog> findAll() {

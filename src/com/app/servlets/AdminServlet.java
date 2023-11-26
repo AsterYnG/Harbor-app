@@ -3,6 +3,7 @@ package com.app.servlets;
 import com.app.dto.*;
 import com.app.entity.Freighter;
 import com.app.entity.Position;
+import com.app.entity.Route;
 import com.app.exceptions.ValidationException;
 import com.app.service.AdminService;
 import com.app.service.LoginService;
@@ -56,7 +57,7 @@ public class AdminServlet extends HttpServlet {
                 }
                 case "addEmployeePassport": {
                     if (Boolean.valueOf(req.getParameter("exit")).equals(true)) {//Кнопка крестик убирает актив
-                        session.setAttribute("active","");
+                        session.setAttribute("active", "");
                         doGet(req, resp);
                         break;
                     }
@@ -99,8 +100,8 @@ public class AdminServlet extends HttpServlet {
 
                 case "addEmployeeMedicalCard": {
                     if (Boolean.valueOf(req.getParameter("exit")).equals(true)) {
-                        session.setAttribute("active","");
-                        doGet(req,resp);
+                        session.setAttribute("active", "");
+                        doGet(req, resp);
                         break;
                     }
 
@@ -112,8 +113,7 @@ public class AdminServlet extends HttpServlet {
                                 .build();
                         adminService.checkMedicalCard(medicalCard);
                         session.setAttribute("medicalCard", medicalCard);
-                    }
-                    catch (ValidationException e){
+                    } catch (ValidationException e) {
                         req.setAttribute("errors", e.getErrors());
                         doGet(req, resp);
                         break;
@@ -126,8 +126,8 @@ public class AdminServlet extends HttpServlet {
 
                 case "addEmployeeEmploymentCard": {
                     if (Boolean.valueOf(req.getParameter("exit")).equals(true)) {
-                        session.setAttribute("active","");
-                        doGet(req,resp);
+                        session.setAttribute("active", "");
+                        doGet(req, resp);
                         break;
                     }
 
@@ -139,21 +139,20 @@ public class AdminServlet extends HttpServlet {
                                 .build();
                         adminService.checkEmploymentCard(employmentCard);
                         session.setAttribute("employmentCard", employmentCard);
-                    }
-                    catch (ValidationException e){
+                    } catch (ValidationException e) {
                         req.setAttribute("errors", e.getErrors());
                         doGet(req, resp);
                         break;
                     }
 
-                        session.setAttribute("active", employeeAddStatus.get(employeeAddStatus.indexOf(currentStatus) + 1));
+                    session.setAttribute("active", employeeAddStatus.get(employeeAddStatus.indexOf(currentStatus) + 1));
                     resp.sendRedirect("/admin");
                     break;
                 }
                 case "addEmployeeEducationCard": {
                     if (Boolean.valueOf(req.getParameter("exit")).equals(true)) {
-                        session.setAttribute("active","");
-                        doGet(req,resp);
+                        session.setAttribute("active", "");
+                        doGet(req, resp);
                         break;
                     }
 
@@ -173,9 +172,7 @@ public class AdminServlet extends HttpServlet {
                         var employmentCard = (CreateEmploymentDto) session.getAttribute("employmentCard");
                         var position = (Position) session.getAttribute("position");
                         adminService.saveWorker(education, employmentCard, passport, registration, medicalCard, position);
-                        doGet(req,resp);
-                    }
-                    catch (ValidationException e){
+                    } catch (ValidationException e) {
                         req.setAttribute("errors", e.getErrors());
                         doGet(req, resp);
                         break;
@@ -186,21 +183,46 @@ public class AdminServlet extends HttpServlet {
                 }
             }
 
-        }
-        if (currentStatus.equals("addFreighter")) {
+        } else {
+            switch (currentStatus) {
+                case "addFreighter": {
+                    Freighter freighter = Freighter.builder()
+                            .freighterName(req.getParameter("freighterName"))
+                            .fragileCost(Integer.parseInt(req.getParameter("fragileCost")))
+                            .tax(Integer.parseInt(req.getParameter("tax")))
+                            .weightCost(Integer.parseInt(req.getParameter("weightCost")))
+                            .sizeCost(Integer.parseInt(req.getParameter("sizeCost")))
+                            .build();
+                    adminService.saveFreighter(freighter);
+                    session.setAttribute("active", " ");
+                    resp.sendRedirect("/admin");
+                    break;
+                }
+                case "addAvailableRoute":{
+                    try{
+                    Route route = Route.builder()
+                            .destinationCountry(req.getParameter("routeDirectionCountry"))
+                            .destinationCity(req.getParameter("routeDirectionCity"))
+                            .duration(Integer.parseInt(req.getParameter("duration")))
+                            .build();
+                    adminService.checkRoute(route);
+                        var freighters = adminService.getFreighterNames();
+                        List<Freighter> freightersResult = freighters.stream()
+                                .filter(value -> req.getParameter(value.getFreighterName()) != null)
+                                .toList();
 
-            Freighter freighter = Freighter.builder()
-                    .freighterName(req.getParameter("freighterName"))
-                    .fragileCost(Integer.parseInt(req.getParameter("fragileCost")))
-                    .tax(Integer.parseInt(req.getParameter("tax")))
-                    .weightCost(Integer.parseInt(req.getParameter("weightCost")))
-                    .sizeCost(Integer.parseInt(req.getParameter("sizeCost")))
-                    .build();
-
-            adminService.saveFreighter(freighter);
-            session.setAttribute("active", " ");
-            doGet(req,resp);
-
+                        adminService.saveRoute(route,freightersResult);
+                        session.setAttribute("active","");
+                    }
+                    catch (ValidationException e){
+                        req.setAttribute("errors", e.getErrors());
+                        doGet(req, resp);
+                        break;
+                    }
+                    resp.sendRedirect("/admin");
+                    break;
+                }
+            }
         }
 
 

@@ -22,14 +22,11 @@ public final class ConnectionManager {
     private static final String USERNAME_KEY = "db.username";
     private static final String PASSWORD_KEY = "db.password";
     private static final String POOL_SIZE_KEY = "db.poolsize";
-    public static BlockingQueue<Connection> pool;
-    public static List<Connection> sourcePool;
 
 
 
     static {
         loadDriver();
-        initConnectionPool();
 
     }
 
@@ -41,18 +38,7 @@ public final class ConnectionManager {
         }
     }
 
-    private static void initConnectionPool() {
-        var size = Integer.valueOf(PropertiesUtil.get(POOL_SIZE_KEY));
-        pool = new ArrayBlockingQueue<Connection>(size);
-        sourcePool = new ArrayList<>(size);
-        for (int i = 0; i < size; i++) {
-            var connection = open();
-            sourcePool.add(connection);
-            var proxyConnection = (Connection) Proxy.newProxyInstance(ConnectionManager.class.getClassLoader(), new Class[]{Connection.class}, (proxy, method, args) ->
-                    method.getName().equals("close") ? pool.add((Connection) proxy) : method.invoke(connection, args));
-            pool.add(proxyConnection);
-        }
-    }
+
 
     private static Connection open() {
         try {
@@ -63,20 +49,8 @@ public final class ConnectionManager {
     }
 
     public static Connection get() {
-        try {
-            return pool.take();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+            return open();
     }
 
-    public static void closePool(){
-        for (int i = 0; i < Integer.parseInt(PropertiesUtil.get("POOL_SIZE_KEY")); i++) {
-            try {
-                sourcePool.get(i).close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
+
 }

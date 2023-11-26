@@ -138,7 +138,6 @@ button:hover {
 }
 
 .table-container {
-    max-height: 300px;
     overflow: auto;
 }
 
@@ -245,7 +244,8 @@ option {
     display: block;
     color: red;
     font-size: 14px;
-    margin-top: -15px; /* Регулируйте отступ, чтобы всплывающее окно было над полем ввода */
+    /*margin-top: 15px; !* Регулируйте отступ, чтобы всплывающее окно было над полем ввода *!*/
+    margin-left: 100px;
 }
 .error-message-date{
 display: block;

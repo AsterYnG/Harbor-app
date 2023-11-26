@@ -4,6 +4,7 @@ import com.app.dao.*;
 import com.app.dto.*;
 import com.app.entity.*;
 import com.app.exceptions.ValidationException;
+import com.app.util.EntityBuilder;
 import com.app.util.Mapper;
 import com.app.validator.*;
 
@@ -40,12 +41,15 @@ public class AdminService {
     private final WorkerDao workerDao = WorkerDao.getInstance();
 
     private final FreighterDao freighterDao = FreighterDao.getInstance();
+    private final RouteDao routeDao = RouteDao.getInstance();
+    private final FreighterRoutesDao freighterRoutesDao = FreighterRoutesDao.getInstance();
 
     private final PassportValidator passportValidator = PassportValidator.getInstance();
     private final RegistrationValidator registrationValidator = RegistrationValidator.getInstance();
     private final MedicalValidator medicalValidator = MedicalValidator.getInstance();
     private final EducationValidator educationValidator = EducationValidator.getInstance();
     private final EmploymentValidator employmentValidator = EmploymentValidator.getInstance();
+    private final RouteValidator routeValidator = RouteValidator.getInstance();
 
 
     public void saveWorker(CreateEducationDto educationDto, CreateEmploymentDto employmentDto, CreatePassportDto passportDto, CreateRegistrationDto registrationDto , CreateMedicalCardDto medicalCardDto, Position position){
@@ -131,6 +135,28 @@ public class AdminService {
         if(!result.isValid()){
             throw new ValidationException(result.getErrors());
         }
+    }
+    public void checkRoute(Route route){
+        var result = routeValidator.isValid(route);
+        if(!result.isValid()){
+            throw new ValidationException(result.getErrors());
+        }
+    }
+    public void saveRoute(Route route,List<Freighter> freighters){
+        Route saved = routeDao.save(route);
+
+        for (Freighter freighter : freighters) {
+            FreighterRoutes build = FreighterRoutes.builder()
+                    .route(route)
+                    .freighter(freighter)
+                    .build();
+            freighterRoutesDao.save(build);
+        }
+
+    }
+    public List<Freighter> getFreighterNames(){
+        return freighterDao.findAll();
+
     }
 
 }

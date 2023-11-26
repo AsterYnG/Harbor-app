@@ -1,5 +1,7 @@
 package com.app.servlets;
 
+import com.app.dto.FreighterDto;
+import com.app.entity.VoyageLog;
 import com.app.entity.Worker;
 import com.app.service.ButtonService;
 import jakarta.servlet.ServletException;
@@ -86,10 +88,25 @@ public class ButtonServlet extends HttpServlet {
                 break;
             }
             case "buttonShowVoyageLog": {
+                List<VoyageLog> voyageLog = buttonService.getVoyageLog();
+                session.setAttribute("voyageLog", voyageLog);
+                Set<String> columnNames = new HashSet<>();
+                for (Field declaredField : voyageLog.get(0).getClass().getDeclaredFields()) {
+                    columnNames.add(declaredField.getName());
+                }
+                session.setAttribute("columnNames", columnNames);
+                session.setAttribute("active","showVoyageLog");
+                resp.sendRedirect("/admin");
+
                 break;
             }
-            case "buttonShowAllTeams": {
+            case "buttonAddAvailableRoute": {
+                session.setAttribute("active","addAvailableRoute");
+                List<FreighterDto> freighters = buttonService.showAllFreighters();
+                session.setAttribute("freighters",freighters);
+                resp.sendRedirect("/admin");
                 break;
+
             }
         }
     }

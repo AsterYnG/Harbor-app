@@ -8,6 +8,8 @@ import lombok.Cleanup;
 
 import static com.app.util.EntityBuilder.buildFreighterRoutes;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +36,11 @@ public class FreighterRoutesDao implements Dao<Map<String,Integer>, FreighterRou
     private final static String FIND_CITIES = """
         SELECT destination_city FROM available_routes;
     """;
+    private final static String SAVE = """
+        INSERT INTO freighter_routes(freighter_id, route_id)
+        VALUES (?,?);
+    """;
+
 
     @Override
     public List<FreighterRoutes> findAll() {
@@ -79,6 +86,15 @@ public class FreighterRoutesDao implements Dao<Map<String,Integer>, FreighterRou
 
     @Override
     public FreighterRoutes save(FreighterRoutes entity) {
-        return entity;
+        try (var connection = ConnectionManager.get()) {
+            @Cleanup var preparedStatement = connection.prepareStatement(SAVE, PreparedStatement.RETURN_GENERATED_KEYS);
+            preparedStatement.setInt(1,entity.getFreighter().getFreighterId());
+            preparedStatement.setInt(2, entity.getRoute().getRouteId());
+            preparedStatement.executeUpdate();
+            ResultSet resultSet = preparedStatement.getGeneratedKeys();
+            return entity;
+        } catch (SQLException e) {
+            throw new UnableToTakeConnectionException(e);
+        }
     }
 }

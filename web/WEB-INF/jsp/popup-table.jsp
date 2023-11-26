@@ -108,7 +108,7 @@
             <h2>Добавить работника</h2>
             <div class="form-group">
                 <label for="employeeFullName">ФИО:</label>
-                <input type="text" id="employeeFullName" name="employeeFullName" maxlength="49"  required>
+                <input type="text" id="employeeFullName" name="employeeFullName" maxlength="39" pattern="^[А-Я][а-я]* [А-Я][а-я]* [А-Я][а-я]*$"  required>
             </div>
             <div class="form-group">
                 <label for="employeePosition">Должность:</label>
@@ -133,23 +133,23 @@
             <h2>Добавить Перевозчика</h2>
             <div class="form-group">
                 <label for="freighterName">Название перевозчика:</label>
-                <input type="text" id="freighterName" name="freighterName" required>
+                <input type="text" id="freighterName" name="freighterName" maxlength="30" placeholder="Балтимор" pattern="^([а-яА-я]+ ?)+$" required>
             </div>
             <div class="form-group">
                 <label for="weightCost">Стоимость за 1 кг груза:</label>
-                <input type="text" id="weightCost" name="weightCost" required>
+                <input type="text" id="weightCost" name="weightCost" maxlength="4" pattern="^/d+$" required>
             </div>
             <div class="form-group">
                 <label for="sizeCost">Стоимость за 1 кубометр груза:</label>
-                <input type="text" id="sizeCost" name="sizeCost" required>
+                <input type="text" id="sizeCost" name="sizeCost" maxlength="4" pattern="^/d+$" required>
             </div>
             <div class="form-group">
                 <label for="tax">Тариф за пользование услугами порта в % :</label>
-                <input type="text" id="tax" name="tax" required>
+                <input type="text" id="tax" name="tax" maxlength="2" pattern="^/d+$" required>
             </div>
             <div class="form-group">
                 <label for="fragileCost">Стоимость за хрупкость груза:</label>
-                <input type="text" id="fragileCost" name="fragileCost" required>
+                <input type="text" id="fragileCost" name="fragileCost" maxlength="4" pattern="^/d+$" required>
             </div>
             <!-- Другие поля для ввода данных работника -->
 
@@ -157,6 +157,44 @@
                 <button type="submit">Добавить</button>
             </div>
         </form>
+    </div>
+</c:if>
+<c:if test="${sessionScope.active == 'showVoyageLog'}">
+    <div id="allFreightersModal" class="modal-table">
+        <div class="table-container">
+            <table>
+                <thead>
+                <tr>
+                    <th>Номер плавания</th>
+                    <th>Перевозчик</th>
+                    <th>Дата</th>
+                    <th>Номер корабля</th>
+                    <th>Модель корабля</th>
+                    <th>Вместимость корабля</th>
+                    <th>Размер корабля</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- Здесь будут данные о работниках -->
+
+                <c:forEach var="voyage" items="${sessionScope.voyageLog}">
+                    <tr>
+                        <td>${voyage.logId}</td>
+                        <td>${voyage.ship.freighter.freighterName}</td>
+                        <td>${voyage.shipmentDate}</td>
+                        <td>${voyage.ship.shipId}</td>
+                        <td>${voyage.ship.shipModel.shipModel}</td>
+                        <td>${voyage.ship.shipModel.shipCapacity}</td>
+                        <td>${voyage.ship.shipModel.shipSize}</td>
+                    </tr>
+                </c:forEach>
+
+                <!-- ... другие данные столбцов -->
+
+                <!-- ... другие строки с данными о работниках -->
+                </tbody>
+            </table>
+        </div>
     </div>
 </c:if>
 

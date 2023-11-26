@@ -14,7 +14,7 @@ public class MedicalValidator implements Validator<CreateMedicalCardDto>{
     public ValidationResult isValid(CreateMedicalCardDto dto) {
         var validationResult = new ValidationResult();
 
-        if(medicalCardDao.findById(dto.getMedSerialNumber()).isEmpty()){
+        if(medicalCardDao.findById(dto.getMedSerialNumber()).isPresent()){
             validationResult.add(Error.of("invalid.MedicalCard.SerialNumber","Серия и номер уже существуют"));
         }
 

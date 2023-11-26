@@ -41,11 +41,12 @@
         <button onclick="showAllClients()" name="buttonShowAllClients" value="true">Все клиенты</button>
 
         <!-- Кнопка вывода всех плаваний кораблей -->
-<%--        <button onclick="showAllShipVoyages()" name="buttonShowVoyageLog" value="true">Плавания кораблей</button>--%>
+        <button onclick="showAllShipVoyages()" name="buttonShowVoyageLog" value="true">Плавания кораблей</button>
 
-<%--        <!-- Кнопка вывода всех команд для кораблей -->--%>
-<%--        <button onclick="showAllShipCrews()" name="buttonShowAllTeams" value="true">Команды для кораблей</button>--%>
+        <!-- Кнопка вывода всех команд для кораблей -->
+        <button onclick="showAllShipCrews()" name="buttonAddAvailableRoute" value="true">Добавить путь</button>
     </form>
+
 </main>
 
 <!-- Модальные окна для форм -->
@@ -53,6 +54,7 @@
 
 <jsp:include page="popup-table.jsp" />
 <jsp:include page="worker-documents-modal.jsp"/>
+<jsp:include page="addRoute.jsp"/>
 </body>
 </html>
 

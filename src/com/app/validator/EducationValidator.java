@@ -13,7 +13,7 @@ public class EducationValidator implements Validator<CreateEducationDto>{
     public ValidationResult isValid(CreateEducationDto dto) {
         var result = new ValidationResult();
 
-        if (educationDao.findById(dto.getEducationSerialNumber()).isEmpty()){
+        if (educationDao.findById(dto.getEducationSerialNumber()).isPresent()){
             result.add(Error.of("invalid.Education.serialNumber","Номер трудовой книжки уже существует"));
         }
 
