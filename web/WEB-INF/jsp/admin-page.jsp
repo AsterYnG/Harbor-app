@@ -45,6 +45,8 @@
 
         <!-- Кнопка вывода всех команд для кораблей -->
         <button onclick="showAllShipCrews()" name="buttonAddAvailableRoute" value="true">Добавить путь</button>
+
+        <button class="search-btn" onclick="showAllShipCrews()" name="buttonSearch" value="true">Поиск</button>
     </form>
 
 </main>
@@ -55,6 +57,8 @@
 <jsp:include page="popup-table.jsp" />
 <jsp:include page="worker-documents-modal.jsp"/>
 <jsp:include page="addRoute.jsp"/>
+<jsp:include page="search.jsp"/>
+<jsp:include page="search-results.jsp"/>
 </body>
 </html>
 

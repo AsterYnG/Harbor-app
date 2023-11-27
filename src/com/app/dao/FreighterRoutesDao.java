@@ -40,8 +40,33 @@ public class FreighterRoutesDao implements Dao<Map<String,Integer>, FreighterRou
         INSERT INTO freighter_routes(freighter_id, route_id)
         VALUES (?,?);
     """;
+    private final static String FIND_FILTERED = """
+        SELECT * FROM freighter_routes
+        JOIN public.available_routes ar on ar.route_id = freighter_routes.route_id
+        JOIN public.freighter f on f.freighter_id = freighter_routes.freighter_id
+        WHERE f.freighter_id = ?
+        AND (destination_country = ? AND destination_city = ?) AND
+        duration BETWEEN ? AND ?;
+    """;
 
-
+    public List<FreighterRoutes> findFiltered(FreighterRoutes entity,Integer durationFrom, Integer durationTo){
+        try (var connection = ConnectionManager.get()) {
+            @Cleanup var preparedStatement = connection.prepareStatement(FIND_FILTERED);
+            preparedStatement.setInt(1,entity.getFreighter().getFreighterId());
+            preparedStatement.setString(2,entity.getRoute().getDestinationCountry());
+            preparedStatement.setString(3,entity.getRoute().getDestinationCity());
+            preparedStatement.setInt(4,durationFrom);
+            preparedStatement.setInt(5,durationTo);
+            @Cleanup var resultSet = preparedStatement.executeQuery();
+            List<FreighterRoutes> result = new ArrayList<>();
+            while (resultSet.next()) {
+                result.add(buildFreighterRoutes(resultSet));
+            }
+            return result;
+        } catch (SQLException e) {
+            throw new UnableToTakeConnectionException(e);
+        }
+    }
     @Override
     public List<FreighterRoutes> findAll() {
         try (var connection = ConnectionManager.get()) {

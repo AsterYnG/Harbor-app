@@ -43,20 +43,3 @@
         </form>
     </div>
 </c:if>
-<script>
-
-
-    function closeModal() {
-        document.getElementById('addAvailableRouteModal').style.display = 'none';
-    }
-
-
-
-
-    window.onclick = function(event) {
-        if (event.target === document.getElementById('addAvailableRouteModal')) {
-            closeModal();
-        }
-
-    };
-</script>

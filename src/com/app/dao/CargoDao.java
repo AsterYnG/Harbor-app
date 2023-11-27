@@ -36,6 +36,8 @@ public final class CargoDao implements Dao<Integer, Cargo> {
         VALUES (?,?,?,?,?,?);
     """;
 
+
+
     @Override
     public List<Cargo> findAll() {
         try (var connection = ConnectionManager.get()) {

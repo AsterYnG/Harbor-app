@@ -108,6 +108,11 @@ public class ButtonServlet extends HttpServlet {
                 break;
 
             }
+            case "buttonSearch":{
+                session.setAttribute("active","showSearch");
+                resp.sendRedirect("/admin");
+                break;
+            }
         }
     }
 }

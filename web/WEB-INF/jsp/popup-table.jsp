@@ -198,6 +198,38 @@
     </div>
 </c:if>
 
+<c:if test="${sessionScope.active == 'showSearch'}">
+    <div id="searchFormModal" class="modal">
+        <form id="searchForm" class="modal-form" action="${pageContext.request.contextPath}/admin" method="post">
+            <h2>Поиск по базе</h2>
+
+            <div class="form-group">
+                <label for="selectedTable">Выберите по какому разделу искать:</label>
+                <select id="selectedTable" name="selectedTable">
+
+                        <option value="availableRoutes">Доступные пути</option>
+                        <option value="cargos">Грузы</option>
+                        <option value="freighters">Перевозчики</option>
+                        <option value="ships">Корабли</option>
+                        <option value="teams">Команды на кораблях</option>
+                        <option value="clients">Клиенты</option>
+                        <option value="orders">Заказы</option>
+                        <option value="workers">Работники и их данные</option>
+                        <option value="positions">Должности</option>
+
+                </select>
+            </div>
+            <!-- Другие поля для ввода данных работника -->
+
+            <div class="form-group">
+                <button type="submit">Добавить</button>
+            </div>
+        </form>
+    </div>
+</c:if>
+
+
+
 <script>
 
 
@@ -206,6 +238,13 @@
      }
      function closeModal1() {
          document.getElementById('freighterFormModal').style.display = 'none';
+     }
+
+     function closeModal2() {
+         document.getElementById('addAvailableRouteModal').style.display = 'none';
+     }
+     function closeModal3() {
+         document.getElementById('searchFormModal').style.display = 'none';
      }
 
 
@@ -217,6 +256,14 @@
          if (event.target === document.getElementById('freighterFormModal')) {
              closeModal1();
          }
+         if (event.target === document.getElementById('addAvailableRouteModal')) {
+             closeModal2();
+         }
+         if (event.target === document.getElementById('searchFormModal')) {
+             closeModal3();
+         }
 
      };
+
+
 </script>

@@ -4,7 +4,6 @@ import com.app.dao.*;
 import com.app.dto.*;
 import com.app.entity.*;
 import com.app.exceptions.ValidationException;
-import com.app.util.EntityBuilder;
 import com.app.util.Mapper;
 import com.app.validator.*;
 
@@ -39,6 +38,8 @@ public class AdminService {
     private final PassportDao passportDao = PassportDao.getInstance();
     private final EducationDao educationDao = EducationDao.getInstance();
     private final WorkerDao workerDao = WorkerDao.getInstance();
+    private final CargoDao cargoDao = CargoDao.getInstance();
+
 
     private final FreighterDao freighterDao = FreighterDao.getInstance();
     private final RouteDao routeDao = RouteDao.getInstance();
@@ -154,9 +155,49 @@ public class AdminService {
         }
 
     }
-    public List<Freighter> getFreighterNames(){
+    public List<Freighter> getFreighters(){
         return freighterDao.findAll();
 
+    }
+
+    public List<Route> getAvailableRoutes(){
+        return routeDao.findAll();
+    }
+
+    public List<FreighterRoutes> getFilteredRoutes(List<Freighter> freighters,List<Route> routes , Integer durationFrom, Integer durationTo){
+        List<FreighterRoutes> result = new ArrayList<>();
+        for (Freighter freighter : freighters) {
+            FreighterRoutes freighterRoute = FreighterRoutes.builder()
+                    .freighter(freighter)
+                    .build();
+            for (Route route : routes) {
+                freighterRoute.setRoute(route);
+                result.addAll(freighterRoutesDao.findFiltered(freighterRoute,durationFrom,durationTo));
+            }
+        }
+        return result.stream()
+                .distinct()
+                .toList();
+    }
+
+    public List<Cargo> getFilteredCargos(Integer weightFrom, Integer weightTo, Integer sizeFrom, Integer sizeTo, Boolean isFragile, List<Integer> customer, List<String> routes,List<String> freighters){
+
+
+        List<Cargo> allCargos = cargoDao.findAll();
+        List<Cargo> result = allCargos.stream()
+                .filter(value -> value.getCargoWeight() > weightFrom && value.getCargoWeight() < weightTo)
+                .filter(value -> value.getCargoSize() > sizeFrom && value.getCargoSize() < sizeTo)
+                .filter(value -> customer.contains(value.getCustomer().getCustomerId()))
+                .filter(value -> routes.contains(value.getDestination()))
+                .filter(value -> freighters.contains(value.getFreighter().getFreighterName()))
+                .toList();
+
+
+        return result;
+
+    }
+    public List<Customer> getAllClients(){
+        return customerDao.findAll();
     }
 
 }

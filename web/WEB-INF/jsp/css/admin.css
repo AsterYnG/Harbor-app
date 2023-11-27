@@ -269,3 +269,28 @@ margin-left: 180px;
     justify-content: center;
     align-items: center;
 }
+
+button.search-btn {
+    /* Увеличение размера */
+    font-size: 16px;
+    padding: 10px 20px; /* Изменение отступов */
+    /* Правое выравнивание */
+    float: right;
+    /* Дополнительные стили */
+    /* Если нужно задать цвет фона или текста: */
+    background-color: #777;
+    color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    /* Другие стили по желанию */
+}
+input[type="number"] {
+    width: 150px; /* Ширина поля */
+    padding: 8px; /* Отступы вокруг текста */
+    font-size: 14px; /* Размер шрифта */
+    border: 1px solid #ccc; /* Граница поля */
+    border-radius: 4px; /* Скругление углов */
+    box-sizing: border-box; /* Учитывать границу в общей ширине поля */
+    /* Дополнительные стили */
+    /* Можно добавить другие стили по вашему выбору */
+}

@@ -1,13 +1,9 @@
 package com.app.servlets;
 
 import com.app.dto.*;
-import com.app.entity.Freighter;
-import com.app.entity.Position;
-import com.app.entity.Route;
+import com.app.entity.*;
 import com.app.exceptions.ValidationException;
 import com.app.service.AdminService;
-import com.app.service.LoginService;
-import com.app.validator.Error;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -25,6 +21,7 @@ public class AdminServlet extends HttpServlet {
     private final AdminService adminService = AdminService.getInstance();
 
     private final List<String> employeeAddStatus = new ArrayList<>();
+    private final List<String> searchTables = new ArrayList<>();
 
     {
         employeeAddStatus.add("addEmployee");
@@ -32,6 +29,16 @@ public class AdminServlet extends HttpServlet {
         employeeAddStatus.add("addEmployeeMedicalCard");
         employeeAddStatus.add("addEmployeeEmploymentCard");
         employeeAddStatus.add("addEmployeeEducationCard");
+
+        searchTables.add("availableRoutes");
+        searchTables.add("cargos");
+        searchTables.add("freighters");
+        searchTables.add("ships");
+        searchTables.add("teams");
+        searchTables.add("clients");
+        searchTables.add("orders");
+        searchTables.add("workers");
+        searchTables.add("positions");
     }
 
     @Override
@@ -198,23 +205,22 @@ public class AdminServlet extends HttpServlet {
                     resp.sendRedirect("/admin");
                     break;
                 }
-                case "addAvailableRoute":{
-                    try{
-                    Route route = Route.builder()
-                            .destinationCountry(req.getParameter("routeDirectionCountry"))
-                            .destinationCity(req.getParameter("routeDirectionCity"))
-                            .duration(Integer.parseInt(req.getParameter("duration")))
-                            .build();
-                    adminService.checkRoute(route);
-                        var freighters = adminService.getFreighterNames();
+                case "addAvailableRoute": {
+                    try {
+                        Route route = Route.builder()
+                                .destinationCountry(req.getParameter("routeDirectionCountry"))
+                                .destinationCity(req.getParameter("routeDirectionCity"))
+                                .duration(Integer.parseInt(req.getParameter("duration")))
+                                .build();
+                        adminService.checkRoute(route);
+                        var freighters = adminService.getFreighters();
                         List<Freighter> freightersResult = freighters.stream()
                                 .filter(value -> req.getParameter(value.getFreighterName()) != null)
                                 .toList();
 
-                        adminService.saveRoute(route,freightersResult);
-                        session.setAttribute("active","");
-                    }
-                    catch (ValidationException e){
+                        adminService.saveRoute(route, freightersResult);
+                        session.setAttribute("active", "");
+                    } catch (ValidationException e) {
                         req.setAttribute("errors", e.getErrors());
                         doGet(req, resp);
                         break;
@@ -222,7 +228,150 @@ public class AdminServlet extends HttpServlet {
                     resp.sendRedirect("/admin");
                     break;
                 }
+                case "showSearch": {
+                    String selectedTable = req.getParameter("selectedTable");
+                    session.setAttribute("active", selectedTable);
+                    for (String searchTable : searchTables) {
+                        if (searchTable.equals("availableRoutes")) {
+                            session.setAttribute("freighters", adminService.getFreighters());
+                            List<String> countries = adminService.getAvailableRoutes().stream()
+                                    .map(Route::getDestinationCountry)
+                                    .distinct()
+                                    .toList();
+                            session.setAttribute("availableRoutesCountries", countries);
+                            session.setAttribute("availableRoutes", adminService.getAvailableRoutes());
+                        }
+                        if (searchTable.equals("cargos")) {
+                            List<String> countries = adminService.getAvailableRoutes().stream()
+                                    .map(Route::getDestinationCountry)
+                                    .distinct()
+                                    .toList();
+                            session.setAttribute("availableRoutesCountries", countries);
+                            session.setAttribute("freighters", adminService.getFreighters());
+
+
+                        }
+                    }
+
+                    resp.sendRedirect("/admin");
+                    break;
+                }
+                case "availableRoutes": {
+                    var freighters = adminService.getFreighters(); // Какие перевозчики выбраны
+                    List<Freighter> freightersResult = freighters.stream()
+                            .filter(value -> req.getParameter(value.getFreighterName()) != null)
+                            .toList();
+                    if (freightersResult.isEmpty()) {
+                        freightersResult = freighters;
+                    }
+
+                    var countries = adminService.getAvailableRoutes(); // Какие страны выбраны
+                    List<Route> countriesResult = countries.stream()
+                            .filter(value -> req.getParameter(value.getDestinationCountry()) != null)
+                            .toList();
+                    if (countriesResult.isEmpty()) {
+                        countriesResult = countries;
+                    }
+
+                    List<Route> routesResult = countriesResult.stream() // Какие города выбраны
+                            .filter(value -> req.getParameter(value.getDestinationCity()) != null)
+                            .toList();
+                    if (routesResult.isEmpty()) {
+                        routesResult = countriesResult;
+                    }
+                    Integer durationFrom = 0;
+                    Integer durationTo = 9999;
+                    if (!req.getParameter("durationFrom").isBlank()) {
+                        durationFrom = Integer.parseInt(req.getParameter("durationFrom"));
+                    }
+                    if (!req.getParameter("durationTo").isBlank()) {
+                        durationTo = Integer.parseInt(req.getParameter("durationTo"));
+                    }
+
+
+                    if (durationFrom > durationTo) {
+                        session.setAttribute("error", "Неправильно выбран промежуток( от > до )");
+                        doGet(req, resp);
+                        break;
+                    }
+
+                    List<FreighterRoutes> filteredRoutes = adminService.getFilteredRoutes(freightersResult, routesResult, durationFrom, durationTo);
+                    session.setAttribute("searchResult", filteredRoutes);
+                    session.setAttribute("active", "showSearchResultAvailableRoutes");
+                    resp.sendRedirect("/admin");
+
+                    break;
+                }
+                case "cargos": {
+                    Integer weightFrom = 0;
+                    Integer weightTo = 19999;
+
+                    Boolean isFragile = null;
+
+                    Integer sizeFrom = 0;
+                    Integer sizeTo = 19999;
+
+
+                    if (!req.getParameter("weightFrom").isBlank()) {
+                        weightFrom = Integer.parseInt(req.getParameter("weightFrom"));
+                    }
+                    if (!req.getParameter("weightTo").isBlank()) {
+                        weightTo = Integer.parseInt(req.getParameter("weightTo"));
+                    }
+
+                    if (!req.getParameter("sizeFrom").isBlank()) {
+                        sizeFrom = Integer.parseInt(req.getParameter("sizeFrom"));
+                    }
+                    if (!req.getParameter("sizeTo").isBlank()) {
+                        sizeTo = Integer.parseInt(req.getParameter("sizeTo"));
+                    }
+
+
+//                    if (!req.getParameter("fragile").isBlank()) {
+//                        isFragile = Boolean.valueOf(req.getParameter("fragile"));
+//                    }
+
+
+
+                    if ((weightFrom > weightTo)|| (sizeFrom > sizeTo)) {
+                        session.setAttribute("error", "Неправильно выбран промежуток( от > до )");
+                        doGet(req, resp);
+                        break;
+                    }
+
+                    var countries = adminService.getAvailableRoutes(); // Какие страны выбраны
+                    List<String> countriesResult = countries.stream()
+                            .map(Route::getDestinationCountry)
+                            .filter(destinationCountry -> req.getParameter(destinationCountry) != null)
+                            .toList();
+                    if (countriesResult.isEmpty()) {
+                        countriesResult = countries.stream().map(Route::getDestinationCountry).toList();
+                    }
+                    var clients = adminService.getAllClients();
+                    List<Integer> clientsResult = clients.stream()
+                            .map(Customer::getCustomerId)
+                            .filter(customerId -> req.getParameter(String.valueOf(customerId)) != null)
+                            .toList();
+                    if (clientsResult.isEmpty()){
+                        clientsResult = clients.stream().map(Customer::getCustomerId).toList();
+                    }
+                    var freighters = adminService.getFreighters(); // Какие перевозчики выбраны
+                    List<String> freightersResult = freighters.stream()
+                            .map(Freighter::getFreighterName)
+                            .filter(freighterName -> req.getParameter(freighterName) != null)
+                            .toList();
+                    if (freightersResult.isEmpty()){
+                        freightersResult = freighters.stream().map(Freighter::getFreighterName).toList();
+                    }
+
+                    List<Cargo> filteredCargos = adminService.getFilteredCargos(weightFrom, weightTo, sizeFrom, sizeTo, isFragile, clientsResult, countriesResult, freightersResult);
+                    session.setAttribute("searchResult", filteredCargos);
+                    session.setAttribute("active","showSearchResultCargos");
+                    resp.sendRedirect("/admin");
+                    break;
+                }
             }
+
         }
 
 
