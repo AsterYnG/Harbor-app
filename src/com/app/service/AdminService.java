@@ -6,6 +6,7 @@ import com.app.entity.*;
 import com.app.exceptions.ValidationException;
 import com.app.util.Mapper;
 import com.app.validator.*;
+import org.eclipse.tags.shaded.org.apache.bcel.generic.LUSHR;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ public class AdminService {
         allowedPositions.add("Loader");
         allowedPositions.add("Cleaner");
     }
+
     private final CustomerDao customerDao = CustomerDao.getInstance();
 
     private final PositionDao positionDao = PositionDao.getInstance();
@@ -39,6 +41,8 @@ public class AdminService {
     private final EducationDao educationDao = EducationDao.getInstance();
     private final WorkerDao workerDao = WorkerDao.getInstance();
     private final CargoDao cargoDao = CargoDao.getInstance();
+    private final ShipDao shipDao = ShipDao.getInstance();
+    private final TeamMemberDao teamMemberDao = TeamMemberDao.getInstance();
 
 
     private final FreighterDao freighterDao = FreighterDao.getInstance();
@@ -53,13 +57,12 @@ public class AdminService {
     private final RouteValidator routeValidator = RouteValidator.getInstance();
 
 
-    public void saveWorker(CreateEducationDto educationDto, CreateEmploymentDto employmentDto, CreatePassportDto passportDto, CreateRegistrationDto registrationDto , CreateMedicalCardDto medicalCardDto, Position position){
+    public void saveWorker(CreateEducationDto educationDto, CreateEmploymentDto employmentDto, CreatePassportDto passportDto, CreateRegistrationDto registrationDto, CreateMedicalCardDto medicalCardDto, Position position) {
         Dock dock;
 
-        if(allowedPositions.contains(position.getPosition())){
+        if (allowedPositions.contains(position.getPosition())) {
             dock = dockDao.findLeastWorkersDock();
-        }
-        else{
+        } else {
             dock = null;
         }
         var education = Mapper.mapFromDtoToEducation(educationDto);
@@ -97,53 +100,58 @@ public class AdminService {
 
     }
 
-    public Optional<Position> findByPositionName(String position){
+    public Optional<Position> findByPositionName(String position) {
         return positionDao.findByName(position);
     }
 
 
-    public void saveFreighter(Freighter freighter){
+    public void saveFreighter(Freighter freighter) {
         freighterDao.save(freighter);
     }
 
-    public void checkPassport(CreatePassportDto dto){
+    public void checkPassport(CreatePassportDto dto) {
         var result = passportValidator.isValid(dto);
-        if(!result.isValid()){
-            throw new ValidationException(result.getErrors());
-        }
-    }
-    public void checkRegistration(CreateRegistrationDto dto){
-        var result = registrationValidator.isValid(dto);
-        if(!result.isValid()){
+        if (!result.isValid()) {
             throw new ValidationException(result.getErrors());
         }
     }
 
-    public void checkMedicalCard(CreateMedicalCardDto dto){
+    public void checkRegistration(CreateRegistrationDto dto) {
+        var result = registrationValidator.isValid(dto);
+        if (!result.isValid()) {
+            throw new ValidationException(result.getErrors());
+        }
+    }
+
+    public void checkMedicalCard(CreateMedicalCardDto dto) {
         var result = medicalValidator.isValid(dto);
-        if(!result.isValid()){
+        if (!result.isValid()) {
             throw new ValidationException(result.getErrors());
         }
     }
-    public void checkEducationCard(CreateEducationDto dto){
+
+    public void checkEducationCard(CreateEducationDto dto) {
         var result = educationValidator.isValid(dto);
-        if(!result.isValid()){
+        if (!result.isValid()) {
             throw new ValidationException(result.getErrors());
         }
     }
-    public void checkEmploymentCard(CreateEmploymentDto dto){
+
+    public void checkEmploymentCard(CreateEmploymentDto dto) {
         var result = employmentValidator.isValid(dto);
-        if(!result.isValid()){
+        if (!result.isValid()) {
             throw new ValidationException(result.getErrors());
         }
     }
-    public void checkRoute(Route route){
+
+    public void checkRoute(Route route) {
         var result = routeValidator.isValid(route);
-        if(!result.isValid()){
+        if (!result.isValid()) {
             throw new ValidationException(result.getErrors());
         }
     }
-    public void saveRoute(Route route,List<Freighter> freighters){
+
+    public void saveRoute(Route route, List<Freighter> freighters) {
         Route saved = routeDao.save(route);
 
         for (Freighter freighter : freighters) {
@@ -155,16 +163,17 @@ public class AdminService {
         }
 
     }
-    public List<Freighter> getFreighters(){
+
+    public List<Freighter> getFreighters() {
         return freighterDao.findAll();
 
     }
 
-    public List<Route> getAvailableRoutes(){
+    public List<Route> getAvailableRoutes() {
         return routeDao.findAll();
     }
 
-    public List<FreighterRoutes> getFilteredRoutes(List<Freighter> freighters,List<Route> routes , Integer durationFrom, Integer durationTo){
+    public List<FreighterRoutes> getFilteredRoutes(List<Freighter> freighters, List<Route> routes, Integer durationFrom, Integer durationTo) {
         List<FreighterRoutes> result = new ArrayList<>();
         for (Freighter freighter : freighters) {
             FreighterRoutes freighterRoute = FreighterRoutes.builder()
@@ -172,7 +181,7 @@ public class AdminService {
                     .build();
             for (Route route : routes) {
                 freighterRoute.setRoute(route);
-                result.addAll(freighterRoutesDao.findFiltered(freighterRoute,durationFrom,durationTo));
+                result.addAll(freighterRoutesDao.findFiltered(freighterRoute, durationFrom, durationTo));
             }
         }
         return result.stream()
@@ -180,7 +189,7 @@ public class AdminService {
                 .toList();
     }
 
-    public List<Cargo> getFilteredCargos(Integer weightFrom, Integer weightTo, Integer sizeFrom, Integer sizeTo, Boolean isFragile, List<Integer> customer, List<String> routes,List<String> freighters){
+    public List<Cargo> getFilteredCargos(Integer weightFrom, Integer weightTo, Integer sizeFrom, Integer sizeTo, Boolean isFragile, List<Integer> customer, List<String> routes, List<String> freighters) {
 
 
         List<Cargo> allCargos = cargoDao.findAll();
@@ -196,8 +205,77 @@ public class AdminService {
         return result;
 
     }
-    public List<Customer> getAllClients(){
+
+    public List<Customer> getAllClients() {
         return customerDao.findAll();
+    }
+
+    public List<Ship> getAllShips() {
+        return shipDao.findAll();
+
+    }
+
+    public List<TeamMember> getAllTeamMembers() {
+        return teamMemberDao.findAll();
+    }
+
+    public List<Freighter> getFilteredFreighters(Integer weightFrom, Integer weightTo, Integer sizeFrom, Integer sizeTo, Integer taxFrom, Integer taxTo, Integer fragileFrom, Integer fragileTo, List<Freighter> freighters) {
+        return getFreighters().stream()
+                .filter(value -> value.getWeightCost() > weightFrom && value.getWeightCost() < weightTo)
+                .filter(value -> value.getSizeCost() > sizeFrom && value.getSizeCost() < sizeTo)
+                .filter(value -> value.getFragileCost() > fragileFrom && value.getFragileCost() < fragileTo)
+                .filter(freighters::contains)
+                .toList();
+    }
+
+    public List<Ship> getFilteredShips(Integer shipSizeFrom, Integer shipSizeTo, Integer shipCapacityFrom, Integer shipCapacityTo, Boolean allShips, Boolean inUse, List<Freighter> freighters, List<Ship> ships, List<Team> teams) {
+        var temp = getAllShips().stream()
+                .filter(value -> value.getShipModel().getShipSize() > shipSizeFrom && value.getShipModel().getShipSize() < shipSizeTo)
+                .filter(value -> value.getShipModel().getShipCapacity() > shipCapacityFrom && value.getShipModel().getShipCapacity() < shipCapacityTo)
+                .filter(value -> freighters.contains(value.getFreighter()))
+                .filter(value -> teams.contains(value.getTeam()))
+                .filter(ships::contains)
+                .toList();
+
+        if (allShips) {
+            return temp;
+        } else {
+            return temp.stream().filter(value -> value.getInUse().equals(inUse))
+                    .toList();
+        }
+    }
+
+    public List<Team> getFilteredTeams(Integer experienceFrom, Integer experienceTo, List<String> fullNames, List<String> citizenships) {
+        return getAllTeamMembers().stream()
+                .filter(value -> fullNames.contains(value.getFullName()))
+                .filter(value -> citizenships.contains(value.getCitizenship()))
+                .filter(value -> value.getTeam().getExperience() > experienceFrom && value.getTeam().getExperience() < experienceTo)
+                .map(TeamMember::getTeam)
+                .distinct()
+                .toList();
+    }
+
+    public List<Customer> getFilteredCustomers(String fullName, String email, String login) {
+        var temp = getAllClients();
+        List<Customer> temp1;
+        List<Customer> temp2;
+        List<Customer> temp3;
+        if (!fullName.isEmpty()) {
+            temp1 = temp.stream().filter(value -> value.getFullName().equals(fullName)).toList();
+        } else {
+            temp1 = temp;
+        }
+        if (!email.isEmpty()) {
+            temp2 = temp1.stream().filter(value -> value.getEmail().equals(email)).toList();
+        } else {
+            temp2 = temp1;
+        }
+        if (!login.isEmpty()) {
+            temp3 = temp2.stream().filter(value -> value.getLogin().equals(login)).toList();
+        } else {
+            temp3 = temp2;
+        }
+        return temp3;
     }
 
 }
