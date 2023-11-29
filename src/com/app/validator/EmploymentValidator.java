@@ -13,7 +13,7 @@ public class EmploymentValidator implements Validator<CreateEmploymentDto>{
     public ValidationResult isValid(CreateEmploymentDto dto) {
         var validationResult = new ValidationResult();
 
-        if (employmentDao.findById(dto.getEmploymentSerialNumber()).isEmpty()){
+        if (employmentDao.findById(dto.getEmploymentSerialNumber()).isPresent()){
             validationResult.add(Error.of("invalid.Employment.serialNumber","Серия и номер уже существуют"));
         }
 

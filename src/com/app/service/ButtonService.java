@@ -1,13 +1,11 @@
 package com.app.service;
 
-import com.app.dao.CustomerDao;
-import com.app.dao.FreighterDao;
-import com.app.dao.PositionDao;
-import com.app.dao.WorkerDao;
+import com.app.dao.*;
 import com.app.dto.ShowCustomerDto;
 import com.app.dto.FreighterDto;
 import com.app.dto.ShowWorkerDto;
 import com.app.entity.Position;
+import com.app.entity.VoyageLog;
 import com.app.util.Mapper;
 
 import java.util.List;
@@ -20,6 +18,7 @@ public class ButtonService {
     private final CustomerDao customerDao = CustomerDao.getInstance();
 
     private final PositionDao positionDao = PositionDao.getInstance();
+    private final VoyageLogDao voyageLogDao = VoyageLogDao.getInstance();
 
     private ButtonService() {
     }
@@ -51,5 +50,11 @@ public class ButtonService {
 
     public List<Position> getAllPositions(){
         return positionDao.findAll();
+    }
+
+    public List<VoyageLog> getVoyageLog(){
+        return voyageLogDao.findAll().stream()
+                .distinct()
+                .toList();
     }
 }

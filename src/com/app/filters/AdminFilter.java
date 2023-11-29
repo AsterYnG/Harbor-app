@@ -1,6 +1,7 @@
 package com.app.filters;
 
 import jakarta.servlet.*;
+import jakarta.servlet.Filter;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -8,8 +9,8 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-@WebFilter(urlPatterns = {"/client"})
-public class Filter implements jakarta.servlet.Filter {
+@WebFilter("/admin")
+public class AdminFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) servletRequest;
@@ -22,18 +23,13 @@ public class Filter implements jakarta.servlet.Filter {
         } else {
             var role = (String) tempRole;
 
-
-            if (role.equals("user")) {
+            if (role.equals("admin")) {
                 filterChain.doFilter(servletRequest, servletResponse);
             }
-            else {
-                resp.sendRedirect("/login");
+            else{
+                    resp.sendRedirect("/login");
+                }
             }
         }
-
-//        catch (Exception e){
-//            resp.sendRedirect("/login");
-//        }
-
     }
-}
+

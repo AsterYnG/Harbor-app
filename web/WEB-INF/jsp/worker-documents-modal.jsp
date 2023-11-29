@@ -22,12 +22,12 @@
 
             <c:forEach var="error" items="${requestScope.errors}">
                 <c:if test="${error.code == 'invalid.Passport.birthDate'}">
-                    <div class="error-message" id="login-error">${error.message}</div>
+                    <div class="error-message-date" id="login-error">${error.message}</div>
                 </c:if>
             </c:forEach>
             <div class="form-group">
                 <label for="birthDate">Дата рождения:</label>
-                <input value="${param.birthDate}" type="date" id="birthDate" name="birthDate"  required>
+                <input value="${param.birthDate}" type="date" id="birthDate" name="birthDate"  min="1930-01-01" max="2023-01-01"   required>
             </div>
             <c:forEach var="error" items="${requestScope.errors}">
                 <c:if test="${error.code == 'invalid.Passport.sex'}">
@@ -52,25 +52,50 @@
                     <option value="Россия">Россия</option>
                 </select>
             </div>
+            <c:forEach var="error" items="${requestScope.errors}">
+            <c:if test="${error.code == 'invalid.Registration.region'}">
+                <div class="error-message" id="login-error">${error.message}</div>
+            </c:if>
+            </c:forEach>
             <div class="form-group">
                 <label for="region">Регион:</label>
-                <input placeholder="Московская область" value="${param.region}" type="text" id="region" name="region" maxlength="30" pattern="^\D+$"  required>
+                <input placeholder="Московская область" value="${param.region}" type="text" id="region" name="region" maxlength="30" pattern="^[А-Я][а-я]+\D*$"  required>
             </div>
+            <c:forEach var="error" items="${requestScope.errors}">
+            <c:if test="${error.code == 'invalid.Registration.city'}">
+                <div class="error-message" id="login-error">${error.message}</div>
+            </c:if>
+            </c:forEach>
             <div class="form-group">
                 <label for="city">Город:</label>
-                <input placeholder="Москва" value="${param.city}" type="text" id="city" name="city" maxlength="30" pattern="^\D+$"  required>
+                <input placeholder="Москва" value="${param.city}" type="text" id="city" name="city" maxlength="30" pattern="^^[А-Я][а-я]+\D*$"  required>
             </div>
+            <c:forEach var="error" items="${requestScope.errors}">
+            <c:if test="${error.code == 'invalid.Registration.street'}">
+                <div class="error-message" id="login-error">${error.message}</div>
+            </c:if>
+            </c:forEach>
             <div class="form-group">
                 <label for="street">Улица:</label>
-                <input placeholder="Лобачевского" value="${param.street}" type="text" id="street" name="street" maxlength="30" pattern="^\D+$"  required>
+                <input placeholder="Лобачевского" value="${param.street}" type="text" id="street" name="street" maxlength="30" pattern="^[А-Я][а-я]+\D*$"  required>
             </div>
+            <c:forEach var="error" items="${requestScope.errors}">
+            <c:if test="${error.code == 'invalid.Registration.house'}">
+                <div class="error-message" id="login-error">${error.message}</div>
+            </c:if>
+            </c:forEach>
             <div class="form-group">
                 <label for="house">Дом:</label>
                 <input placeholder="88к5" value="${param.house}" type="text" id="house" name="house" maxlength="30" pattern="^\S+$"  required>
             </div>
+            <c:forEach var="error" items="${requestScope.errors}">
+            <c:if test="${error.code == 'invalid.Registration.flat'}">
+                <div class="error-message" id="login-error">${error.message}</div>
+            </c:if>
+            </c:forEach>
             <div class="form-group">
                 <label for="flat">Квартира(0, если живете в частном доме):</label>
-                <input value="${param.flat}" type="text" id="flat" name="flat" pattern="^\d+$" maxlength="3" required>
+                <input value="${param.flat}" type="number" id="flat" name="flat" pattern="^\d+$" maxlength="3" required>
             </div>
 
             <!-- Другие поля для ввода данных работника -->
@@ -91,9 +116,11 @@
         <form id="employeeMedicalCardForm" class="modal-form" action="${pageContext.request.contextPath}/admin" method="post">
             <h2>Добавить Медицинскую книжку</h2>
 
-            <c:if test="${requestScope.medicalCardIsNotUnique}">
-                <div  class="error-message" id="login-error">Медицинская книжка такой серией и номером уже существует!</div>
-            </c:if>
+            <c:forEach var="error" items="${requestScope.errors}">
+                <c:if test="${error.code == 'invalid.MedicalCard.SerialNumber'}">
+                    <div class="error-message" id="login-error">${error.message}</div>
+                </c:if>
+            </c:forEach>
             <div class="form-group">
                 <label for="medSerialNumber">Серия и номер Мед. Книжки:</label>
                 <input placeholder="50АПxxxxxxx"  value="${param.medSerialNumber}" type="text" id="medSerialNumber" name="medSerialNumber" pattern="^(\d|[А-Я]){11}$" maxlength="11" required>
@@ -128,21 +155,23 @@
         </form>
         <form id="employeeEmploymentCardForm" class="modal-form" action="/admin" method="post">
             <h2>Добавить книжку трудоустройства</h2>
-            <c:if test="${requestScope.employmentCardIsNotUnique}">
-                <div class="error-message" id="login-error">Трудовая книжка такой серией и номером уже существует!</div>
-            </c:if>
+            <c:forEach var="error" items="${requestScope.errors}">
+                <c:if test="${error.code == 'invalid.Employment.serialNumber'}">
+                    <div class="error-message" id="login-error">${error.message}</div>
+                </c:if>
+            </c:forEach>
             <div class="form-group">
                 <label for="employmentSerialNumber">Серия и номер книжки трудоустройства:</label>
                 <input placeholder="50АПxxxxxxx" value="${param.employmentSerialNumber}" type="text" id="employmentSerialNumber" name="employmentSerialNumber" pattern="^(\d|[А-Я]){11}$" maxlength="11" required>
             </div>
             <div class="form-group">
                 <label for="previousJob">Предыдущая работа:</label>
-                <input placeholder="Грузчик" value="${param.previousJob}" type="text" id="previousJob" name="previousJob" maxlength="30" pattern="^\D+$"  required>
+                <input placeholder="Грузчик" value="${param.previousJob}" type="text" id="previousJob" name="previousJob" maxlength="30" pattern="^[А-Я][а-я]+\D*$"  required>
             </div>
 
             <div class="form-group">
                 <label for="experience">Стаж на предыдущей работе:</label>
-                <input value="${param.experience}" type="text" id="experience" name="experience"  maxlength="1" pattern="^\d+$" required>
+                <input value="${param.experience}" type="number" id="experience" name="experience"  maxlength="1" pattern="^\d+$" required>
             </div>
             <!-- Другие поля для ввода данных работника -->
 
@@ -160,9 +189,11 @@
         </form>
         <form id="employeeEducationCardForm" class="modal-form" action="${pageContext.request.contextPath}/admin" method="post">
             <h2>Добавить документ об образовании</h2>
-            <c:if test="${requestScope.educationCardIsNotUnique}">
-                <div class="error-message" id="login-error">Документ с такой серией и номером уже существует!</div>
-            </c:if>
+            <c:forEach var="error" items="${requestScope.errors}">
+                <c:if test="${error.code == 'invalid.Education.serialNumber'}">
+                    <div class="error-message" id="login-error">${error.message}</div>
+                </c:if>
+            </c:forEach>
             <div class="form-group">
                 <label for="educationSerialNumber">Серия и номер документа:</label>
                 <input placeholder="50АПxxxxxxx" value="${param.educationSerialNumber}" type="text" id="educationSerialNumber" name="educationSerialNumber" pattern="^(\d|[А-Я]){11}$" maxlength="11" required>
@@ -194,3 +225,4 @@
         </form>
     </div>
 </c:if>
+
