@@ -4,13 +4,13 @@
 <c:if test="${sessionScope.active == 'addOrder'}">
     <div id="newOrderFormModal" class="modal">
     <div class="modal-content">
-        <h2>Создать заказ</h2>
         <form id="newOrderForm" class="modal-form" action="/client" method="post">
+            <h2>Создать заказ</h2>
             <label for="cargoWeight">Вес груза (в килограммах):</label>
-            <input type="text" id="cargoWeight" name="cargoWeight" required><br>
+            <input type="text" id="cargoWeight" name="cargoWeight" maxlength="4" required><br>
 
             <label for="cargoSize">Размер груза (в кубометрах):</label>
-            <input type="text" id="cargoSize" name="cargoSize" required><br>
+            <input type="text" id="cargoSize" name="cargoSize" maxlength="3" required><br>
 
             <label for="isFragile">Хрупкий груз:</label>
             <input type="checkbox" id="isFragile" name="isFragile"><br>
@@ -33,14 +33,20 @@
 <c:if test="${sessionScope.active == 'addFreighter'}">
     <div id="selectFreighterModal" class="modal">
         <div class="modal-content">
-            <h2>Выбрать перевозчика</h2>
             <form id="selectFreighterForm" class="modal-form" action="/client" method="post">
+                <h2>Выбрать перевозчика</h2>
                 <label for="freighterName">Перевозчики:</label>
                 <select id="freighterName" name="freighterName">
-                    <c:forEach var="freighterName" items="${sessionScope.availableFreighters}">
-                        <option value="${freighterName.freighterName}">${freighterName.freighterName}</option>
+                    <c:forEach var="freighter" items="${sessionScope.availableFreighters}">
+                        <option value="${freighter.freighterName}">${freighter.freighterName}, Цена: ${freighter.shippingPrice}</option>
                     </c:forEach>
                 </select><br>
+
+                <div>
+                    <label>Цена за перевозку: </label>
+                    <span>${sessionScope.shippingPrice}</span>
+                </div>
+
                 <div class="form-group">
                     <button type="submit">Добавить заказ</button>
                 </div>

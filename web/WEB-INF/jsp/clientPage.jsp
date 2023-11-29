@@ -7,9 +7,15 @@
     <meta charset="UTF-8">
     <title>Страница клиента морского порта</title>
     <style>
-        <%@include file="css/clientStyles.css"%>
+        <%@include file="css/admin.css"%>
     </style>
 </head>
+<header>
+    <form action="/logout" method="post">
+        <button class="logout-btn">Выход</button>
+    </form>
+</header>
+
 <body>
 <jsp:include page="profileSection.jsp"/>
 

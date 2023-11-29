@@ -2,8 +2,13 @@ package com.app.service;
 
 import com.app.dao.*;
 import com.app.dto.CreateCargoDto;
+import com.app.dto.CreatePassportDto;
+import com.app.dto.ShowCustomerDto;
 import com.app.entity.*;
+import com.app.exceptions.ValidationException;
 import com.app.util.Mapper;
+import com.app.validator.PassportValidator;
+import com.app.validator.PasswordValidator;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,8 +22,9 @@ public class ClientService {
     private final CargoDao cargoDao = CargoDao.getInstance();
     private final RouteDao routeDao = RouteDao.getInstance();
     private final FreighterDao freighterDao = FreighterDao.getInstance();
-
+    private final CustomerDao customerDao = CustomerDao.getInstance();
     private final FreighterRoutesDao freighterRoutesDao = FreighterRoutesDao.getInstance();
+    private final PasswordValidator passwordValidator = PasswordValidator.getInstance();
 
     private ClientService() {
     }
@@ -73,8 +79,14 @@ public class ClientService {
         cargoDao.save(curCargo);
     }
 
-    public String editClientProfile(String clientId, String newProfileData) {
-        // добавить логику на редактирование профиля клиента
-        return "Профиль клиента отредактирован: " + newProfileData;
+    public void checkPassword(ShowCustomerDto dto){
+        var result = passwordValidator.isValid(dto);
+        if(!result.isValid()){
+            throw new ValidationException(result.getErrors());
+        }
+    }
+
+    public void updatePassword(ShowCustomerDto dto) {
+        customerDao.updatePassword(dto.getLogin(), dto.getPassword());
     }
 }
