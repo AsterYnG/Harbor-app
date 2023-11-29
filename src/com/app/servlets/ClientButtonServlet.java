@@ -45,6 +45,11 @@ public class ClientButtonServlet extends HttpServlet {
                 resp.sendRedirect("/client");
                 break;
             }
+            case "buttonChangePassword": {
+                session.setAttribute("active", "changePassword");
+                resp.sendRedirect("/client");
+                break;
+            }
         }
     }
 }

@@ -8,17 +8,55 @@
     </form>
 </section>
 
-<section class="order-section">
+<section class="order-section" id="currentOrdersSection">
     <h2>Текущие заказы</h2>
-    <c:forEach var="order" items="${sessionScope.currentOrders}">
-        <p>${order}</p>
-    </c:forEach>
+    <div id="currentOrdersContainer">
+        <c:forEach var="order" items="${sessionScope.currentOrders}" varStatus="loop">
+            <c:if test="${loop.index < 3 or sessionScope.showAllCurrentOrders}">
+                <p>${order}</p>
+            </c:if>
+        </c:forEach>
+    </div>
+    <c:if test="${sessionScope.currentOrders.size() > 3}">
+        <button onclick="showAllCurrentOrders()">Показать все</button>
+    </c:if>
 </section>
 
-<section class="order-section">
+<script>
+    var showAllCurrentOrders = function() {
+        var currentOrdersContainer = document.getElementById("currentOrdersContainer");
+        currentOrdersContainer.innerHTML = `<c:forEach var="order" items="${sessionScope.currentOrders}">
+                                                <p>${order}</p>
+                                            </c:forEach>`;
+
+        // Убрать кнопку "Показать все"
+        document.querySelector("#currentOrdersSection button").style.display = "none";
+    };
+</script>
+
+<section class="order-section" id="orderHistorySection">
     <h2>История заказов</h2>
-    <c:forEach var="order" items="${sessionScope.orderHistory}">
-        <p>${order}</p>
-    </c:forEach>
+    <div id="orderHistoryContainer">
+        <c:forEach var="order" items="${sessionScope.orderHistory}" varStatus="loop">
+            <c:if test="${loop.index < 3 or sessionScope.showAllOrderHistory}">
+                <p>${order}</p>
+            </c:if>
+        </c:forEach>
+    </div>
+    <c:if test="${sessionScope.orderHistory.size() > 3}">
+        <button onclick="showAllOrderHistory()">Показать все</button>
+    </c:if>
 </section>
+
+<script>
+    var showAllOrderHistory = function() {
+        var orderHistoryContainer = document.getElementById("orderHistoryContainer");
+        orderHistoryContainer.innerHTML = `<c:forEach var="order" items="${sessionScope.orderHistory}">
+                                                <p>${order}</p>
+                                            </c:forEach>`;
+
+        // Убрать кнопку "Показать все"
+        document.querySelector("#orderHistorySection button").style.display = "none";
+    };
+</script>
 

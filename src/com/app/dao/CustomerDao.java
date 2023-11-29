@@ -31,9 +31,21 @@ public class CustomerDao implements Dao<Integer, Customer> {
         INSERT INTO customer(full_name, email, password,login)\s
         VALUES (?,?,?,?);
     """;
+    private final static String CHANGE_PASS = """
+        UPDATE customer
+        SET password = ?
+        WHERE login = ?;
+    """;
+
     private final static String FIND_BY_LOGIN = """
         SELECT * FROM customer
         WHERE login = ?
+            LIMIT 1;
+    """;
+
+    private final static String FIND_BY_PASSWORD = """
+        SELECT * FROM customer
+        WHERE password = ? AND login = ?
             LIMIT 1;
     """;
 
@@ -69,6 +81,33 @@ public class CustomerDao implements Dao<Integer, Customer> {
                 result = buildCustomer(resultSet);
             }
             return Optional.ofNullable(result);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Optional<Customer> findByPassword(String log, String pass){
+        try (var connection = ConnectionManager.get()) {
+            @Cleanup var preparedStatement = connection.prepareStatement(FIND_BY_PASSWORD);
+            preparedStatement.setString(1,pass);
+            preparedStatement.setString(2,log);
+            @Cleanup var resultSet = preparedStatement.executeQuery();
+            Customer result = null;
+            if (resultSet.next()){
+                result = buildCustomer(resultSet);
+            }
+            return Optional.ofNullable(result);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void updatePassword(String log, String pass){
+        try (var connection = ConnectionManager.get()) {
+            @Cleanup var preparedStatement = connection.prepareStatement(CHANGE_PASS);
+            preparedStatement.setString(1,pass);
+            preparedStatement.setString(2,log);
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
