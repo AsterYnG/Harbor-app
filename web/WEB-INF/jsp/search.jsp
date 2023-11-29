@@ -3,8 +3,14 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <c:if test="${sessionScope.active == 'availableRoutes'}">
     <div id="availableRoutesSearchFormModal" class="modal">
+        <form action="${pageContext.request.contextPath}/admin" method="post">
+            <button value="true" name="exit" class="close-button">&#10006;</button>
+        </form>
         <form id="availableRoutesSearchForm" class="modal-form" action="${pageContext.request.contextPath}/admin"
               method="post">
+
+                <div class="error-message" id="login-error">${requestScope.error.message}</div>
+
             <h2>Поиск по базе</h2>
 
             <div class="form-group">
@@ -59,17 +65,21 @@
 
 <c:if test="${sessionScope.active == 'cargos'}">
     <div id="cargosFormModal" class="modal">
+        <form action="${pageContext.request.contextPath}/admin" method="post">
+            <button value="true" name="exit" class="close-button">&#10006;</button>
+        </form>
         <form id="cargosForm" class="modal-form" action="${pageContext.request.contextPath}/admin" method="post">
+            <div class="error-message" id="login-error">${requestScope.error.message}</div>
             <h2>Поиск по базе</h2>
 
             <h3>Вес груза от и до (кг):</h3>
             <div class="form-group">
                 <label for="weightFrom">Вес от:</label>
-                <input type="number" id="weightFrom" name="weightFrom" pattern="^(\S|\d)+$"  max="10000">
+                <input type="number" id="weightFrom" name="weightFrom" pattern="^(\S|\d)+$" max="10000">
             </div>
             <div class="form-group">
                 <label for="weightTo">Вес до:</label>
-                <input type="number" id="weightTo" name="weightTo" pattern="^(\S|\d)+$"  max="10000">
+                <input type="number" id="weightTo" name="weightTo" pattern="^(\S|\d)+$" max="10000">
             </div>
 
             <h3>Размер груза от и до (м^3):</h3>
@@ -84,7 +94,7 @@
             <h3>Id:</h3>
             <div class="form-group">
                 <label for="clientId">Id клиента:</label>
-                <input type="number" id="clientId" name="clientId" pattern="^(\S|\d)+$"  max="10000">
+                <input type="number" id="clientId" name="clientId" pattern="^(\S|\d)+$" max="10000">
             </div>
             <h3>Страна:</h3>
 
@@ -94,7 +104,6 @@
                     <input type="checkbox" id="${route}" name="${route}" value="true">
                 </div>
             </c:forEach>
-
 
 
             <h3>Перевозчик:</h3>
@@ -112,6 +121,10 @@
                 <input type="checkbox" id="fragile" name="fragile" value="true">
             </div>
 
+            <div class="form-group">
+                <label for="allCargos">Искать все грузы:</label>
+                <input type="checkbox" id="allCargos" name="allCargos" value="true">
+            </div>
 
 
             <!-- Другие поля для ввода данных работника -->
@@ -125,7 +138,11 @@
 
 <c:if test="${sessionScope.active == 'freighters'}">
     <div id="freightersFormModal" class="modal">
+        <form action="${pageContext.request.contextPath}/admin" method="post">
+            <button value="true" name="exit" class="close-button">&#10006;</button>
+        </form>
         <form id="freightersForm" class="modal-form" action="${pageContext.request.contextPath}/admin" method="post">
+            <div class="error-message" id="login-error">${requestScope.error.message}</div>
             <h2>Поиск по базе</h2>
 
 
@@ -189,7 +206,11 @@
 
 <c:if test="${sessionScope.active == 'ships'}">
     <div id="shipsFormModal" class="modal">
+        <form action="${pageContext.request.contextPath}/admin" method="post">
+            <button value="true" name="exit" class="close-button">&#10006;</button>
+        </form>
         <form id="shipsForm" class="modal-form" action="${pageContext.request.contextPath}/admin" method="post">
+            <div class="error-message" id="login-error">${requestScope.error.message}</div>
             <h2>Поиск по базе</h2>
 
 
@@ -216,9 +237,8 @@
             <h3>Id:</h3>
             <div class="form-group">
                 <label for="teamId">Id команды:</label>
-                <input type="number" id="teamId" name="teamId" pattern="^(\S|\d)+$"  max="10000">
+                <input type="number" id="teamId" name="teamId" pattern="^(\S|\d)+$" max="10000">
             </div>
-
 
 
             <h3>Размер корабля:</h3>
@@ -262,13 +282,18 @@
 
 <c:if test="${sessionScope.active == 'teams'}">
     <div id="teamsFormModal" class="modal">
+        <form action="${pageContext.request.contextPath}/admin" method="post">
+            <button value="true" name="exit" class="close-button">&#10006;</button>
+        </form>
         <form id="teamsForm" class="modal-form" action="${pageContext.request.contextPath}/admin" method="post">
+            <div class="error-message" id="login-error">${requestScope.error.message}</div>
             <h2>Поиск по базе</h2>
 
             <h3>ФИО:</h3>
             <div class="form-group">
                 <label for="memberFullName">ФИО участника команды:</label>
-                <input type="text" id="memberFullName" name="memberFullName" maxlength="39" pattern="^[А-Я][а-я]* [А-Я][а-я]*( [А-Я][а-я]*)?$"  >
+                <input type="text" id="memberFullName" name="memberFullName" maxlength="39"
+                       pattern="^[А-Я][а-я]* [А-Я][а-я]*( [А-Я][а-я]*)?$">
             </div>
 
             <h3>Гражданство участника команды:</h3>
@@ -300,25 +325,177 @@
 
 <c:if test="${sessionScope.active == 'clients'}">
     <div id="clientsFormModal" class="modal">
+        <form action="${pageContext.request.contextPath}/admin" method="post">
+            <button value="true" name="exit" class="close-button">&#10006;</button>
+        </form>
         <form id="clientsForm" class="modal-form" action="${pageContext.request.contextPath}/admin" method="post">
+            <div class="error-message" id="login-error">${requestScope.error.message}</div>
             <h2>Поиск по базе</h2>
 
             <h3>ФИО:</h3>
             <div class="form-group">
                 <label for="customerFullName">ФИО клиента:</label>
-                <input type="text" id="customerFullName" name="customerFullName" maxlength="39" pattern="^[А-Я][а-я]* [А-Я][а-я]*( [А-Я][а-я]*)?$"  >
+                <input type="text" id="customerFullName" name="customerFullName" maxlength="39"
+                       pattern="^[А-Я][а-я]* [А-Я][а-я]*( [А-Я][а-я]*)?$">
             </div>
 
             <h3>Электронная почта:</h3>
             <div class="form-group">
                 <label for="customerEmail">Почта клиента:</label>
-                <input type="text" id="customerEmail" name="customerEmail" maxlength="39" pattern="^\S+@\S+\.\S+$"  >
+                <input type="text" id="customerEmail" name="customerEmail" maxlength="39" pattern="^\S+@\S+\.\S+$">
             </div>
 
             <h3>Логин:</h3>
             <div class="form-group">
                 <label for="customerLogin">Логин клиента:</label>
-                <input type="text" id="customerLogin" name="customerLogin" maxlength="39" pattern="^\S+$"  >
+                <input type="text" id="customerLogin" name="customerLogin" maxlength="39" pattern="^\S+$">
+            </div>
+
+            <div class="form-group">
+                <button type="submit">Искать</button>
+            </div>
+        </form>
+    </div>
+</c:if>
+
+<c:if test="${sessionScope.active == 'orders'}">
+    <div id="ordersFormModal" class="modal">
+        <form action="${pageContext.request.contextPath}/admin" method="post">
+            <button value="true" name="exit" class="close-button">&#10006;</button>
+        </form>
+
+        <form id="ordersForm" class="modal-form" action="${pageContext.request.contextPath}/admin" method="post">
+            <div class="error-message" id="login-error">${requestScope.error.message}</div>
+            <h2>Поиск по базе</h2>
+
+            <h3>Id:</h3>
+            <div class="form-group">
+                <label for="orderClientId">Id клиента:</label>
+                <input type="number" id="orderClientId" name="orderClientId" pattern="^(\S|\d)+$" max="10000">
+            </div>
+            <div class="form-group">
+                <label for="orderId">Id заказа:</label>
+                <input type="number" id="orderId" name="orderId" pattern="^(\S|\d)+$" max="10000">
+            </div>
+
+            <h3>ФИО:</h3>
+            <div class="form-group">
+                <label for="orderCustomerFullName">ФИО клиента:</label>
+                <input type="text" id="orderCustomerFullName" name="orderCustomerFullName" maxlength="39"
+                       pattern="^[А-Я][а-я]* [А-Я][а-я]*( [А-Я][а-я]*)?$">
+            </div>
+            <h3>Дата заказа:</h3>
+            <div class="form-group">
+                <label for="orderDateFrom">Дата от:</label>
+                <input type="datetime-local" id="orderDateFrom" name="orderDateFrom" min="2000-01-01" max="2023-12-02">
+            </div>
+            <div class="form-group">
+                <label for="orderDateTo">Дата от:</label>
+                <input type="datetime-local" id="orderDateTo" name="orderDateTo" min="2000-01-01" max="2023-12-02">
+            </div>
+            <h3>Статус заказа:</h3>
+            <c:forEach var="status" items="${sessionScope.statusList}">
+                <div class="form-group">
+                    <label for="${status}">${status}:</label>
+                    <input type="checkbox" id="${status}" name="${status}"
+                           value="true">
+                </div>
+            </c:forEach>
+
+
+            <div class="form-group">
+                <button type="submit">Искать</button>
+            </div>
+        </form>
+    </div>
+</c:if>
+
+<c:if test="${sessionScope.active == 'workers'}">
+    <div id="workersFormModal" class="modal">
+        <form action="${pageContext.request.contextPath}/admin" method="post">
+            <button value="true" name="exit" class="close-button">&#10006;</button>
+        </form>
+        <form id="workersForm" class="modal-form" action="${pageContext.request.contextPath}/admin" method="post">
+            <div class="error-message">${requestScope.error.message}</div>
+            <h2>Поиск по базе</h2>
+
+            <h3>Причал:</h3>
+            <div class="form-group">
+                <label for="dockId">Номер причала:</label>
+                <input type="number" id="dockId" name="dockId" pattern="^(\S|\d)+$" max="100">
+            </div>
+            <h3>Серия и номер паспорта:</h3>
+            <div class="form-group">
+                <label for="passportSerialNumber">Серия и номер 10 цифр:</label>
+                <input type="number" id="passportSerialNumber" name="passportSerialNumber" pattern="^(\S|\d)+$"
+                       maxlength="10">
+            </div>
+
+            <h3>Возраст:</h3>
+            <div class="form-group">
+                <label for="ageFrom">От:</label>
+                <input type="number" id="ageFrom" name="ageFrom" pattern="^(\S|\d)+$" maxlength="2">
+            </div>
+            <div class="form-group">
+                <label for="ageTo">До:</label>
+                <input type="number" id="ageTo" name="ageTo" pattern="^(\S|\d)+$" maxlength="2">
+            </div>
+
+            <h3>Зарплата:</h3>
+            <div class="form-group">
+                <label for="salaryFrom">От:</label>
+                <input type="number" id="salaryFrom" name="salaryFrom" pattern="^(\S|\d)+$" maxlength="8">
+            </div>
+            <div class="form-group">
+                <label for="salaryTo">До:</label>
+                <input type="number" id="salaryTo" name="salaryTo" pattern="^(\S|\d)+$" maxlength="8">
+            </div>
+
+            <h3>Должность:</h3>
+            <c:forEach var="position" items="${sessionScope.positionList}">
+                <div class="form-group">
+                    <label for="${position}">${position}:</label>
+                    <input type="checkbox" id="${position}" name="${position}"
+                           value="true">
+                </div>
+            </c:forEach>
+            <h3>Дата найма:</h3>
+            <div class="form-group">
+                <label for="hiringDateFrom">Дата от:</label>
+                <input type="date" id="hiringDateFrom" name="hiringDateFrom" min="2000-01-01" max="2023-12-02">
+            </div>
+            <div class="form-group">
+                <label for="hiringDateTo">Дата от:</label>
+                <input type="date" id="hiringDateTo" name="hiringDateTo" min="2000-01-01" max="2023-12-02">
+            </div>
+
+            <h3>ФИО:</h3>
+            <div class="form-group">
+                <label for="workerFullName">ФИО работника:</label>
+                <input type="text" id="workerFullName" name="workerFullName" maxlength="39"
+                       pattern="^[А-Я][а-я]* [А-Я][а-я]*( [А-Я][а-я]*)?$">
+            </div>
+
+            <div class="form-group">
+                <button type="submit">Искать</button>
+            </div>
+        </form>
+    </div>
+</c:if>
+<c:if test="${sessionScope.active == 'sortAvailableRoutes'}">
+    <div id="sortRoutesFormModal" class="modal">
+
+        <form id="sortForm" class="modal-form" action="${pageContext.request.contextPath}/admin" method="post">
+            <h2>Сортировка</h2>
+
+            <div class="form-group">
+                <label for="sortBy">Сортировать по:</label>
+                <select id="sortBy" name="sortBy">
+                    <option value="country">Страна</option>
+                    <option value="city">Город</option>
+                    <option value="duration">Длительность</option>
+                    <option value="freighter">Перевозчик</option>
+                </select>
             </div>
 
             <div class="form-group">

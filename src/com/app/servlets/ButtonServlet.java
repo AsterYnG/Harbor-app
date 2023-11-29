@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -90,11 +91,8 @@ public class ButtonServlet extends HttpServlet {
             case "buttonShowVoyageLog": {
                 List<VoyageLog> voyageLog = buttonService.getVoyageLog();
                 session.setAttribute("voyageLog", voyageLog);
-                Set<String> columnNames = new HashSet<>();
-                for (Field declaredField : voyageLog.get(0).getClass().getDeclaredFields()) {
-                    columnNames.add(declaredField.getName());
-                }
-                session.setAttribute("columnNames", columnNames);
+                LocalDateTime temp;
+
                 session.setAttribute("active","showVoyageLog");
                 resp.sendRedirect("/admin");
 
@@ -112,6 +110,15 @@ public class ButtonServlet extends HttpServlet {
                 session.setAttribute("active","showSearch");
                 resp.sendRedirect("/admin");
                 break;
+            }
+            case "buttonSort":{
+                var currentStatus = session.getAttribute("active");
+                switch (currentStatus){
+                    case "showSearchResultAvailableRoutes":{
+                        session.getAttribute("searchResult");
+
+                    }
+                }
             }
         }
     }

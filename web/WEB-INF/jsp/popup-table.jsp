@@ -137,19 +137,19 @@
             </div>
             <div class="form-group">
                 <label for="weightCost">Стоимость за 1 кг груза:</label>
-                <input type="text" id="weightCost" name="weightCost" maxlength="4" pattern="^/d+$" required>
+                <input type="number" id="weightCost" name="weightCost" maxlength="4" pattern="^/d+$" max="1000000" required>
             </div>
             <div class="form-group">
                 <label for="sizeCost">Стоимость за 1 кубометр груза:</label>
-                <input type="text" id="sizeCost" name="sizeCost" maxlength="4" pattern="^/d+$" required>
+                <input type="number" id="sizeCost" name="sizeCost" maxlength="4" pattern="^/d+$" max="1000000" required>
             </div>
             <div class="form-group">
                 <label for="tax">Тариф за пользование услугами порта в % :</label>
-                <input type="text" id="tax" name="tax" maxlength="2" pattern="^/d+$" required>
+                <input type="number" id="tax" name="tax" maxlength="2" pattern="^/d+$" max="100" required>
             </div>
             <div class="form-group">
                 <label for="fragileCost">Стоимость за хрупкость груза:</label>
-                <input type="text" id="fragileCost" name="fragileCost" maxlength="4" pattern="^/d+$" required>
+                <input type="number" id="fragileCost" name="fragileCost" maxlength="4" max="1000000" pattern="^/d+$" required>
             </div>
             <!-- Другие поля для ввода данных работника -->
 
@@ -168,6 +168,7 @@
                     <th>Номер плавания</th>
                     <th>Перевозчик</th>
                     <th>Дата</th>
+                    <th>Время</th>
                     <th>Номер корабля</th>
                     <th>Модель корабля</th>
                     <th>Вместимость корабля</th>
@@ -181,7 +182,8 @@
                     <tr>
                         <td>${voyage.logId}</td>
                         <td>${voyage.ship.freighter.freighterName}</td>
-                        <td>${voyage.shipmentDate}</td>
+                        <td>${voyage.shipmentDate.year}.${voyage.shipmentDate.monthValue}.${voyage.shipmentDate.dayOfMonth}</td>
+                        <td>${voyage.shipmentDate.hour}:${voyage.shipmentDate.minute}:${voyage.shipmentDate.second}</td>
                         <td>${voyage.ship.shipId}</td>
                         <td>${voyage.ship.shipModel.shipModel}</td>
                         <td>${voyage.ship.shipModel.shipCapacity}</td>
@@ -215,7 +217,6 @@
                         <option value="clients">Клиенты</option>
                         <option value="orders">Заказы</option>
                         <option value="workers">Работники и их данные</option>
-                        <option value="positions">Должности</option>
 
                 </select>
             </div>

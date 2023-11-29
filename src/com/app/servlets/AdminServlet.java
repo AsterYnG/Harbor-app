@@ -4,6 +4,7 @@ import com.app.dto.*;
 import com.app.entity.*;
 import com.app.exceptions.ValidationException;
 import com.app.service.AdminService;
+import com.app.validator.Error;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -13,6 +14,7 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -134,7 +136,7 @@ public class AdminServlet extends HttpServlet {
                 case "addEmployeeEmploymentCard": {
                     if (Boolean.valueOf(req.getParameter("exit")).equals(true)) {
                         session.setAttribute("active", "");
-                        doGet(req, resp);
+                        resp.sendRedirect("/admin");
                         break;
                     }
 
@@ -261,12 +263,24 @@ public class AdminServlet extends HttpServlet {
                         if (searchTable.equals("teams")) {
                             session.setAttribute("teamMembers", adminService.getAllTeamMembers().stream().map(TeamMember::getCitizenship).distinct().toList());
                         }
+                        if (searchTable.equals("orders")) {
+                            session.setAttribute("statusList", adminService.getAllOrders().stream().map(Order::getStatus).distinct().toList());
+                        }
+                        if (searchTable.equals("workers")) {
+                            session.setAttribute("positionList", adminService.getAllPositions().stream().map(Position::getPosition).toList());
+                        }
                     }
 
                     resp.sendRedirect("/admin");
                     break;
                 }
                 case "availableRoutes": {
+                    if (Boolean.valueOf(req.getParameter("exit")).equals(true)) {
+                        session.setAttribute("active", "");
+                        resp.sendRedirect("/admin");
+                        break;
+                    }
+
                     var freighters = adminService.getFreighters(); // Какие перевозчики выбраны
                     List<Freighter> freightersResult = freighters.stream()
                             .filter(value -> req.getParameter(value.getFreighterName()) != null)
@@ -300,8 +314,8 @@ public class AdminServlet extends HttpServlet {
 
 
                     if (durationFrom > durationTo) {
-                        session.setAttribute("error", "Неправильно выбран промежуток( от > до )");
-                        doGet(req, resp);
+                        req.setAttribute("error", Error.of("invalid.interval.jsp","Неправильно указан промежуток от > до"));
+                        doGet(req,resp);
                         break;
                     }
 
@@ -313,10 +327,17 @@ public class AdminServlet extends HttpServlet {
                     break;
                 }
                 case "cargos": {
+
+                    if (Boolean.valueOf(req.getParameter("exit")).equals(true)) {
+                        session.setAttribute("active", "");
+                        resp.sendRedirect("/admin");
+                        break;
+                    }
                     Integer weightFrom = 0;
                     Integer weightTo = 19999;
 
                     Boolean isFragile = null;
+                    Boolean allCargos = null;
 
                     Integer customerIdTemp;
                     Integer sizeFrom = 0;
@@ -338,10 +359,10 @@ public class AdminServlet extends HttpServlet {
                     }
 
 
-//                    if (!req.getParameter("fragile").isBlank()) {
-//                        isFragile = Boolean.valueOf(req.getParameter("fragile"));
-//                    }
-                    if (req.getParameter("clientId") != null) {
+                    isFragile = req.getParameter("fragile") != null;
+
+                    allCargos = req.getParameter("allCargos") != null;
+                    if (!req.getParameter("clientId").isBlank()) {
                         customerIdTemp = Integer.parseInt(req.getParameter("clientId"));
                     } else {
                         customerIdTemp = null;
@@ -349,8 +370,8 @@ public class AdminServlet extends HttpServlet {
 
 
                     if ((weightFrom > weightTo) || (sizeFrom > sizeTo)) {
-                        session.setAttribute("error", "Неправильно выбран промежуток( от > до )");
-                        doGet(req, resp);
+                        req.setAttribute("error", Error.of("invalid.interval.jsp","Неправильно указан промежуток от > до"));
+                        doGet(req,resp);
                         break;
                     }
 
@@ -388,13 +409,19 @@ public class AdminServlet extends HttpServlet {
                         freightersResult = freighters.stream().map(Freighter::getFreighterName).toList();
                     }
 
-                    List<Cargo> filteredCargos = adminService.getFilteredCargos(weightFrom, weightTo, sizeFrom, sizeTo, isFragile, clientsResult, countriesResult, freightersResult);
+                    List<Cargo> filteredCargos = adminService.getFilteredCargos(weightFrom, weightTo, sizeFrom, sizeTo, isFragile,allCargos
+                            ,clientsResult, countriesResult, freightersResult);
                     session.setAttribute("searchResult", filteredCargos);
                     session.setAttribute("active", "showSearchResultCargos");
                     resp.sendRedirect("/admin");
                     break;
                 }
                 case "freighters": {
+                    if (Boolean.valueOf(req.getParameter("exit")).equals(true)) {
+                        session.setAttribute("active", "");
+                        resp.sendRedirect("/admin");
+                        break;
+                    }
                     Integer taxFrom = 0;
                     Integer taxTo = 1000;
 
@@ -434,8 +461,8 @@ public class AdminServlet extends HttpServlet {
                         fragileCostTo = Integer.parseInt(req.getParameter("fragileCostTo"));
                     }
                     if ((weightCostFrom > weightCostTo) || (sizeCostFrom > sizeCostTo) || (taxFrom > taxTo) || (fragileCostFrom > fragileCostTo)) {
-                        session.setAttribute("error", "Неправильно выбран промежуток( от > до )");
-                        doGet(req, resp);
+                        req.setAttribute("error", Error.of("invalid.interval.jsp","Неправильно указан промежуток от > до"));
+                        doGet(req,resp);
                         break;
                     }
 
@@ -455,6 +482,11 @@ public class AdminServlet extends HttpServlet {
                     break;
                 }
                 case "ships": {
+                    if (Boolean.valueOf(req.getParameter("exit")).equals(true)) {
+                        session.setAttribute("active", "");
+                        resp.sendRedirect("/admin");
+                        break;
+                    }
                     Integer shipSizeFrom = 0;
                     Integer shipSizeTo = 10000000;
 
@@ -469,7 +501,7 @@ public class AdminServlet extends HttpServlet {
                     var teams = adminService.getAllShips().stream().map(Ship::getTeam).toList();
 
 
-                    if (req.getParameter("teamId") != null) {
+                    if (!req.getParameter("teamId").isBlank()) {
                         teamId = Integer.parseInt(req.getParameter("teamId"));
                     } else {
                         teamId = null;
@@ -495,8 +527,8 @@ public class AdminServlet extends HttpServlet {
                     } else allShips = true;
 
                     if ((shipSizeFrom > shipSizeTo) || (shipCapacityFrom > shipCapacityTo)) {
-                        session.setAttribute("error", "Неправильно выбран промежуток( от > до )");
-                        doGet(req, resp);
+                        req.setAttribute("error", Error.of("invalid.interval.jsp","Неправильно указан промежуток от > до"));
+                        doGet(req,resp);
                         break;
                     }
                     var freightersResult = freighters.stream().filter(value -> req.getParameter(value.getFreighterName()) != null)
@@ -533,6 +565,11 @@ public class AdminServlet extends HttpServlet {
                     break;
                 }
                 case "teams": {
+                    if (Boolean.valueOf(req.getParameter("exit")).equals(true)) {
+                        session.setAttribute("active", "");
+                        resp.sendRedirect("/admin");
+                        break;
+                    }
                     String fullName;
                     var citizenships = adminService.getAllTeamMembers().stream().map(TeamMember::getCitizenship).toList();
                     var fullNames = adminService.getAllTeamMembers().stream().map(TeamMember::getFullName).toList();
@@ -546,8 +583,8 @@ public class AdminServlet extends HttpServlet {
                         experienceTo = Integer.parseInt(req.getParameter("experienceTo"));
                     }
                     if ((experienceFrom > experienceTo)) {
-                        session.setAttribute("error", "Неправильно выбран промежуток( от > до )");
-                        doGet(req, resp);
+                        req.setAttribute("error", Error.of("invalid.interval.jsp","Неправильно указан промежуток от > до"));
+                        doGet(req,resp);
                         break;
                     }
                     if (req.getParameter("memberFullName") != null) {
@@ -578,31 +615,161 @@ public class AdminServlet extends HttpServlet {
                     resp.sendRedirect("/admin");
                     break;
                 }
-                case "clients":{
+                case "clients": {
+                    if (Boolean.valueOf(req.getParameter("exit")).equals(true)) {
+                        session.setAttribute("active", "");
+                        resp.sendRedirect("/admin");
+                        break;
+                    }
                     String customerFullName;
                     String customerEmail;
                     String customerLogin;
 
-                    if(req.getParameter("customerFullName") != null){
+                    if (!req.getParameter("customerFullName").isBlank()) {
                         customerFullName = req.getParameter("customerFullName");
-                    }
-                    else customerFullName = "";
+                    } else customerFullName = "";
 
-                    if(req.getParameter("customerEmail") != null){
+                    if (!req.getParameter("customerEmail").isBlank()) {
                         customerEmail = req.getParameter("customerEmail");
-                    }
-                    else customerEmail = "";
+                    } else customerEmail = "";
 
-                    if(req.getParameter("customerLogin") != null){
+                    if (!req.getParameter("customerLogin").isBlank()) {
                         customerLogin = req.getParameter("customerLogin");
-                    }
-                    else customerLogin = "";
+                    } else customerLogin = "";
 
                     List<Customer> filteredCustomers = adminService.getFilteredCustomers(customerFullName, customerEmail, customerLogin);
 
 
                     session.setAttribute("searchResult", filteredCustomers);
                     session.setAttribute("active", "showSearchResultClients");
+                    resp.sendRedirect("/admin");
+                    break;
+                }
+                case "orders": {
+                    if (Boolean.valueOf(req.getParameter("exit")).equals(true)) {
+                        session.setAttribute("active", "");
+                        resp.sendRedirect("/admin");
+                        break;
+                    }
+                    Integer clientId;
+                    Integer orderId;
+                    String fullName;
+
+                    LocalDateTime orderDateFrom;
+                    LocalDateTime orderDateTo;
+
+                    var statusList = adminService.getAllOrders().stream().map(Order::getStatus).distinct().toList();
+
+                    var temp = req.getParameter("orderClientId");
+
+                    if (!req.getParameter("orderClientId").isBlank()) {
+                        clientId = Integer.parseInt(req.getParameter("orderClientId"));
+                    } else clientId = null;
+                    if (!req.getParameter("orderId").isBlank()) {
+                        orderId = Integer.parseInt(req.getParameter("orderId"));
+                    } else orderId = null;
+                    if (!req.getParameter("orderCustomerFullName").isBlank()) {
+                        fullName = req.getParameter("orderCustomerFullName");
+                    } else fullName = "";
+
+                    if (!req.getParameter("orderDateFrom").isBlank()) {
+                        orderDateFrom = LocalDateTime.parse(req.getParameter("orderDateFrom"));
+                    } else orderDateFrom = LocalDateTime.parse("1930-01-01T00:00:00");
+
+                    if (!req.getParameter("orderDateTo").isBlank()) {
+                        orderDateTo = LocalDateTime.parse(req.getParameter("orderDateTo"));
+                    } else orderDateTo = LocalDateTime.parse("2024-01-01T00:00:00");
+
+                    if (orderDateFrom.compareTo(orderDateTo) > 0) {
+                        req.setAttribute("error", Error.of("invalid.interval.jsp","Неправильно указан промежуток от > до"));
+                        doGet(req,resp);
+                        break;
+                    }
+
+                    var statusListResult = statusList.stream().filter(value -> req.getParameter(value) != null)
+                            .toList();
+                    if (statusListResult.isEmpty()) {
+                        statusListResult = statusList;
+                    }
+
+                    var filteredOrders = adminService.getFilteredOrders(clientId, orderId, fullName, orderDateFrom, orderDateTo, statusListResult);
+                    List<Cargo> filteredOrdersResult = new ArrayList<>();
+                    for (List<Cargo> value : filteredOrders.values()) {
+                        filteredOrdersResult.add(value.get(0));
+                    }
+
+                    session.setAttribute("searchResult", filteredOrdersResult);
+                    session.setAttribute("active", "showSearchResultOrders");
+                    resp.sendRedirect("/admin");
+                    break;
+                }
+                case "workers": {
+                    if (Boolean.valueOf(req.getParameter("exit")).equals(true)) {
+                        session.setAttribute("active", "");
+                        resp.sendRedirect("/admin");
+                        break;
+                    }
+                    Integer dockId;
+                    Integer ageFrom;
+                    Integer ageTo;
+                    Integer salaryFrom;
+                    Integer salaryTo;
+                    String passportSerialNumber;
+                    String fullName;
+                    LocalDate hiringDateFrom;
+                    LocalDate hiringDateTo;
+                    var positionList = adminService.getAllPositions();
+
+                    if (!req.getParameter("dockId").isBlank()) {
+                        dockId = Integer.parseInt(req.getParameter("dockId"));
+                    } else dockId = null;
+
+                    if (!req.getParameter("ageFrom").isBlank()) {
+                        ageFrom = Integer.parseInt(req.getParameter("ageFrom"));
+                    } else ageFrom = 0;
+
+                    if (!req.getParameter("ageTo").isBlank()) {
+                        ageTo = Integer.parseInt(req.getParameter("ageTo"));
+                    } else ageTo = 200;
+
+                    if (!req.getParameter("salaryFrom").isBlank()) {
+                        salaryFrom = Integer.parseInt(req.getParameter("salaryFrom"));
+                    } else salaryFrom = 0;
+
+                    if (!req.getParameter("salaryTo").isBlank()) {
+                        salaryTo = Integer.parseInt(req.getParameter("salaryTo"));
+                    } else salaryTo = 10000000;
+
+                    if (!req.getParameter("passportSerialNumber").isBlank()) {
+                        passportSerialNumber = req.getParameter("passportSerialNumber");
+                    } else passportSerialNumber = "";
+
+                    if (!req.getParameter("workerFullName").isBlank()) {
+                        fullName = req.getParameter("workerFullName");
+                    } else fullName = "";
+
+                    if (!req.getParameter("hiringDateFrom").isBlank()) {
+                        hiringDateFrom = LocalDate.parse(req.getParameter("hiringDateFrom"));
+                    } else hiringDateFrom = LocalDate.parse("1930-01-01");
+
+                    if (!req.getParameter("hiringDateTo").isBlank()) {
+                        hiringDateTo = LocalDate.parse(req.getParameter("hiringDateTo"));
+                    } else hiringDateTo = LocalDate.parse("2024-01-01");
+
+                    if ((hiringDateFrom.isAfter(hiringDateTo)) || (ageFrom > ageTo) || (salaryFrom > salaryTo)) {
+                        req.setAttribute("error", Error.of("invalid.interval.jsp","Неправильно указан промежуток от > до"));
+                        doGet(req,resp);
+                        break;
+                    }
+
+                    var positionListResult = positionList.stream().filter(value -> req.getParameter(value.getPosition()) != null).toList();
+                    if (positionListResult.isEmpty()) {
+                        positionListResult = positionList;
+                    }
+                    List<Worker> filteredWorkers = adminService.getFilteredWorkers(dockId, ageFrom, ageTo, salaryFrom, salaryTo, passportSerialNumber, fullName, hiringDateFrom, hiringDateTo, positionListResult);
+
+                    session.setAttribute("searchResult", filteredWorkers);
+                    session.setAttribute("active", "showSearchResultWorkers");
                     resp.sendRedirect("/admin");
                     break;
                 }

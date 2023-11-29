@@ -212,3 +212,80 @@
         </div>
     </div>
 </c:if>
+
+<c:if test="${sessionScope.active == 'showSearchResultOrders'}">
+    <div id="SearchResultClientsModal" class="modal-table">
+        <div class="table-container">
+            <table>
+                <thead>
+                <tr>
+                    <th>ID клиента</th>
+                    <th>ID заказа</th>
+                    <th>ФИО клиента</th>
+                    <th>Статус заказа</th>
+                    <th>Дата заказа</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- Здесь будут данные о работниках -->
+
+                <c:forEach var="cargo" items="${sessionScope.searchResult}">
+                    <tr>
+                        <td>${cargo.customer.customerId}</td>
+                        <td>${cargo.order.orderId}</td>
+                        <td>${cargo.customer.fullName}</td>
+                        <td>${cargo.order.status}</td>
+                        <td>${cargo.order.date}</td>
+                    </tr>
+                </c:forEach>
+
+
+                <!-- ... другие данные столбцов -->
+
+                <!-- ... другие строки с данными о работниках -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</c:if>
+
+<c:if test="${sessionScope.active == 'showSearchResultWorkers'}">
+    <div id="SearchResultWorkersModal" class="modal-table">
+        <div class="table-container">
+            <table>
+                <thead>
+                <tr>
+                    <th>ID сотрудника</th>
+                    <th>Паспорт</th>
+                    <th>ФИО</th>
+                    <th>Дата рождения</th>
+                    <th>Должность</th>
+                    <th>Дата найма</th>
+                    <th>Причал</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                <!-- Здесь будут данные о работниках -->
+
+                <c:forEach var="worker" items="${sessionScope.searchResult}">
+                    <tr>
+                        <td>${worker.workerId}</td>
+                        <td>${worker.passportSerialNumber.passportSerialNumber}</td>
+                        <td>${worker.passportSerialNumber.fullName}</td>
+                        <td>${worker.passportSerialNumber.birthDate}</td>
+                        <td>${worker.position.position}</td>
+                        <td>${worker.hiringDate}</td>
+                        <td>${worker.dockId.dockId}</td>
+                    </tr>
+                </c:forEach>
+
+
+                <!-- ... другие данные столбцов -->
+
+                <!-- ... другие строки с данными о работниках -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</c:if>

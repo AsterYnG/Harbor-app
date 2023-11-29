@@ -9,9 +9,8 @@ import com.app.validator.*;
 import org.eclipse.tags.shaded.org.apache.bcel.generic.LUSHR;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.util.*;
 
 public class AdminService {
     private static final AdminService INSTANCE = new AdminService();
@@ -43,6 +42,7 @@ public class AdminService {
     private final CargoDao cargoDao = CargoDao.getInstance();
     private final ShipDao shipDao = ShipDao.getInstance();
     private final TeamMemberDao teamMemberDao = TeamMemberDao.getInstance();
+    private final OrderDao orderDao = OrderDao.getInstance();
 
 
     private final FreighterDao freighterDao = FreighterDao.getInstance();
@@ -189,21 +189,22 @@ public class AdminService {
                 .toList();
     }
 
-    public List<Cargo> getFilteredCargos(Integer weightFrom, Integer weightTo, Integer sizeFrom, Integer sizeTo, Boolean isFragile, List<Integer> customer, List<String> routes, List<String> freighters) {
+    public List<Cargo> getFilteredCargos(Integer weightFrom, Integer weightTo, Integer sizeFrom, Integer sizeTo, Boolean isFragile, Boolean allCargos, List<Integer> customer, List<String> routes, List<String> freighters) {
 
 
-        List<Cargo> allCargos = cargoDao.findAll();
-        List<Cargo> result = allCargos.stream()
+        List<Cargo> temp = cargoDao.findAll();
+        List<Cargo> result = temp.stream()
                 .filter(value -> value.getCargoWeight() > weightFrom && value.getCargoWeight() < weightTo)
                 .filter(value -> value.getCargoSize() > sizeFrom && value.getCargoSize() < sizeTo)
                 .filter(value -> customer.contains(value.getCustomer().getCustomerId()))
                 .filter(value -> routes.contains(value.getDestination()))
                 .filter(value -> freighters.contains(value.getFreighter().getFreighterName()))
                 .toList();
-
-
-        return result;
-
+        if (allCargos) {
+            return result;
+        } else {
+            return result.stream().filter(value -> value.getIsFragile().equals(isFragile)).toList();
+        }
     }
 
     public List<Customer> getAllClients() {
@@ -217,6 +218,14 @@ public class AdminService {
 
     public List<TeamMember> getAllTeamMembers() {
         return teamMemberDao.findAll();
+    }
+
+    public List<Order> getAllOrders() {
+        return orderDao.findAll();
+    }
+
+    public List<Position> getAllPositions() {
+        return positionDao.findAll();
     }
 
     public List<Freighter> getFilteredFreighters(Integer weightFrom, Integer weightTo, Integer sizeFrom, Integer sizeTo, Integer taxFrom, Integer taxTo, Integer fragileFrom, Integer fragileTo, List<Freighter> freighters) {
@@ -277,5 +286,83 @@ public class AdminService {
         }
         return temp3;
     }
+
+    public Map<Order, List<Cargo>> getFilteredOrders(Integer clientId, Integer orderId, String fullName, LocalDateTime from, LocalDateTime to, List<String> statusList) {
+        List<Cargo> temp = cargoDao.findAll().stream()
+                .filter(value -> value.getOrder().getDate().isAfter(from) && value.getOrder().getDate().isBefore(to))
+                .filter(value -> statusList.contains(value.getOrder().getStatus()))
+                .toList();
+        List<Cargo> temp1;
+        List<Cargo> temp2;
+        List<Integer> temp3;
+        var result = new HashMap<Order, List<Cargo>>();
+
+        if (clientId != null) {
+            temp1 = temp.stream().filter(value -> value.getCustomer().getCustomerId().equals(clientId))
+                    .toList();
+        } else {
+            temp1 = temp;
+        }
+        if (orderId != null) {
+            temp2 = temp1.stream().filter(value -> value.getOrder().getOrderId().equals(orderId))
+                    .toList();
+        } else {
+            temp2 = temp1;
+        }
+        if (!fullName.isBlank()) {
+
+            temp2.stream().filter(value -> value.getCustomer().getFullName().equals(fullName))
+                    .distinct()
+                    .forEach(value -> {
+                        if (result.get(value.getOrder()) == null) {
+                            result.put(value.getOrder(), new ArrayList<Cargo>());
+                            result.get(value.getOrder()).add(value);
+                        } else {
+                            result.get(value.getOrder()).add(value);
+                        }
+                    });
+
+        } else {
+            temp2.stream().distinct()
+                    .forEach(value -> {
+                        if (result.get(value.getOrder()) == null) {
+                            result.put(value.getOrder(), new ArrayList<Cargo>());
+                            result.get(value.getOrder()).add(value);
+                        } else {
+                            result.get(value.getOrder()).add(value);
+                        }
+                    });
+        }
+        return result;
+    }
+
+    public List<Worker> getFilteredWorkers(Integer dockId, Integer ageFrom, Integer ageTo, Integer salaryFrom, Integer salaryTo, String passportSerialNumber, String fullName, LocalDate hiringDateFrom, LocalDate hiringDateTo, List<Position> positions) {
+        List<Worker> temp = workerDao.findAll().stream()
+                .distinct()
+                .filter(value -> value.getHiringDate().isAfter(hiringDateFrom) && value.getHiringDate().isBefore(hiringDateTo))
+                .filter(value -> (LocalDate.now().getYear() - value.getPassportSerialNumber().getBirthDate().getYear()) > ageFrom && (LocalDate.now().getYear() - value.getPassportSerialNumber().getBirthDate().getYear()) < ageTo)
+                .filter(value -> value.getPosition().getSalary() > salaryFrom && value.getPosition().getSalary() < salaryTo)
+                .filter(value -> positions.contains(value.getPosition()))
+                .toList();
+        List<Worker> temp1;
+        List<Worker> temp2;
+        if (!passportSerialNumber.isBlank()) {
+            temp1 = temp.stream().filter(value -> value.getPassportSerialNumber().getPassportSerialNumber().equals(passportSerialNumber)).toList();
+        } else temp1 = temp;
+
+        if (!fullName.isBlank()) {
+            temp2 = temp1.stream().filter(value -> value.getPassportSerialNumber().getFullName().equals(fullName)).toList();
+        } else temp2 = temp;
+        if (dockId != null) {
+            return temp2.stream().filter(value ->{
+                if (value.getDockId().getDockId() != null){
+               return value.getDockId().getDockId().equals(dockId);
+                }
+                else return false;
+                    } )
+                    .toList();
+        } else return temp2;
+    }
+
 
 }
