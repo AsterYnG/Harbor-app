@@ -183,7 +183,7 @@ table th {
 }
 
 .logout-btn {
-    position: fixed;
+
     top: 20px;
     right: 20px;
     padding: 15px 30px; /* Увеличиваем отступы внутри кнопки */
@@ -195,6 +195,7 @@ table th {
     border-radius: 8px; /* Более закругленные углы */
     transition: background-color 0.3s ease;
     z-index: 50;
+    margin-left: 90%;
 }
 
 .logout-btn:hover {
@@ -293,4 +294,8 @@ input[type="number"] {
     box-sizing: border-box; /* Учитывать границу в общей ширине поля */
     /* Дополнительные стили */
     /* Можно добавить другие стили по вашему выбору */
+}
+
+.admin-info{
+    display:inline-block;
 }

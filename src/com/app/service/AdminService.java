@@ -189,7 +189,7 @@ public class AdminService {
                 .toList();
     }
 
-    public List<Cargo> getFilteredCargos(Integer weightFrom, Integer weightTo, Integer sizeFrom, Integer sizeTo, Boolean isFragile, Boolean allCargos, List<Integer> customer, List<String> routes, List<String> freighters) {
+    public List<Cargo> getFilteredCargos(Integer weightFrom, Integer weightTo, Integer sizeFrom, Integer sizeTo, Boolean isFragile, Boolean allCargos, List<Integer> customer, List<String> routes, List<String> freighters, List<Integer> orders) {
 
 
         List<Cargo> temp = cargoDao.findAll();
@@ -199,6 +199,7 @@ public class AdminService {
                 .filter(value -> customer.contains(value.getCustomer().getCustomerId()))
                 .filter(value -> routes.contains(value.getDestination()))
                 .filter(value -> freighters.contains(value.getFreighter().getFreighterName()))
+                .filter(value -> orders.contains(value.getOrder().getOrderId()))
                 .toList();
         if (allCargos) {
             return result;
@@ -362,6 +363,150 @@ public class AdminService {
                     } )
                     .toList();
         } else return temp2;
+    }
+
+    public List<FreighterRoutes> sortRoutesBy(String field,List<FreighterRoutes> list){
+        if(field.equals("country")){
+            return list.stream().sorted(Comparator.comparing(prev -> prev.getRoute().getDestinationCountry())).toList();
+        }
+        if(field.equals("city")){
+           return list.stream().sorted(Comparator.comparing(prev -> prev.getRoute().getDestinationCity())).toList();
+        }
+        if(field.equals("duration")){
+           return list.stream().sorted(Comparator.comparingInt(prev -> prev.getRoute().getDuration())).toList();
+        }
+        if(field.equals("freighter")){
+            return list.stream().sorted(Comparator.comparing(prev -> prev.getFreighter().getFreighterName())).toList();
+        }
+        return list;
+
+    }
+    public List<Cargo> sortCargosBy(String field,List<Cargo> list){
+        if(field.equals("country")){
+            return list.stream().sorted(Comparator.comparing(Cargo::getDestination)).toList();
+        }
+        if(field.equals("fullName")){
+            return list.stream().sorted(Comparator.comparing(prev -> prev.getCustomer().getFullName())).toList();
+        }
+
+        if(field.equals("freighter")){
+            return list.stream().sorted(Comparator.comparing(prev -> prev.getFreighter().getFreighterName())).toList();
+        }
+
+        if(field.equals("size")){
+            return list.stream().sorted(Comparator.comparingInt(Cargo::getCargoSize)).toList();
+        }
+        if(field.equals("weight")){
+            return list.stream().sorted(Comparator.comparingInt(Cargo::getCargoWeight)).toList();
+        }
+        return list;
+
+    }
+    public List<Freighter> sortFreightersBy(String field,List<Freighter> list){
+
+
+
+        if(field.equals("freighter")){
+            return list.stream().sorted(Comparator.comparing(Freighter::getFreighterName)).toList();
+        }
+
+        if(field.equals("sizeCost")){
+            return list.stream().sorted(Comparator.comparingInt(Freighter::getSizeCost)).toList();
+        }
+        if(field.equals("weightCost")){
+            return list.stream().sorted(Comparator.comparingInt(Freighter::getWeightCost)).toList();
+        }
+        if(field.equals("fragileCost")){
+            return list.stream().sorted(Comparator.comparingInt(Freighter::getFragileCost)).toList();
+        }
+        if(field.equals("tax")){
+            return list.stream().sorted(Comparator.comparingInt(Freighter::getTax)).toList();
+        }
+        return list;
+
+    }
+    public List<Ship> sortShipsBy(String field,List<Ship> list){
+
+
+
+        if(field.equals("freighter")){
+            return list.stream().sorted(Comparator.comparing(prev -> prev.getFreighter().getFreighterName())).toList();
+        }
+
+        if(field.equals("shipSize")){
+            return list.stream().sorted(Comparator.comparingInt(prev -> prev.getShipModel().getShipSize())).toList();
+        }
+        if(field.equals("shipCapacity")){
+            return list.stream().sorted(Comparator.comparingInt(prev -> prev.getShipModel().getShipCapacity())).toList();
+        }
+
+        if(field.equals("teamId")){
+            return list.stream().sorted(Comparator.comparingInt(prev -> prev.getTeam().getTeamId())).toList();
+        }
+        return list;
+
+    }
+
+    public List<Team> sortTeamsBy(String field,List<Team> list){
+
+        if(field.equals("experience")){
+            return list.stream().sorted(Comparator.comparingInt(Team::getExperience)).toList();
+        }
+
+        if(field.equals("teamId")){
+            return list.stream().sorted(Comparator.comparingInt(Team::getTeamId)).toList();
+        }
+        return list;
+
+    }
+    public List<Customer> sortClientsBy(String field,List<Customer> list){
+
+        if(field.equals("fullName")){
+            return list.stream().sorted(Comparator.comparing(Customer::getFullName)).toList();
+        }
+
+        if(field.equals("clientId")){
+            return list.stream().sorted(Comparator.comparingInt(Customer::getCustomerId)).toList();
+        }
+        return list;
+
+    }
+    public List<Cargo> sortOrdersBy(String field,List<Cargo> list){
+
+        if(field.equals("fullName")){
+            return list.stream().sorted(Comparator.comparing(prev -> prev.getCustomer().getFullName())).toList();
+        }
+
+        if(field.equals("clientId")){
+            return list.stream().sorted(Comparator.comparingInt(prev -> prev.getCustomer().getCustomerId())).toList();
+        }
+        if(field.equals("orderId")){
+            return list.stream().sorted(Comparator.comparingInt(prev -> prev.getOrder().getOrderId())).toList();
+        }
+        if(field.equals("date")){
+            return list.stream().sorted((prev,cont) -> cont.getOrder().getDate().compareTo(prev.getOrder().getDate())).toList();
+        }
+        return list;
+
+    }
+    public List<Worker> sortWorkersBy(String field,List<Worker> list){
+
+        if(field.equals("fullName")){
+            return list.stream().sorted(Comparator.comparing(prev -> prev.getPassportSerialNumber().getFullName())).toList();
+        }
+
+        if(field.equals("workerId")){
+            return list.stream().sorted(Comparator.comparingInt(Worker::getWorkerId)).toList();
+        }
+
+        if(field.equals("birthDate")){
+            return list.stream().sorted((prev,cont) -> cont.getPassportSerialNumber().getBirthDate().compareTo(prev.getPassportSerialNumber().getBirthDate())).toList();
+        }
+        if(field.equals("hiringDate")){
+            return list.stream().sorted((prev,cont) -> cont.getHiringDate().compareTo(prev.getHiringDate())).toList();
+        }
+        return list;
+
     }
 
 

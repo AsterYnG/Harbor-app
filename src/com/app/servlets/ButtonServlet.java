@@ -112,13 +112,59 @@ public class ButtonServlet extends HttpServlet {
                 break;
             }
             case "buttonSort":{
-                var currentStatus = session.getAttribute("active");
-                switch (currentStatus){
-                    case "showSearchResultAvailableRoutes":{
-                        session.getAttribute("searchResult");
+               String currentStatus;
+               if (session.getAttribute("active") != null){
+                   currentStatus = (String)session.getAttribute("active");
+               }else currentStatus = "";
 
-                    }
-                }
+              switch (currentStatus){
+                  case "showSearchResultAvailableRoutes":{
+                      session.setAttribute("active","sortAvailableRoutes");
+                      resp.sendRedirect("/admin");
+                      break;
+                  }
+                  case "showSearchResultCargos":{
+                      session.setAttribute("active","sortCargos");
+                      resp.sendRedirect("/admin");
+                      break;
+                  }
+                  case "showSearchResultFreighters":{
+                      session.setAttribute("active","sortFreighters");
+                      resp.sendRedirect("/admin");
+                      break;
+                  }
+                  case "showSearchResultShips":{
+                      session.setAttribute("active","sortShips");
+                      resp.sendRedirect("/admin");
+                      break;
+                  }
+                  case "showSearchResultTeams":{
+                      session.setAttribute("active","sortTeams");
+                      resp.sendRedirect("/admin");
+                      break;
+                  }
+                  case "showSearchResultClients":{
+                      session.setAttribute("active","sortClients");
+                      resp.sendRedirect("/admin");
+                      break;
+                  }
+                  case "showSearchResultOrders":{
+                      session.setAttribute("active","sortOrders");
+                      resp.sendRedirect("/admin");
+                      break;
+                  }
+                  case "showSearchResultWorkers":{
+                      session.setAttribute("active","sortWorkers");
+                      resp.sendRedirect("/admin");
+                      break;
+                  }
+
+                  default:{
+                      resp.sendRedirect("/admin");
+                      break;
+                  }
+              }
+
             }
         }
     }
