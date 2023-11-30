@@ -9,7 +9,7 @@ body {
 header {
     background-color: #333;
     color: white;
-    padding: 20px;
+    padding: 50px;
     text-align: center;
 }
 
@@ -248,11 +248,11 @@ option {
     margin-left: 100px;
 }
 .error-message-date{
-display: block;
-color: red;
-font-size: 14px;
-margin-top: 3px;
-margin-left: 180px;
+    display: block;
+    color: red;
+    font-size: 14px;
+    margin-top: 3px;
+    margin-left: 180px;
 }
 
 .close-button {
@@ -274,8 +274,8 @@ button.search-btn {
     /* Увеличение размера */
     font-size: 16px;
     padding: 10px 20px; /* Изменение отступов */
-    /* Правое выравнивание */
-    float: right;
+    /* Левое выравнивание */
+    float: left;
     /* Дополнительные стили */
     /* Если нужно задать цвет фона или текста: */
     background-color: #777;
@@ -283,14 +283,4 @@ button.search-btn {
     border: 1px solid #ccc;
     border-radius: 5px;
     /* Другие стили по желанию */
-}
-input[type="number"] {
-    width: 150px; /* Ширина поля */
-    padding: 8px; /* Отступы вокруг текста */
-    font-size: 14px; /* Размер шрифта */
-    border: 1px solid #ccc; /* Граница поля */
-    border-radius: 4px; /* Скругление углов */
-    box-sizing: border-box; /* Учитывать границу в общей ширине поля */
-    /* Дополнительные стили */
-    /* Можно добавить другие стили по вашему выбору */
 }

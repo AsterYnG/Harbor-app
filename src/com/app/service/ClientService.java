@@ -10,10 +10,8 @@ import com.app.util.Mapper;
 import com.app.validator.PassportValidator;
 import com.app.validator.PasswordValidator;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.util.*;
 
 public class ClientService {
     private static final ClientService INSTANCE = new ClientService();
@@ -32,15 +30,43 @@ public class ClientService {
     public static ClientService getInstance(){
         return INSTANCE;
     }
-    public final List<Optional<Order>> getOrderHistory(Customer customer) {
-        List<Optional<Order>> clientOrders = orderDao.customerOrders(customer.getCustomerId());
-        return clientOrders;
+    public List<Optional<Order>> getOrderHistory(Customer customer) {
+        return orderDao.customerOrders(customer.getCustomerId());
+    }
+
+    public List<Optional<Order>> getAllOrders(Customer customer) {
+        return orderDao.findAllByCustomerId(customer.getCustomerId());
     }
 
     public List<Optional<Order>> getCurrentOrders(Customer customer) {
-        List<Optional<Order>> clientCurOrders = orderDao.currentCustomerOrders(customer.getCustomerId());
-        return clientCurOrders;
+        return orderDao.currentCustomerOrders(customer.getCustomerId());
     }
+
+    public Map<Order, List<Optional<Order>>> showOrdersSearch(Customer customer, Integer orderId, LocalDateTime orderDateFrom, LocalDateTime orderDateTo, List<String> statusList) {
+        List<Optional<Order>> temp = orderDao.findAllByCustomerId(customer.getCustomerId()).stream()
+                .filter(value -> value.get().getDate().isAfter(orderDateFrom) && value.get().getDate().isBefore(orderDateTo))
+                .filter(value -> statusList.contains(value.get().getStatus()))
+                .toList();
+        List<Optional<Order>> temp1;
+
+        var result = new HashMap<Order, List<Optional<Order>>>();
+
+        if (orderId != null) {
+            temp1 = temp.stream().filter(value -> value.get().getOrderId().equals(orderId))
+                    .toList();
+        } else {
+            temp1 = temp;
+        }
+        temp1.stream().distinct().forEach(value -> {
+            if (result.get(value.get()) == null) {
+                            result.put(value.get(), new ArrayList<Optional<Order>>());
+                            result.get(value.get()).add(value);
+                            } else {
+                                result.get(value.get()).add(value);
+                            }
+                        });
+        return result;
+        }
 
     public List<FreighterRoutes> getAvailableRoutes() {
         List<FreighterRoutes> cities = freighterRoutesDao.findAll();
@@ -49,6 +75,10 @@ public class ClientService {
     public List<Freighter> getAvailableFreighters(String city) {
         List<Freighter> availableFreighters = freighterDao.getAvailableFreightersByDirection(city);
         return availableFreighters;
+    }
+
+    public void completeOrder(Integer orderId){
+        
     }
 
     public Optional<Route> findByRouteName(String city){

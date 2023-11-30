@@ -4,7 +4,7 @@
 <section class="order-section">
     <h2>Создать заказ</h2>
     <form action="/buttonClient" method="get">
-        <button onclick="addOrder()" name="buttonCreateOrder" value="true" >Создать заказ</button>
+        <button name="buttonCreateOrder" value="true" >Создать заказ</button>
     </form>
 </section>
 

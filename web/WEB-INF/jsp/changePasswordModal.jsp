@@ -4,6 +4,9 @@
 <c:if test="${sessionScope.active == 'changePassword'}">
     <div id="changePasswordFormModal" class="modal">
         <div class="modal-content">
+            <form action="${pageContext.request.contextPath}/client" method="post">
+                <button value="true" name="exit" class="close-button">&#10006;</button>
+            </form>
             <form id="changePasswordForm" class="modal-form" action="/client" method="post">
                 <h2>Изменить пароль</h2>
                 <c:forEach var="error" items="${requestScope.errors}">

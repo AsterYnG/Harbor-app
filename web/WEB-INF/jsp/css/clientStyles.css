@@ -1,30 +1,39 @@
+/* Общие стили */
 body {
-    font-family: Arial, sans-serif;
-    margin: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
 }
 
-section {
-    margin-bottom: 30px;
+header {
+    background-color: #333;
+    color: white;
+    padding: 20px;
+    text-align: center;
 }
 
-h2 {
-    color: #007BFF;
+main {
+    padding: 20px;
 }
 
-.order-section {
-    border: 1px solid #007BFF;
-    padding: 10px;
+button {
+    padding: 10px 20px;
+    margin: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
     border-radius: 5px;
 }
 
-.profile-section {
-    background-color: #f0f0f0;
-    padding: 10px;
-    border-radius: 5px;
+button:hover {
+    background-color: #45a049;
 }
 
+/* Модальные окна и затемнение фона */
 .modal {
-    display: block;
+    display: none;
     position: fixed;
     z-index: 1;
     left: 0;
@@ -32,28 +41,121 @@ h2 {
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0,0,0,0.4);
-    padding-top: 60px;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 2;
 }
 
 .modal-content {
     background-color: #fefefe;
-    margin: 5% auto;
+    margin: 10% auto;
     padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
+    width: 60%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    position: relative;
+    animation: modalFadeIn 0.3s ease-out;
 }
 
-.close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    background-color: #e74c3c;
+    border: none;
+    color: white;
     font-weight: bold;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
 }
 
-.close:hover,
-.close:focus {
-    color: black;
-    text-decoration: none;
+/* Анимация появления модального окна */
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Стили для формы в модальном окне */
+.modal-form {
+    text-align: left;
+}
+
+/* Стили для инпутов и других элементов формы */
+input[type="text"],
+input[type="email"],
+select,
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+input[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
     cursor: pointer;
+    border-radius: 5px;
+}
+
+input[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+/* Стили для select */
+select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+/* Стили для разделов страницы */
+.profile-section,
+.order-section {
+    margin-bottom: 20px;
+}
+
+/* Дополнительные стили по желанию */
+.logout-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 30px;
+    font-size: 16px;
+    background-color: #333;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+    z-index: 50;
+}
+
+.logout-btn:hover {
+    background-color: #555;
 }

@@ -111,15 +111,15 @@ public class ButtonServlet extends HttpServlet {
                 resp.sendRedirect("/admin");
                 break;
             }
-            case "buttonSort":{
-                var currentStatus = session.getAttribute("active");
-                switch (currentStatus){
-                    case "showSearchResultAvailableRoutes":{
-                        session.getAttribute("searchResult");
-
-                    }
-                }
-            }
+//            case "buttonSort":{
+//                var currentStatus = session.getAttribute("active");
+//                switch (currentStatus){
+//                    case "showSearchResultAvailableRoutes":{
+//                        session.getAttribute("searchResult");
+//
+//                    }
+//                }
+//            }
         }
     }
 }

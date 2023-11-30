@@ -7,6 +7,7 @@ import com.app.dto.ShowCustomerDto;
 import com.app.entity.*;
 import com.app.exceptions.ValidationException;
 import com.app.service.ClientService;
+import com.app.validator.Error;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -15,7 +16,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
+import java.sql.Time;
+import java.sql.Date;
+import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -29,7 +34,7 @@ public class ClientServlet extends HttpServlet {
 
     {
         createOrderStatus.add("addOrder");
-        createOrderStatus.add("addFreighter");
+        createOrderStatus.add("addFreighterToOrder");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
@@ -37,7 +42,6 @@ public class ClientServlet extends HttpServlet {
         var loggedCustomer = (Customer) session.getAttribute("loggedIn");
         var history = clientService.getOrderHistory(loggedCustomer);
         var curOrders = clientService.getCurrentOrders(loggedCustomer);
-        var parameterMap = request.getParameterMap();
 
         var orderHistory = history.stream()
                 .map(Optional::get)
@@ -64,6 +68,12 @@ public class ClientServlet extends HttpServlet {
         var parameterMap = request.getParameterMap();
 
         var currentStatus = (String) session.getAttribute("active");
+
+        if (Boolean.valueOf(request.getParameter("exit")).equals(true)) {
+            session.setAttribute("active", "");
+            doGet(request, response);
+        }
+
         if (createOrderStatus.contains(currentStatus)) {
             switch (currentStatus) {
                 case "addOrder": {
@@ -108,7 +118,7 @@ public class ClientServlet extends HttpServlet {
                     break;
                 }
 
-                case "addFreighter": {
+                case "addFreighterToOrder": {
                     var availableFreighter = clientService.getFreighterByName(request.getParameter("freighterName"));
                     session.setAttribute("freighter", availableFreighter);
                     session.setAttribute("active"," ");
@@ -145,6 +155,49 @@ public class ClientServlet extends HttpServlet {
             session.removeAttribute("tempOldPassword");
             session.setAttribute("active", "");
             response.sendRedirect(request.getContextPath() + "/client"); // Перенаправление на ту же страницу
+        }
+        else if (currentStatus.equals("showOrderSearch")) {
+
+            Customer client = loggedCustomer;
+            Integer orderId;
+
+            LocalDateTime orderDateFrom;
+            LocalDateTime orderDateTo;
+
+            var statusList = clientService.getAllOrders(client).stream().map(val -> val.get().getStatus()).distinct().toList();
+
+            if (!request.getParameter("orderIdByClient").isBlank()) {
+                orderId = Integer.parseInt(request.getParameter("orderIdByClient"));
+            } else orderId = null;
+
+            if (!request.getParameter("orderDateFromByClient").isBlank()) {
+                orderDateFrom = LocalDateTime.parse(request.getParameter("orderDateFromByClient"));
+            } else orderDateFrom = LocalDateTime.parse("1930-01-01T00:00:00");
+
+            if (!request.getParameter("orderDateToByClient").isBlank()) {
+                orderDateTo = LocalDateTime.parse(request.getParameter("orderDateToByClient"));
+            } else orderDateTo = LocalDateTime.parse("2024-01-01T00:00:00");
+
+            if (orderDateFrom.compareTo(orderDateTo) > 0) {
+                request.setAttribute("error", Error.of("invalid.interval.jsp","Неправильно указан промежуток от > до"));
+                doGet(request,response);
+            }
+
+            var statusListResult = statusList.stream().filter(value -> request.getParameter(value) != null)
+                    .toList();
+            if (statusListResult.isEmpty()) {
+                statusListResult = statusList;
+            }
+
+            var filteredOrders = clientService.showOrdersSearch(client, orderId, orderDateFrom, orderDateTo, statusListResult);
+            List<Optional<Order>> filteredOrdersResult = new ArrayList<>();
+            for (List<Optional<Order>> value : filteredOrders.values()) {
+                filteredOrdersResult.add(value.get(0));
+            }
+
+            session.setAttribute("searchResult", filteredOrdersResult);
+            session.setAttribute("active", "showSearchResultOrdersForCustomer");
+            response.sendRedirect("/client");
         }
     }
 }

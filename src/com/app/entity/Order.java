@@ -15,7 +15,8 @@ public final class Order {
 
     @Override
     public String toString() {
-        return "Дата заказа: " + date.toLocalDate() + ", " +
+        return "Идентификатор заказа: " + orderId + ", " +
+               "Дата заказа: " + date.toLocalDate() + ", " +
                "Время заказа: " + date.toLocalTime() + ", " +
                "Статус заказа: " + status;
     }
