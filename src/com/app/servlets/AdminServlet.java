@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @WebServlet("/admin")
@@ -340,6 +341,7 @@ public class AdminServlet extends HttpServlet {
                     Boolean allCargos = null;
 
                     Integer customerIdTemp;
+                    Integer orderIdTemp;
                     Integer sizeFrom = 0;
                     Integer sizeTo = 19999;
 
@@ -366,6 +368,11 @@ public class AdminServlet extends HttpServlet {
                         customerIdTemp = Integer.parseInt(req.getParameter("clientId"));
                     } else {
                         customerIdTemp = null;
+                    }
+                    if (!req.getParameter("orderId").isBlank()) {
+                        orderIdTemp = Integer.parseInt(req.getParameter("orderId"));
+                    } else {
+                        orderIdTemp = null;
                     }
 
 
@@ -399,7 +406,22 @@ public class AdminServlet extends HttpServlet {
                                 .filter(customerId -> customerId.equals(customerIdTemp))
                                 .toList();
                     }
-
+                    List<Integer> ordersResult;
+                    var orders = adminService.getAllOrders();
+                    if (orderIdTemp == null) {
+                        ordersResult = orders.stream()
+                                .map(Order::getOrderId)
+                                .filter(orderId -> orderId.equals(orderIdTemp))
+                                .toList();
+                        if (ordersResult.isEmpty()) {
+                            ordersResult = orders.stream().map(Order::getOrderId).toList();
+                        }
+                    } else {
+                        ordersResult = orders.stream()
+                                .map(Order::getOrderId)
+                                .filter(orderId -> orderId.equals(orderIdTemp))
+                                .toList();
+                    }
                     var freighters = adminService.getFreighters(); // Какие перевозчики выбраны
                     List<String> freightersResult = freighters.stream()
                             .map(Freighter::getFreighterName)
@@ -410,7 +432,7 @@ public class AdminServlet extends HttpServlet {
                     }
 
                     List<Cargo> filteredCargos = adminService.getFilteredCargos(weightFrom, weightTo, sizeFrom, sizeTo, isFragile,allCargos
-                            ,clientsResult, countriesResult, freightersResult);
+                            ,clientsResult, countriesResult, freightersResult,ordersResult);
                     session.setAttribute("searchResult", filteredCargos);
                     session.setAttribute("active", "showSearchResultCargos");
                     resp.sendRedirect("/admin");
@@ -587,7 +609,7 @@ public class AdminServlet extends HttpServlet {
                         doGet(req,resp);
                         break;
                     }
-                    if (req.getParameter("memberFullName") != null) {
+                    if (!req.getParameter("memberFullName").isBlank()) {
                         fullName = req.getParameter("memberFullName");
                     } else {
                         fullName = "";
@@ -773,6 +795,87 @@ public class AdminServlet extends HttpServlet {
                     resp.sendRedirect("/admin");
                     break;
                 }
+                case "sortAvailableRoutes":{
+                    var list = (List<FreighterRoutes>) session.getAttribute("searchResult");
+
+                    String sortBy = req.getParameter("sortBy");
+
+                    session.setAttribute("searchResult",adminService.sortRoutesBy(sortBy,list));
+                    session.setAttribute("active","showSearchResultAvailableRoutes");
+                    resp.sendRedirect("/admin");
+                    break;
+                }
+                case "sortCargos":{
+                    var list = (List<Cargo>) session.getAttribute("searchResult");
+
+                    String sortBy = req.getParameter("sortBy");
+
+                    session.setAttribute("searchResult",adminService.sortCargosBy(sortBy,list));
+                    session.setAttribute("active","showSearchResultCargos");
+                    resp.sendRedirect("/admin");
+                    break;
+                }
+                case "sortFreighters":{
+                    var list = (List<Freighter>) session.getAttribute("searchResult");
+
+                    String sortBy = req.getParameter("sortBy");
+
+                    session.setAttribute("searchResult",adminService.sortFreightersBy(sortBy,list));
+                    session.setAttribute("active","showSearchResultFreighters");
+                    resp.sendRedirect("/admin");
+                    break;
+                }
+                case "sortShips":{
+                    var list = (List<Ship>) session.getAttribute("searchResult");
+
+                    String sortBy = req.getParameter("sortBy");
+
+                    session.setAttribute("searchResult",adminService.sortShipsBy(sortBy,list));
+                    session.setAttribute("active","showSearchResultShips");
+                    resp.sendRedirect("/admin");
+                    break;
+                }
+                case "sortTeams":{
+                    var list = (List<Team>) session.getAttribute("searchResult");
+
+                    String sortBy = req.getParameter("sortBy");
+
+                    session.setAttribute("searchResult",adminService.sortTeamsBy(sortBy,list));
+                    session.setAttribute("active","showSearchResultTeams");
+                    resp.sendRedirect("/admin");
+                    break;
+                }
+                case "sortClients":{
+                    var list = (List<Customer>) session.getAttribute("searchResult");
+
+                    String sortBy = req.getParameter("sortBy");
+
+                    session.setAttribute("searchResult",adminService.sortClientsBy(sortBy,list));
+                    session.setAttribute("active","showSearchResultClients");
+                    resp.sendRedirect("/admin");
+                    break;
+                }
+                case "sortOrders":{
+                    var list = (List<Cargo>) session.getAttribute("searchResult");
+
+                    String sortBy = req.getParameter("sortBy");
+
+                    session.setAttribute("searchResult",adminService.sortOrdersBy(sortBy,list));
+                    session.setAttribute("active","showSearchResultOrders");
+                    resp.sendRedirect("/admin");
+                    break;
+                }
+                case "sortWorkers":{
+                    var list = (List<Worker>) session.getAttribute("searchResult");
+
+                    String sortBy = req.getParameter("sortBy");
+
+                    session.setAttribute("searchResult",adminService.sortWorkersBy(sortBy,list));
+                    session.setAttribute("active","showSearchResultWorkers");
+                    resp.sendRedirect("/admin");
+                    break;
+                }
+
             }
 
         }

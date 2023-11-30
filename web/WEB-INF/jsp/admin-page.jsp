@@ -13,11 +13,12 @@
 <!-- Шапка страницы -->
 <header>
     <!-- Данные админа: ФИО, логин -->
+    <form action="/logout" method="post">
     <div class="admin-info">
         <p>ФИО админа: ${sessionScope.loggedIn.fullName}</p>
         <p>Логин: ${sessionScope.loggedIn.password}</p>
     </div>
-    <form action="/logout" method="post">
+
     <button class="logout-btn">Выход</button>
     </form>
 </header>
@@ -48,7 +49,7 @@
         <button class="search-btn" onclick="showAllShipCrews()" name="buttonSearch" value="true">Поиск</button>
         <button class="search-btn" onclick="showAllShipCrews()" name="buttonSort" value="true">Сортировать по</button>
     </form>
-w
+
 </main>
 
 <!-- Модальные окна для форм -->

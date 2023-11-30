@@ -96,6 +96,10 @@
                 <label for="clientId">Id клиента:</label>
                 <input type="number" id="clientId" name="clientId" pattern="^(\S|\d)+$" max="10000">
             </div>
+            <div class="form-group">
+                <label for="orderId">Id Заказа:</label>
+                <input type="number" id="orderId" name="orderId" pattern="^(\S|\d)+$" max="10000">
+            </div>
             <h3>Страна:</h3>
 
             <c:forEach var="route" items="${sessionScope.availableRoutesCountries}">
@@ -482,10 +486,12 @@
         </form>
     </div>
 </c:if>
+
+<%--Сортировка--%>
 <c:if test="${sessionScope.active == 'sortAvailableRoutes'}">
     <div id="sortRoutesFormModal" class="modal">
 
-        <form id="sortForm" class="modal-form" action="${pageContext.request.contextPath}/admin" method="post">
+        <form id="sortRoutesForm" class="modal-form" action="${pageContext.request.contextPath}/admin" method="post">
             <h2>Сортировка</h2>
 
             <div class="form-group">
@@ -504,3 +510,157 @@
         </form>
     </div>
 </c:if>
+<c:if test="${sessionScope.active == 'sortCargos'}">
+    <div id="sortRoutesFormModal" class="modal">
+
+        <form id="sortCargosForm" class="modal-form" action="${pageContext.request.contextPath}/admin" method="post">
+            <h2>Сортировка</h2>
+
+            <div class="form-group">
+                <label for="sortBy1">Сортировать по:</label>
+                <select id="sortBy1" name="sortBy">
+                    <option value="size">Размер</option>
+                    <option value="weight">Вес</option>
+                    <option value="country">Страна</option>
+                    <option value="fullName">ФИО</option>
+                    <option value="freighter">Перевозчик</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <button type="submit">Искать</button>
+            </div>
+        </form>
+    </div>
+</c:if>
+<c:if test="${sessionScope.active == 'sortFreighters'}">
+    <div id="sortFreightersFormModal" class="modal">
+
+        <form id="sortFreightersForm" class="modal-form" action="${pageContext.request.contextPath}/admin" method="post">
+            <h2>Сортировка</h2>
+
+            <div class="form-group">
+                <label for="sortBy2">Сортировать по:</label>
+                <select id="sortBy2" name="sortBy">
+                    <option value="weightCost">Стоимость за кг</option>
+                    <option value="sizeCost">Стоимость за м^3</option>
+                    <option value="fragileCost">Стоимость за хрупкость</option>
+                    <option value="tax">Налог</option>
+                    <option value="freighter">Перевозчик</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <button type="submit">Искать</button>
+            </div>
+        </form>
+    </div>
+</c:if>
+<c:if test="${sessionScope.active == 'sortShips'}">
+    <div id="sortShipsFormModal" class="modal">
+
+        <form id="sortShipsForm" class="modal-form" action="${pageContext.request.contextPath}/admin" method="post">
+            <h2>Сортировка</h2>
+
+            <div class="form-group">
+                <label for="sortBy3">Сортировать по:</label>
+                <select id="sortBy3" name="sortBy">
+                    <option value="teamId">ID команды</option>
+                    <option value="shipSize">Размер корабля</option>
+                    <option value="shipCapacity">Вместимость корабля</option>
+                    <option value="freighter">Перевозчик</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <button type="submit">Искать</button>
+            </div>
+        </form>
+    </div>
+</c:if>
+<c:if test="${sessionScope.active == 'sortTeams'}">
+    <div id="sortTeamsFormModal" class="modal">
+
+        <form id="sortTeamsForm" class="modal-form" action="${pageContext.request.contextPath}/admin" method="post">
+            <h2>Сортировка</h2>
+
+            <div class="form-group">
+                <label for="sortBy4">Сортировать по:</label>
+                <select id="sortBy4" name="sortBy">
+                    <option value="experience">Опыт</option>
+                    <option value="teamId">ID команды</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <button type="submit">Искать</button>
+            </div>
+        </form>
+    </div>
+</c:if>
+<c:if test="${sessionScope.active == 'sortClients'}">
+    <div id="sortClientsFormModal" class="modal">
+
+        <form id="sortClientsForm" class="modal-form" action="${pageContext.request.contextPath}/admin" method="post">
+            <h2>Сортировка</h2>
+
+            <div class="form-group">
+                <label for="sortBy5">Сортировать по:</label>
+                <select id="sortBy5" name="sortBy">
+                    <option value="clientId">ID клиента</option>
+                    <option value="fullName">ФИО</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <button type="submit">Искать</button>
+            </div>
+        </form>
+    </div>
+</c:if>
+<c:if test="${sessionScope.active == 'sortOrders'}">
+    <div id="sortOrdersFormModal" class="modal">
+
+        <form id="sortOrdersForm" class="modal-form" action="${pageContext.request.contextPath}/admin" method="post">
+            <h2>Сортировка</h2>
+
+            <div class="form-group">
+                <label for="sortBy6">Сортировать по:</label>
+                <select id="sortBy6" name="sortBy">
+                    <option value="clientId">ID клиента</option>
+                    <option value="orderId">ID заказа</option>
+                    <option value="fullName">ФИО</option>
+                    <option value="date">Дата</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <button type="submit">Искать</button>
+            </div>
+        </form>
+    </div>
+</c:if>
+<c:if test="${sessionScope.active == 'sortWorkers'}">
+    <div id="sortWorkersFormModal" class="modal">
+
+        <form id="sortWorkersForm" class="modal-form" action="${pageContext.request.contextPath}/admin" method="post">
+            <h2>Сортировка</h2>
+
+            <div class="form-group">
+                <label for="sortBy7">Сортировать по:</label>
+                <select id="sortBy7" name="sortBy">
+                    <option value="workerId">ID работника</option>
+                    <option value="fullName">ФИО</option>
+                    <option value="birthDate">Дата рождения</option>
+                    <option value="hiringDate">Дата найма</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <button type="submit">Искать</button>
+            </div>
+        </form>
+    </div>
+</c:if>
+
+
