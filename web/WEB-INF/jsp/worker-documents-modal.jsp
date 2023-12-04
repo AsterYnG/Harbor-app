@@ -37,8 +37,8 @@
             <div class="form-group">
                 <label for="sex">Пол:</label>
                 <select id="sex" name="sex">
-                    <option value="Мужской">Мужской</option>
-                    <option value="Женский">Женский</option>
+                    <option value="Муж">Мужской</option>
+                    <option value="Жен">Женский</option>
                 </select>
             </div>
             <c:forEach var="error" items="${requestScope.errors}">

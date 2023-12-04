@@ -58,6 +58,11 @@ public class WorkerDao implements Dao<Integer, Worker> {
         WHERE worker_id = ?;
     """;
 
+    private final static String DELETE_BY_SERIAL = """
+        DELETE FROM worker
+        WHERE passport_serial_number = ?;
+    """;
+
     private final static String SAVE = """
         INSERT INTO worker(hiring_date, position, med_serial_number, passport_serial_number, education_serial_number, employment_serial_number, dock_id)
         VALUES (?,?,?,?,?,?,?);
@@ -98,6 +103,18 @@ public class WorkerDao implements Dao<Integer, Worker> {
     @Override
     public boolean delete(Integer id) {
         return false;
+    }
+
+
+    public boolean delete(String passport) {
+        try (var connection = ConnectionManager.get()) {
+            @Cleanup var preparedStatement = connection.prepareStatement(DELETE_BY_SERIAL);
+            preparedStatement.setString(1, passport);
+            preparedStatement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            throw new UnableToTakeConnectionException(e);
+        }
     }
 
     @Override

@@ -4,8 +4,7 @@ import com.app.dao.*;
 import com.app.dto.ShowCustomerDto;
 import com.app.dto.FreighterDto;
 import com.app.dto.ShowWorkerDto;
-import com.app.entity.Position;
-import com.app.entity.VoyageLog;
+import com.app.entity.*;
 import com.app.util.Mapper;
 
 import java.util.List;
@@ -27,25 +26,17 @@ public class ButtonService {
         return INSTANCE;
     }
 
-    public List<ShowWorkerDto> showAllEmployees(){
+    public List<Worker> showAllEmployees(){
 
-        return workerDao.findAll().stream()
-                .map(Mapper::mapFromWorkerToDto)
-                .distinct()
-                .toList();
+        return workerDao.findAll().stream().distinct().toList();
     }
 
-    public List<FreighterDto> showAllFreighters(){
-        return freighterDao.findAll().stream()
-                .map(Mapper::mapFromFreighterToDto)
-                .distinct()
-                .toList();
+    public List<Freighter> showAllFreighters(){
+        return freighterDao.findAll().stream().distinct().toList();
     }
-    public List<ShowCustomerDto> showAllCustomers(){
-        return customerDao.findAll().stream()
-                .map(Mapper::mapFromCustomerToDto)
-                .distinct()
-                .toList();
+    public List<Customer> showAllCustomers(){
+        return customerDao.findAll().stream().distinct().toList();
+
     }
 
     public List<Position> getAllPositions(){

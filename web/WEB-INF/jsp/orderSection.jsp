@@ -1,14 +1,14 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<section class="order-section">
+<section class="order-section" style="margin-left: 50px">
     <h2>Создать заказ</h2>
     <form action="/buttonClient" method="get">
         <button name="buttonCreateOrder" value="true" >Создать заказ</button>
     </form>
 </section>
 
-<section class="order-section" id="currentOrdersSection">
+<section class="order-section" id="currentOrdersSection" style="margin-left: 50px">
     <h2>Текущие заказы</h2>
     <div id="currentOrdersContainer">
         <c:forEach var="order" items="${sessionScope.currentOrders}" varStatus="loop">
@@ -34,7 +34,7 @@
     };
 </script>
 
-<section class="order-section" id="orderHistorySection">
+<section class="order-section" id="orderHistorySection" style="margin-left: 50px">
     <h2>История заказов</h2>
     <div id="orderHistoryContainer">
         <c:forEach var="order" items="${sessionScope.orderHistory}" varStatus="loop">

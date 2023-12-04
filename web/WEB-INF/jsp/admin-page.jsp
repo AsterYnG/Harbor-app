@@ -43,6 +43,7 @@
 
         <!-- Кнопка вывода всех плаваний кораблей -->
         <button onclick="showAllShipVoyages()" name="buttonShowVoyageLog" value="true">Плавания кораблей</button>
+        <button onclick="showAllShipVoyages()" name="buttonDeleteWorker" value="true">Удалить работника</button>
 
         <!-- Кнопка вывода всех команд для кораблей -->
         <button onclick="showAllShipCrews()" name="buttonAddAvailableRoute" value="true">Добавить путь</button>

@@ -30,6 +30,16 @@ public class PassportValidator implements Validator<CreatePassportDto>{
         return validationResult;
     }
 
+    public ValidationResult isValid(String passportSerialNumber) {
+        var validationResult = new ValidationResult();
+
+        if(passportDao.findById(passportSerialNumber).isEmpty()){
+            validationResult.add(Error.of("invalid.Passport.SerialNumber","Сотрудника с таким паспортом нет"));
+        }
+
+        return validationResult;
+    }
+
     public static PassportValidator getInstance(){
         return INSTANCE;
     }

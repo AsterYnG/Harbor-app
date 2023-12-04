@@ -231,6 +231,21 @@ public class AdminServlet extends HttpServlet {
                     resp.sendRedirect("/admin");
                     break;
                 }
+                case "deleteWorker":{
+                    try {
+                    String passport = req.getParameter("passport");
+                    adminService.checkPassport(passport);
+                    adminService.deleteWorker(passport);
+                    session.setAttribute("active","");
+                    }
+                    catch (ValidationException e){
+                        req.setAttribute("errors", e.getErrors());
+                        doGet(req, resp);
+                        break;
+                    }
+                    resp.sendRedirect("/admin");
+                    break;
+                }
                 case "showSearch": {
                     String selectedTable = req.getParameter("selectedTable");
                     session.setAttribute("active", selectedTable);
@@ -448,13 +463,13 @@ public class AdminServlet extends HttpServlet {
                     Integer taxTo = 1000;
 
                     Integer weightCostFrom = 0;
-                    Integer weightCostTo = 1000;
+                    Integer weightCostTo = 10000000;
 
                     Integer sizeCostFrom = 0;
-                    Integer sizeCostTo = 1000;
+                    Integer sizeCostTo = 10000000;
 
                     Integer fragileCostFrom = 0;
-                    Integer fragileCostTo = 1000;
+                    Integer fragileCostTo = 1000000;
 
                     var freighters = adminService.getFreighters();
 
@@ -821,7 +836,7 @@ public class AdminServlet extends HttpServlet {
                     String sortBy = req.getParameter("sortBy");
 
                     session.setAttribute("searchResult",adminService.sortFreightersBy(sortBy,list));
-                    session.setAttribute("active","showSearchResultFreighters");
+                    session.setAttribute("active","showFreighters");
                     resp.sendRedirect("/admin");
                     break;
                 }
@@ -851,7 +866,7 @@ public class AdminServlet extends HttpServlet {
                     String sortBy = req.getParameter("sortBy");
 
                     session.setAttribute("searchResult",adminService.sortClientsBy(sortBy,list));
-                    session.setAttribute("active","showSearchResultClients");
+                    session.setAttribute("active","showCustomers");
                     resp.sendRedirect("/admin");
                     break;
                 }
@@ -871,7 +886,17 @@ public class AdminServlet extends HttpServlet {
                     String sortBy = req.getParameter("sortBy");
 
                     session.setAttribute("searchResult",adminService.sortWorkersBy(sortBy,list));
-                    session.setAttribute("active","showSearchResultWorkers");
+                    session.setAttribute("active","showWorkers");
+                    resp.sendRedirect("/admin");
+                    break;
+                }
+                case "sortLog":{
+                    var list = (List<VoyageLog>) session.getAttribute("voyageLog");
+
+                    String sortBy = req.getParameter("sortBy");
+                    session.setAttribute("voyageLog",adminService.sortLogBy(sortBy,list));
+
+                    session.setAttribute("active","showVoyageLog");
                     resp.sendRedirect("/admin");
                     break;
                 }

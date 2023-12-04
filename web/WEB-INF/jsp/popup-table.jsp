@@ -8,23 +8,31 @@
             <table>
                 <thead>
                 <tr>
-                    <c:forEach var="name" items="${sessionScope.columnNames}">
-                        <th>${name}</th>
-                    </c:forEach>
+                    <th>ID работника</th>
+                    <th>Паспорт</th>
+                    <th>ФИО</th>
+                    <th>Дата рождения</th>
+                    <th>Должность</th>
+                    <th>Дата найма</th>
+                    <th>Документ об трудоустройстве</th>
+                    <th>Документ об образовании</th>
+                    <th>Мед книжка</th>
                 </tr>
                 </thead>
                 <tbody>
                 <!-- Здесь будут данные о работниках -->
 
-                <c:forEach var="customer" items="${sessionScope.workers}">
+                <c:forEach var="customer" items="${sessionScope.searchResult}">
                     <tr>
+                        <td>${customer.workerId}</td>
+                        <td>${customer.passportSerialNumber.passportSerialNumber}</td>
+                        <td>${customer.passportSerialNumber.fullName}</td>
+                        <td>${customer.passportSerialNumber.birthDate}</td>
+                        <td>${customer.position.position}</td>
                         <td>${customer.hiringDate}</td>
-                        <td>${customer.employmentSerialNumber}</td>
-                        <td>${customer.fullName}</td>
-                        <td>${customer.position}</td>
-                        <td>${customer.passportSerialNumber}</td>
-                        <td>${customer.educationSerialNumber}</td>
-                        <td>${customer.medSerialNumber}</td>
+                        <td>${customer.employmentSerialNumber.employmentSerialNumber}</td>
+                        <td>${customer.educationSerialNumber.educationSerialNumber}</td>
+                        <td>${customer.medSerialNumber.medSerialNumber}</td>
                     </tr>
                 </c:forEach>
 
@@ -43,21 +51,23 @@
             <table>
                 <thead>
                 <tr>
-                    <c:forEach var="name" items="${sessionScope.columnNames}">
-                        <th>${name}</th>
-                    </c:forEach>
+                    <th>Название</th>
+                    <th>Налог</th>
+                    <th>Цена за 1кг</th>
+                    <th>Цена за кубометр</th>
+                    <th>Цена за хрупкость</th>
                 </tr>
                 </thead>
                 <tbody>
                 <!-- Здесь будут данные о работниках -->
 
-                <c:forEach var="customer" items="${sessionScope.freighters}">
+                <c:forEach var="customer" items="${sessionScope.searchResult}">
                     <tr>
-                        <td>${customer.tax}</td>
-                        <td>${customer.sizeCost}</td>
-                        <td>${customer.weightCost}</td>
-                        <td>${customer.fragileCost}</td>
                         <td>${customer.freighterName}</td>
+                        <td>${customer.tax}</td>
+                        <td>${customer.weightCost}</td>
+                        <td>${customer.sizeCost}</td>
+                        <td>${customer.fragileCost}</td>
                     </tr>
                 </c:forEach>
 
@@ -77,15 +87,16 @@
             <table>
                 <thead>
                 <tr>
-                    <c:forEach var="name" items="${sessionScope.columnNames}">
-                        <th>${name}</th>
-                    </c:forEach>
+                    <th>ФИО</th>
+                    <th>Логин</th>
+                    <th>Почта</th>
+                    <th>Пароль</th>
                 </tr>
                 </thead>
                 <tbody>
                 <!-- Здесь будут данные о работниках -->
 
-                <c:forEach var="customer" items="${sessionScope.customers}">
+                <c:forEach var="customer" items="${sessionScope.searchResult}">
                     <tr>
                         <td>${customer.password}</td>
                         <td>${customer.fullName}</td>
@@ -108,7 +119,7 @@
             <h2>Добавить работника</h2>
             <div class="form-group">
                 <label for="employeeFullName">ФИО:</label>
-                <input type="text" id="employeeFullName" name="employeeFullName" maxlength="39" pattern="^[А-Я][а-я]* [А-Я][а-я]* [А-Я][а-я]*$"  required>
+                <input type="text" id="employeeFullName" name="employeeFullName" maxlength="39" pattern="^[А-Я][а-я]* [А-Я][а-я]*( [А-Я][а-я]*)?$"  required>
             </div>
             <div class="form-group">
                 <label for="employeePosition">Должность:</label>
@@ -224,6 +235,29 @@
 
             <div class="form-group">
                 <button type="submit">Добавить</button>
+            </div>
+        </form>
+    </div>
+</c:if>
+
+<c:if test="${sessionScope.active == 'deleteWorker'}">
+    <div id="deleteWorkerFormModal" class="modal">
+        <form id="deleteWorkerForm" class="modal-form" action="${pageContext.request.contextPath}/admin" method="post">
+            <h2>Удалить работника</h2>
+            <c:forEach var="error" items="${requestScope.errors}">
+                <c:if test="${error.code == 'invalid.Passport.SerialNumber'}">
+                    <div class="error-message" id="login-error">${error.message}</div>
+                </c:if>
+            </c:forEach>
+            <div class="form-group">
+                <label for="passport">Паспорт:</label>
+                <input type="text" id="passport" name="passport" maxlength="10" pattern="^\d{10}$" placeholder="6017xxxxxx" required>
+            </div>
+
+            <!-- Другие поля для ввода данных работника -->
+
+            <div class="form-group">
+                <button type="submit">Удалить</button>
             </div>
         </form>
     </div>

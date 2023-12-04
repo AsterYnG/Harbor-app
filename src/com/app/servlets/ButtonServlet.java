@@ -1,6 +1,7 @@
 package com.app.servlets;
 
 import com.app.dto.FreighterDto;
+import com.app.entity.Freighter;
 import com.app.entity.VoyageLog;
 import com.app.entity.Worker;
 import com.app.service.ButtonService;
@@ -49,7 +50,7 @@ public class ButtonServlet extends HttpServlet {
             }
             case "buttonShowAllEmployees": {
                 var workers = buttonService.showAllEmployees();
-                session.setAttribute("workers", workers);
+                session.setAttribute("searchResult", workers);
                 Set<String> columnNames = new HashSet<>();
                 for (Field declaredField : workers.get(0).getClass().getDeclaredFields()) {
                     columnNames.add(declaredField.getName());
@@ -66,7 +67,7 @@ public class ButtonServlet extends HttpServlet {
             }
             case "buttonShowAllFreighters": {
                 var freighters = buttonService.showAllFreighters();
-                session.setAttribute("freighters", freighters);
+                session.setAttribute("searchResult", freighters);
                 Set<String> columnNames = new HashSet<>();
                 for (Field declaredField : freighters.get(0).getClass().getDeclaredFields()) {
                     columnNames.add(declaredField.getName());
@@ -78,7 +79,7 @@ public class ButtonServlet extends HttpServlet {
             }
             case "buttonShowAllClients": {
                 var customers = buttonService.showAllCustomers();
-                session.setAttribute("customers", customers);
+                session.setAttribute("searchResult", customers);
                 Set<String> columnNames = new HashSet<>();
                 for (Field declaredField : customers.get(0).getClass().getDeclaredFields()) {
                     columnNames.add(declaredField.getName());
@@ -91,20 +92,23 @@ public class ButtonServlet extends HttpServlet {
             case "buttonShowVoyageLog": {
                 List<VoyageLog> voyageLog = buttonService.getVoyageLog();
                 session.setAttribute("voyageLog", voyageLog);
-                LocalDateTime temp;
 
                 session.setAttribute("active","showVoyageLog");
                 resp.sendRedirect("/admin");
 
                 break;
             }
+            case "buttonDeleteWorker":{
+                session.setAttribute("active","deleteWorker");
+                resp.sendRedirect("/admin");
+                break;
+            }
             case "buttonAddAvailableRoute": {
                 session.setAttribute("active","addAvailableRoute");
-                List<FreighterDto> freighters = buttonService.showAllFreighters();
+                List<Freighter> freighters = buttonService.showAllFreighters();
                 session.setAttribute("freighters",freighters);
                 resp.sendRedirect("/admin");
                 break;
-
             }
             case "buttonSearch":{
                 session.setAttribute("active","showSearch");
@@ -128,7 +132,7 @@ public class ButtonServlet extends HttpServlet {
                       resp.sendRedirect("/admin");
                       break;
                   }
-                  case "showSearchResultFreighters":{
+                  case "showSearchResultFreighters", "showFreighters":{
                       session.setAttribute("active","sortFreighters");
                       resp.sendRedirect("/admin");
                       break;
@@ -143,7 +147,7 @@ public class ButtonServlet extends HttpServlet {
                       resp.sendRedirect("/admin");
                       break;
                   }
-                  case "showSearchResultClients":{
+                  case "showSearchResultClients", "showCustomers":{
                       session.setAttribute("active","sortClients");
                       resp.sendRedirect("/admin");
                       break;
@@ -153,11 +157,17 @@ public class ButtonServlet extends HttpServlet {
                       resp.sendRedirect("/admin");
                       break;
                   }
-                  case "showSearchResultWorkers":{
+                  case "showSearchResultWorkers", "showWorkers":{
                       session.setAttribute("active","sortWorkers");
                       resp.sendRedirect("/admin");
                       break;
                   }
+                  case "showVoyageLog":{
+                      session.setAttribute("active","sortLog");
+                      resp.sendRedirect("/admin");
+                      break;
+                  }
+
 
                   default:{
                       resp.sendRedirect("/admin");

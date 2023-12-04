@@ -115,6 +115,13 @@ public class AdminService {
             throw new ValidationException(result.getErrors());
         }
     }
+    public void checkPassport(String passportSerial) {
+        var result = passportValidator.isValid(passportSerial);
+        if (!result.isValid()) {
+            throw new ValidationException(result.getErrors());
+        }
+    }
+
 
     public void checkRegistration(CreateRegistrationDto dto) {
         var result = registrationValidator.isValid(dto);
@@ -508,6 +515,33 @@ public class AdminService {
         return list;
 
     }
+    public List<VoyageLog> sortLogBy(String field,List<VoyageLog> list){
+        if(field.equals("freighter")){
+            return list.stream().sorted(Comparator.comparing(prev -> prev.getShip().getFreighter().getFreighterName())).toList();
+        }
+        if(field.equals("logId")){
+            return list.stream().sorted(Comparator.comparingInt(VoyageLog::getLogId)).toList();
+        }
+        if(field.equals("shipId")){
+            return list.stream().sorted(Comparator.comparingInt(prev -> prev.getShip().getShipId())).toList();
+        }
+        if(field.equals("shipCapacity")){
+            return list.stream().sorted(Comparator.comparingInt(prev -> prev.getShip().getShipModel().getShipCapacity())).toList();
+        }
+        if(field.equals("shipSize")){
+            return list.stream().sorted(Comparator.comparingInt(prev -> prev.getShip().getShipModel().getShipSize())).toList();
+        }
+
+        if(field.equals("date")){
+            return list.stream().sorted((prev,cont) -> cont.getShipmentDate().compareTo(prev.getShipmentDate())).toList();
+        }
+
+        return list;
+    }
+    public void deleteWorker(String passport){
+            workerDao.delete(passport);
+    }
+
 
 
 }

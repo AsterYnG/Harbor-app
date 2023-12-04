@@ -431,7 +431,7 @@
             <h3>Серия и номер паспорта:</h3>
             <div class="form-group">
                 <label for="passportSerialNumber">Серия и номер 10 цифр:</label>
-                <input type="number" id="passportSerialNumber" name="passportSerialNumber" pattern="^(\S|\d)+$"
+                <input type="text" id="passportSerialNumber" name="passportSerialNumber" pattern="^(\S|\d)+$"
                        maxlength="10">
             </div>
 
@@ -653,6 +653,30 @@
                     <option value="fullName">ФИО</option>
                     <option value="birthDate">Дата рождения</option>
                     <option value="hiringDate">Дата найма</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <button type="submit">Искать</button>
+            </div>
+        </form>
+    </div>
+</c:if>
+<c:if test="${sessionScope.active == 'sortLog'}">
+    <div id="sortLogFormModal" class="modal">
+
+        <form id="sortLogForm" class="modal-form" action="${pageContext.request.contextPath}/admin" method="post">
+            <h2>Сортировка</h2>
+
+            <div class="form-group">
+                <label for="sortBy8">Сортировать по:</label>
+                <select id="sortBy8" name="sortBy">
+                    <option value="logId">Номер записи</option>
+                    <option value="freighter">Перевозчик</option>
+                    <option value="date">Дата</option>
+                    <option value="shipId">Номер корабля</option>
+                    <option value="shipCapacity">Вместимость корабля</option>
+                    <option value="shipSize">Размер корабля</option>
                 </select>
             </div>
 
