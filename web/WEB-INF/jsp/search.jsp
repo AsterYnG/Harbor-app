@@ -339,8 +339,7 @@
             <h3>ФИО:</h3>
             <div class="form-group">
                 <label for="customerFullName">ФИО клиента:</label>
-                <input type="text" id="customerFullName" name="customerFullName" maxlength="39"
-                       pattern="^[А-Я][а-я]* [А-Я][а-я]*( [А-Я][а-я]*)?$">
+                <input type="text" id="customerFullName" name="customerFullName" maxlength="39">
             </div>
 
             <h3>Электронная почта:</h3>
@@ -476,8 +475,7 @@
             <h3>ФИО:</h3>
             <div class="form-group">
                 <label for="workerFullName">ФИО работника:</label>
-                <input type="text" id="workerFullName" name="workerFullName" maxlength="39"
-                       pattern="^[А-Я][а-я]* [А-Я][а-я]*( [А-Я][а-я]*)?$">
+                <input type="text" id="workerFullName" name="workerFullName" maxlength="39">
             </div>
 
             <div class="form-group">

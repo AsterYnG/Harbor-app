@@ -263,6 +263,44 @@
     </div>
 </c:if>
 
+<c:if test="${sessionScope.active == 'updateFreighter'}">
+    <div id="updateFreighterFormModal" class="modal">
+        <form id="updateFreighterForm" class="modal-form" action="${pageContext.request.contextPath}/admin" method="post">
+            <h2>Обновить перевозчика</h2>
+            <div class="form-group">
+                    <label for="selectedFreighter">Выбрать перевозчика:</label>
+                    <select id="selectedFreighter" name="selectedFreighter">
+            <c:forEach var="freighter" items="${sessionScope.freighters}">
+                        <option value="${freighter.freighterName}">${freighter.freighterName}</option>
+            </c:forEach>
+                    </select>
+            </div>
+            <div class="form-group">
+                <label for="newWeightCost">Новая цена за 1кг:</label>
+                <input type="number" id="newWeightCost" name="newWeightCost" max="100000" >
+            </div>
+            <div class="form-group">
+                <label for="newSizeCost">Новая цена за 1 кубометр:</label>
+                <input type="number" id="newSizeCost" name="newSizeCost" max="100000" >
+            </div>
+            <div class="form-group">
+                <label for="newFragileCost">Новая цена за хрупкость:</label>
+                <input type="number" id="newFragileCost" name="newFragileCost" max="100000" >
+            </div>
+            <div class="form-group">
+                <label for="newTax">Новый налог в %:</label>
+                <input type="number" id="newTax" name="newTax" max="100000" >
+            </div>
+
+            <!-- Другие поля для ввода данных работника -->
+
+            <div class="form-group">
+                <button type="submit">Обновить</button>
+            </div>
+        </form>
+    </div>
+</c:if>
+
 
 
 <script>
@@ -281,6 +319,13 @@
      function closeModal3() {
          document.getElementById('searchFormModal').style.display = 'none';
      }
+     function closeModal4() {
+         document.getElementById('updateFreighterFormModal').style.display = 'none';
+     }
+     function closeModal5() {
+         document.getElementById('deleteWorkerFormModal').style.display = 'none';
+     }
+
 
 
 
@@ -296,6 +341,12 @@
          }
          if (event.target === document.getElementById('searchFormModal')) {
              closeModal3();
+         }
+         if (event.target === document.getElementById('updateFreighterFormModal')) {
+             closeModal4();
+         }
+         if (event.target === document.getElementById('deleteWorkerFormModal')) {
+             closeModal5();
          }
 
      };

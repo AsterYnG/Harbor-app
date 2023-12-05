@@ -278,7 +278,7 @@ public class AdminService {
         List<Customer> temp2;
         List<Customer> temp3;
         if (!fullName.isEmpty()) {
-            temp1 = temp.stream().filter(value -> value.getFullName().equals(fullName)).toList();
+            temp1 = temp.stream().filter(value -> value.getFullName().contains(fullName)).toList();
         } else {
             temp1 = temp;
         }
@@ -359,7 +359,7 @@ public class AdminService {
         } else temp1 = temp;
 
         if (!fullName.isBlank()) {
-            temp2 = temp1.stream().filter(value -> value.getPassportSerialNumber().getFullName().equals(fullName)).toList();
+            temp2 = temp1.stream().filter(value -> value.getPassportSerialNumber().getFullName().contains(fullName)).toList();
         } else temp2 = temp;
         if (dockId != null) {
             return temp2.stream().filter(value ->{
@@ -541,7 +541,17 @@ public class AdminService {
     public void deleteWorker(String passport){
             workerDao.delete(passport);
     }
-
+    public void updateFreighter(List<Freighter> list, Integer sizeCost, Integer weightCost, Integer fragileCost, Integer tax){
+        Freighter build = Freighter.builder()
+                .weightCost(weightCost != null ? weightCost : list.get(0).getWeightCost())
+                .sizeCost(sizeCost != null ? sizeCost : list.get(0).getSizeCost())
+                .fragileCost(fragileCost != null ? fragileCost : list.get(0).getFragileCost())
+                .freighterName(list.get(0).getFreighterName())
+                .tax(tax != null ? tax : list.get(0).getTax())
+                .freighterId(list.get(0).getFreighterId())
+                .build();
+        freighterDao.update(build);
+    }
 
 
 }

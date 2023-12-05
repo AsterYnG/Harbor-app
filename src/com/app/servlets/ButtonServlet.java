@@ -103,6 +103,13 @@ public class ButtonServlet extends HttpServlet {
                 resp.sendRedirect("/admin");
                 break;
             }
+            case "buttonUpdateFreighter":{
+                List<Freighter> freighters = buttonService.showAllFreighters();
+                session.setAttribute("freighters",freighters);
+                session.setAttribute("active","updateFreighter");
+                resp.sendRedirect("/admin");
+                break;
+            }
             case "buttonAddAvailableRoute": {
                 session.setAttribute("active","addAvailableRoute");
                 List<Freighter> freighters = buttonService.showAllFreighters();

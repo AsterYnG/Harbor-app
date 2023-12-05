@@ -47,6 +47,7 @@
 
         <!-- Кнопка вывода всех команд для кораблей -->
         <button onclick="showAllShipCrews()" name="buttonAddAvailableRoute" value="true">Добавить путь</button>
+        <button onclick="showAllShipCrews()" name="buttonUpdateFreighter" value="true">Обновить перевозчика</button>
         <button class="search-btn" onclick="showAllShipCrews()" name="buttonSearch" value="true">Поиск</button>
         <button class="search-btn" onclick="showAllShipCrews()" name="buttonSort" value="true">Сортировать по</button>
     </form>

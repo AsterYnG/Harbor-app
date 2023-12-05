@@ -39,6 +39,12 @@ public class FreighterDao implements Dao<Integer, Freighter> {
             SELECT * FROM freighter WHERE freighter_name = ?;
             """;
 
+    private static final String UPDATE = """
+            UPDATE freighter
+            SET fragile_cost = ? , weight_cost = ? , size_cost = ? , tax =?
+            WHERE freighter_id =?;
+            """;
+
     private static final String SELECT_AVAILABLE_FREIGHTERS = """
             SELECT * FROM freighter f
             JOIN freighter_routes fr on f.freighter_id = fr.freighter_id
@@ -100,7 +106,18 @@ public class FreighterDao implements Dao<Integer, Freighter> {
 
     @Override
     public Freighter update(Freighter entity) {
-        return null;
+        try (var connection = ConnectionManager.get()) {
+            @Cleanup var preparedStatement = connection.prepareStatement(UPDATE);
+            preparedStatement.setInt(1,entity.getFragileCost());
+            preparedStatement.setInt(2,entity.getWeightCost());
+            preparedStatement.setInt(3,entity.getSizeCost());
+            preparedStatement.setInt(4,entity.getTax());
+            preparedStatement.setInt(5,entity.getFreighterId());
+            preparedStatement.executeUpdate();
+            return entity;
+        } catch (SQLException e) {
+            throw new UnableToTakeConnectionException(e);
+        }
     }
 
     @Override

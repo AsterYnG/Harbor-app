@@ -246,6 +246,33 @@ public class AdminServlet extends HttpServlet {
                     resp.sendRedirect("/admin");
                     break;
                 }
+                case "updateFreighter":{
+                    var freighters = adminService.getFreighters();
+                    List<Freighter> freightersResult = freighters.stream()
+                            .filter(value -> req.getParameter("selectedFreighter") != null)
+                            .toList();
+                    Integer newSizeCost;
+                    Integer newWeightCost;
+                    Integer newFragileCost;
+                    Integer newTax;
+
+                    if (!req.getParameter("newSizeCost").isBlank()){
+                        newSizeCost =Integer.parseInt(req.getParameter("newSizeCost"));
+                    } else newSizeCost = null;
+                    if (!req.getParameter("newWeightCost").isBlank()){
+                        newWeightCost =Integer.parseInt(req.getParameter("newWeightCost"));
+                    } else newWeightCost = null;
+                    if (!req.getParameter("newFragileCost").isBlank()){
+                        newFragileCost =Integer.parseInt(req.getParameter("newFragileCost"));
+                    } else newFragileCost = null;
+                    if (!req.getParameter("newTax").isBlank()){
+                        newTax =Integer.parseInt(req.getParameter("newTax"));
+                    } else newTax = null;
+                    adminService.updateFreighter(freightersResult,newSizeCost,newWeightCost,newFragileCost,newTax);
+                    session.setAttribute("active","");
+                    resp.sendRedirect("/admin");
+                    break;
+                }
                 case "showSearch": {
                     String selectedTable = req.getParameter("selectedTable");
                     session.setAttribute("active", selectedTable);
