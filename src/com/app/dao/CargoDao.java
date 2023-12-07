@@ -36,6 +36,10 @@ public final class CargoDao implements Dao<Integer, Cargo> {
         VALUES (?,?,?,?,?,?);
     """;
 
+    private final static String DELETE_BY_ORDER_ID = """
+        DELETE FROM cargo WHERE order_id = ?;
+    """;
+
     private final static String UPDATE = """
         UPDATE cargo
         SET cargo_weight = ?,
@@ -71,7 +75,14 @@ public final class CargoDao implements Dao<Integer, Cargo> {
 
     @Override
     public boolean delete(Integer id) {
-        return false;
+        try (var connection = ConnectionManager.get()) {
+            @Cleanup var preparedStatement = connection.prepareStatement(DELETE_BY_ORDER_ID);
+            preparedStatement.setInt(1, id);
+            preparedStatement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            throw new UnableToTakeConnectionException(e);
+        }
     }
 
     @Override

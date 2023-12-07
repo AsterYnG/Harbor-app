@@ -55,7 +55,7 @@ public class ClientButtonServlet extends HttpServlet {
             }
             case "buttonRemoveOrder": {
                 session.setAttribute("active", "removeOrder");
-                session.setAttribute("currentOrdersToRemove", clientService.getCurrentOrders(loggedCustomer).stream().map(v -> v.get().toString()).toList());
+                session.setAttribute("currentOrdersToRemove", clientService.getCurrentOrders(loggedCustomer).stream().map(v -> v.get()).toList());
                 resp.sendRedirect("/client");
                 break;
             }

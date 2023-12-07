@@ -60,6 +60,10 @@ public class OrderDao implements Dao<Integer, Order> {
             WHERE c.customer_id = ? AND "Order".status NOT IN ('Доставлено', 'Отменено');
             """;
 
+    private final static String DELETE_BY_ID = """
+            DELETE FROM "Order" WHERE order_id = ?;
+            """;
+
     @Override
     public List<Order> findAll() {
         try (var connection = ConnectionManager.get()) {
@@ -131,7 +135,14 @@ public class OrderDao implements Dao<Integer, Order> {
 
     @Override
     public boolean delete(Integer id) {
-        return false;
+        try (var connection = ConnectionManager.get()) {
+            @Cleanup var preparedStatement = connection.prepareStatement(DELETE_BY_ID);
+            preparedStatement.setInt(1, id);
+            preparedStatement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            throw new UnableToTakeConnectionException(e);
+        }
     }
 
     @Override

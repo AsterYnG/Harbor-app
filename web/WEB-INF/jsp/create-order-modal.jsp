@@ -139,3 +139,26 @@
         </div>
     </div>
 </c:if>
+
+<c:if test="${sessionScope.active == 'removeOrder'}">
+    <div id="removeOrderFormModal" class="modal">
+        <div class="modal-content">
+            <form action="${pageContext.request.contextPath}/client" method="post">
+                <button value="true" name="exit" class="close-button">&#10006;</button>
+            </form>
+            <form id="removeOrderForm" class="modal-form" action="${pageContext.request.contextPath}/client" method="post">
+                <h2>Выбрать заказ</h2>
+                <label for="clientCurrentOrdersToRemove">Ваши текущие заказы:</label>
+                <select id="clientCurrentOrdersToRemove" name="clientCurrentOrdersToRemove">
+                    <c:forEach var="clientsOrderToRemove" items="${sessionScope.currentOrdersToRemove}">
+                        <option value="${clientsOrderToRemove.orderId}">${clientsOrderToRemove}</option>
+                    </c:forEach>
+                </select><br>
+
+                <div class="form-group">
+                    <button type="submit">Удалить заказ</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</c:if>

@@ -213,6 +213,13 @@ public class ClientServlet extends HttpServlet {
                 }
             }
         }
+        else if (currentStatus.equals("removeOrder")) {
+            var wannabeRemovedOrder = clientService.findByOrderId(Integer.valueOf(request.getParameter("clientCurrentOrdersToRemove"))).get();
+            clientService.deleteOrder(wannabeRemovedOrder);
+
+            session.setAttribute("active", " ");
+            response.sendRedirect(request.getContextPath() + "/client"); // Перенаправление на ту же страницу
+        }
         else if (currentStatus.equals("changePassword")) {
             session.setAttribute("tempOldPassword", request.getParameter("oldPassword"));
             try { // Валидация

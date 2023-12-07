@@ -128,6 +128,11 @@ public class ClientService {
         cargoDao.update(curCargo);
     }
 
+    public void deleteOrder(Order order) {
+        cargoDao.delete(order.getOrderId());
+        orderDao.delete(order.getOrderId());
+    }
+
     public void checkPassword(ShowCustomerDto dto){
         var result = passwordValidator.isValid(dto);
         if(!result.isValid()){
