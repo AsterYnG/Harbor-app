@@ -1,5 +1,6 @@
 package com.app.util;
 
+import com.app.dto.CreateCargoDto;
 import com.app.entity.*;
 import com.app.exceptions.NoSuchColumnInResultSetException;
 import lombok.experimental.UtilityClass;
@@ -144,6 +145,19 @@ public class EntityBuilder {
                     .customer(buildCustomer(resultSet))
                     .freighter(buildFreighter(resultSet))
                     .order(buildOrder(resultSet))
+                    .destination(resultSet.getObject("destination",String.class))
+                    .build();
+        } catch (SQLException e) {
+            throw new NoSuchColumnInResultSetException(e);
+        }
+    }
+
+    public static CreateCargoDto buildCargoDto(ResultSet resultSet){
+        try {
+            return CreateCargoDto.builder()
+                    .cargoWeight(resultSet.getObject("cargo_weight",Integer.class))
+                    .isFragile(resultSet.getObject("is_fragile",Boolean.class))
+                    .cargoSize(resultSet.getObject("cargo_size",Integer.class))
                     .destination(resultSet.getObject("destination",String.class))
                     .build();
         } catch (SQLException e) {

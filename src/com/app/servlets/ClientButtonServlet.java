@@ -47,6 +47,18 @@ public class ClientButtonServlet extends HttpServlet {
                 resp.sendRedirect("/client");
                 break;
             }
+            case "buttonChangeOrder": {
+                session.setAttribute("active", "changeOrder");
+                session.setAttribute("currentOrdersToChange", clientService.getCurrentOrders(loggedCustomer).stream().map(v -> v.get()).toList());
+                resp.sendRedirect("/client");
+                break;
+            }
+            case "buttonRemoveOrder": {
+                session.setAttribute("active", "removeOrder");
+                session.setAttribute("currentOrdersToRemove", clientService.getCurrentOrders(loggedCustomer).stream().map(v -> v.get().toString()).toList());
+                resp.sendRedirect("/client");
+                break;
+            }
             case "buttonChangePassword": {
                 session.setAttribute("active", "changePassword");
                 resp.sendRedirect("/client");

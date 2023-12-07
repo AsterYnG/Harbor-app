@@ -6,6 +6,7 @@ import com.app.dto.FreighterDto;
 import com.app.dto.ShowCustomerDto;
 import com.app.entity.*;
 import com.app.exceptions.ValidationException;
+import com.app.service.ClientButtonService;
 import com.app.service.ClientService;
 import com.app.validator.Error;
 import jakarta.servlet.ServletException;
@@ -29,6 +30,7 @@ import java.util.stream.Collectors;
 @WebServlet("/client")
 public class ClientServlet extends HttpServlet {
     private final ClientService clientService = ClientService.getInstance();
+    private final ClientButtonService clientButtonService = ClientButtonService.getInstance();
 
     private final List<String> createOrderStatus = new ArrayList<>();
 
@@ -36,6 +38,14 @@ public class ClientServlet extends HttpServlet {
         createOrderStatus.add("addOrder");
         createOrderStatus.add("addFreighterToOrder");
     }
+    private final List<String> changeOrderStatus = new ArrayList<>();
+
+    {
+        changeOrderStatus.add("changeOrder");
+        changeOrderStatus.add("changeOrderCharacteristics");
+        changeOrderStatus.add("addFreighterToChangedOrder");
+    }
+
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         HttpSession session = request.getSession();
@@ -74,7 +84,80 @@ public class ClientServlet extends HttpServlet {
             doGet(request, response);
         }
 
-        if (createOrderStatus.contains(currentStatus)) {
+        if (changeOrderStatus.contains(currentStatus)) {
+            switch (currentStatus) {
+                case "changeOrder": {
+                    var wannabeChangedOrder = clientService.findByOrderId(Integer.valueOf(request.getParameter("clientCurrentOrders"))).get();
+                    session.setAttribute("clientsOrder", wannabeChangedOrder);
+
+                    var curCargo = clientService.cargoByOrderId(Integer.valueOf(request.getParameter("clientCurrentOrders")));
+                    session.setAttribute("currentWeight", curCargo.getCargoWeight());
+                    session.setAttribute("currentSize", curCargo.getCargoSize());
+                    session.setAttribute("currentIsFragile", curCargo.getIsFragile());
+                    session.setAttribute("destinationCity", curCargo.getDestination());
+
+                    session.setAttribute("destinations", clientButtonService.getAllRoutes());
+
+                    session.setAttribute("active", changeOrderStatus.get(changeOrderStatus.indexOf(currentStatus) + 1));
+                    response.sendRedirect(request.getContextPath() + "/client"); // Перенаправление на ту же страницу
+                    break;
+                }
+                case "changeOrderCharacteristics": {
+                    var destination = clientService.findByRouteName(request.getParameter("correctedDestinationRoute")).get();
+                    session.setAttribute("correctedDestination", destination);
+                    //проверяем чекбокс (как по другому сделать я не придумал) =)
+                    boolean isFragile;
+                    try {
+                        isFragile = Boolean.parseBoolean(parameterMap.get("correctedIsFragile")[0]);
+                        if (!isFragile) {
+                            isFragile = true;
+                        }
+                    } catch (NullPointerException e) {
+                        isFragile = false;
+                    }
+
+                    var order = CreateCargoDto.builder()
+                            .cargoWeight(Integer.valueOf(parameterMap.get("correctedCargoWeight")[0]))
+                            .isFragile(isFragile)
+                            .cargoSize(Integer.valueOf(parameterMap.get("correctedCargoSize")[0]))
+                            .build();
+
+                    session.setAttribute("correctedOrder", order);
+                    List<FreighterDto> freightersWithShippingPrice = new ArrayList<>();
+                    List<Freighter> availableFreighters = clientService.getAvailableFreighters(destination.getDestinationCity());
+                    for (Freighter freighter : availableFreighters) {
+                        double shippingPrice = clientService.calculateShippingCost(order, freighter);
+                        FreighterDto freighterWithShippingPrice = new FreighterDto(
+                                freighter.getTax(),
+                                freighter.getWeightCost(),
+                                freighter.getSizeCost(),
+                                freighter.getFragileCost(),
+                                freighter.getFreighterName(),
+                                shippingPrice
+                        );
+                        freightersWithShippingPrice.add(freighterWithShippingPrice);
+                    }
+                    session.setAttribute("newAvailableFreighters", freightersWithShippingPrice);
+
+                    session.setAttribute("active", changeOrderStatus.get(changeOrderStatus.indexOf(currentStatus) + 1));
+                    response.sendRedirect(request.getContextPath() + "/client"); // Перенаправление на ту же страницу
+                    break;
+                }
+                case "addFreighterToChangedOrder": {
+                    var availableFreighter = clientService.getFreighterByName(request.getParameter("correctedFreighterName"));
+                    session.setAttribute("freighter", availableFreighter);
+                    session.setAttribute("active"," ");
+                    var orderEntity = (Order) session.getAttribute("clientsOrder");
+                    var order = (CreateCargoDto) session.getAttribute("correctedOrder");
+                    var destination = (Route)session.getAttribute("correctedDestination");
+                    clientService.updateOrder(order, availableFreighter, loggedCustomer, destination.getDestinationCity(), orderEntity);
+                    response.sendRedirect(request.getContextPath() + "/client"); // Перенаправление на ту же страницу
+                    break;
+                }
+            }
+        }
+
+        else if (createOrderStatus.contains(currentStatus)) {
             switch (currentStatus) {
                 case "addOrder": {
                     var destination = clientService.findByRouteName(request.getParameter("destinationRoute")).get();
@@ -83,7 +166,7 @@ public class ClientServlet extends HttpServlet {
                     boolean isFragile;
                     try {
                         isFragile = Boolean.valueOf(parameterMap.get("isFragile")[0]);
-                        if (isFragile == false) {
+                        if (!isFragile) {
                             isFragile = true;
                         }
                     } catch (NullPointerException e) {
@@ -124,7 +207,7 @@ public class ClientServlet extends HttpServlet {
                     session.setAttribute("active"," ");
                     var order = (CreateCargoDto) session.getAttribute("order");
                     var destination = (Route)session.getAttribute("destinationCity");
-                    clientService.createOrder(order, availableFreighter, loggedCustomer, destination.getDestinationCountry());
+                    clientService.createOrder(order, availableFreighter, loggedCustomer, destination.getDestinationCity());
                     response.sendRedirect(request.getContextPath() + "/client"); // Перенаправление на ту же страницу
                     break;
                 }
@@ -194,8 +277,7 @@ public class ClientServlet extends HttpServlet {
             for (List<Optional<Order>> value : filteredOrders.values()) {
                 filteredOrdersResult.add(value.get(0));
             }
-
-            session.setAttribute("searchResult", filteredOrdersResult);
+            session.setAttribute("searchResult", filteredOrdersResult.stream().map(v -> v.get().toString()).toList());
             session.setAttribute("active", "showSearchResultOrdersForCustomer");
             response.sendRedirect("/client");
         }

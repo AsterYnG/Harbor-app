@@ -36,6 +36,17 @@ public final class CargoDao implements Dao<Integer, Cargo> {
         VALUES (?,?,?,?,?,?);
     """;
 
+    private final static String UPDATE = """
+        UPDATE cargo
+        SET cargo_weight = ?,
+            is_fragile = ?,
+            cargo_size = ?,
+            customer_id = ?,
+            freighter_id = ?,
+            destination = ?
+        WHERE order_id = ?;
+    """;
+
 
 
     @Override
@@ -65,7 +76,20 @@ public final class CargoDao implements Dao<Integer, Cargo> {
 
     @Override
     public Cargo update(Cargo entity) {
-        return null;
+        try (var connection = ConnectionManager.get()) {
+            @Cleanup var preparedStatement = connection.prepareStatement(UPDATE);
+            preparedStatement.setInt(1, entity.getCargoWeight());
+            preparedStatement.setBoolean(2, entity.getIsFragile());
+            preparedStatement.setInt(3, entity.getCargoSize());
+            preparedStatement.setInt(4, entity.getCustomer().getCustomerId());
+            preparedStatement.setInt(5, entity.getFreighter().getFreighterId());
+            preparedStatement.setString(6, entity.getDestination());
+            preparedStatement.setInt(7, entity.getOrder().getOrderId());
+            preparedStatement.executeUpdate();
+            return entity;
+        } catch (SQLException e) {
+            throw new UnableToTakeConnectionException(e);
+        }
     }
 
     @Override

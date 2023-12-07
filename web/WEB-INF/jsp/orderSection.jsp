@@ -3,8 +3,14 @@
 
 <section class="order-section" style="margin-left: 50px">
     <h2>Создать заказ</h2>
-    <form action="/buttonClient" method="get">
+    <form action="${pageContext.request.contextPath}/buttonClient" method="get">
         <button name="buttonCreateOrder" value="true" >Создать заказ</button>
+    </form>
+    <form action="${pageContext.request.contextPath}/buttonClient" method="get">
+        <button name="buttonChangeOrder" value="true" >Изменить заказ</button>
+    </form>
+    <form action="${pageContext.request.contextPath}/buttonClient" method="get">
+        <button name="buttonRemoveOrder" value="true" >Удалить заказ</button>
     </form>
 </section>
 

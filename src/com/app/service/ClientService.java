@@ -76,6 +76,9 @@ public class ClientService {
         List<Freighter> availableFreighters = freighterDao.getAvailableFreightersByDirection(city);
         return availableFreighters;
     }
+    public CreateCargoDto cargoByOrderId(Integer id) {
+        return orderDao.CargoByOrderId(id);
+    }
 
     public void completeOrder(Integer orderId){
         
@@ -83,6 +86,9 @@ public class ClientService {
 
     public Optional<Route> findByRouteName(String city){
         return routeDao.findByName(city);
+    }
+    public Optional<Order> findByOrderId(Integer id){
+        return orderDao.findById(id);
     }
 
     public Freighter getFreighterByName (String name) {
@@ -107,6 +113,19 @@ public class ClientService {
                 .customer(customer)
                 .build();
         cargoDao.save(curCargo);
+    }
+
+    public void updateOrder(CreateCargoDto cargoDto, Freighter freighter, Customer customer, String destination, Order order) {
+        Cargo curCargo = Cargo.builder()
+                .cargoSize(cargoDto.getCargoSize())
+                .cargoWeight(cargoDto.getCargoWeight())
+                .isFragile(cargoDto.getIsFragile())
+                .destination(destination)
+                .freighter(freighter)
+                .order(order)
+                .customer(customer)
+                .build();
+        cargoDao.update(curCargo);
     }
 
     public void checkPassword(ShowCustomerDto dto){

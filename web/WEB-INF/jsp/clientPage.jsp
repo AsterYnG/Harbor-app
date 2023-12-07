@@ -2,7 +2,6 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html lang="en">
 <!DOCTYPE html>
-<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Страница клиента морского порта</title>
@@ -11,10 +10,10 @@
     </style>
 </head>
 <header>
-    <form action="/logout" method="post">
+    <form action="${pageContext.request.contextPath}/logout" method="post">
         <button class="logout-btn">Выход</button>
     </form>
-    <form action="/buttonClient" method="get">
+    <form action="${pageContext.request.contextPath}/buttonClient" method="get">
         <button class="search-btn" name="buttonSearchOrders" value="true">Поиск</button>
     </form>
 </header>
@@ -33,7 +32,7 @@
         <form action="${pageContext.request.contextPath}/client" method="post">
             <button value="true" name="exit" class="close-button">&#10006;</button>
         </form>
-        <form id="ordersSearchForm" class="modal-form" action="/client" method="post">
+        <form id="ordersSearchForm" class="modal-form" action="${pageContext.request.contextPath}/client" method="post">
             <div class="error-message" id="login-error">${requestScope.error.message}</div>
             <h2>Поиск по заказам</h2>
 
