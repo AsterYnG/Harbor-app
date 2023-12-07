@@ -1,13 +1,12 @@
-/* Общие стили */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f0f0f0;
+    background-color: #eeeeee;
 }
 
 header {
-    background-color: #333;
+    background-color: #37343d;
     color: white;
     padding: 50px;
     text-align: center;
@@ -184,8 +183,8 @@ table th {
 
 .logout-btn {
     position: absolute;
-    top: 20px;
-    right: 20px;
+    top: 1%;
+    right: 1%;
     padding: 15px 30px; /* Увеличиваем отступы внутри кнопки */
     font-size: 16px; /* Увеличиваем размер шрифта */
     background-color: #555;
@@ -271,16 +270,20 @@ option {
 }
 
 button.search-btn {
-    /* Увеличение размера */
-    font-size: 16px;
-    padding: 10px 20px; /* Изменение отступов */
-    /* Левое выравнивание */
-    float: left;
-    /* Дополнительные стили */
-    /* Если нужно задать цвет фона или текста: */
-    background-color: #777;
+    position: absolute;
+    top: 1%;
+    right: 8%;
+    padding: 15px 30px; /* Увеличиваем отступы внутри кнопки */
+    font-size: 16px; /* Увеличиваем размер шрифта */
+    background-color: #555;
     color: white;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    /* Другие стили по желанию */
+    border: none;
+    cursor: pointer;
+    border-radius: 8px; /* Более закругленные углы */
+    transition: background-color 0.3s ease;
+    z-index: 50;
+}
+button.search-btn:hover {
+    background-color: #777;
+    transform: scale(1.1);
 }
